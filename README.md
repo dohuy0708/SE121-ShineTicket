@@ -4,7 +4,7 @@
   <img src="https://www.uit.edu.vn/sites/vi/files/banner_uit.png" alt="Alt text">
 </p>
 
-## ShineTciket 
+## ShineTicket 
 ShineTicket is a ticket selling and event management project that helps people buy tickets easily and quickly. It offers a reliable way to purchase tickets, saving time for customers. At the same time, it helps event organizers promote and manage their events effectively.
  
 
