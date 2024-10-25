@@ -15,13 +15,18 @@
     "dotenv": "^16.4.5",
     "ejs": "^3.1.10",
     "express": "^4.21.0",
-    "mysql2": "^3.11.3"
+    "mysql2": "^3.11.3",
+    "umzug": "^3.8.2"
   },
   "devDependencies": {
     "@babel/cli": "^7.25.7",
     "@babel/core": "^7.25.8",
     "@babel/node": "^7.25.7",
     "@babel/preset-env": "^7.25.8",
-    "nodemon": "^3.1.6"
+    "nodemon": "^3.1.6",
+    "sequelize": "^6.37.4",
+    "sequelize-cli": "^6.6.2",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.6.3"
   }
 }

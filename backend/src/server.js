@@ -5,6 +5,8 @@ import viewEngine from "./config/viewEngine.js";
 import initWebRoutes from "./routes/web.js";
 import dotenv from "dotenv"; // Sử dụng import
 
+import { connection } from "./config/connectDB.js";
+
 dotenv.config(); // Gọi config
 
 // config app
@@ -12,6 +14,10 @@ const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 viewEngine(app);
+
+// tesst DB
+connection();
+
 initWebRoutes(app);
 //
 
