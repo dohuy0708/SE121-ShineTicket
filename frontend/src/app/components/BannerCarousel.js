@@ -1,16 +1,18 @@
 import React, { useState } from "react";
 import "./BannerCarousel.css";
-
+import { useNavigate } from "react-router-dom";
 const BannerCarousel = ({ events }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const slidesToShow = 2; // Số lượng slide hiển thị
-
+  const navigate = useNavigate();
   const nextSlide = () => {
     setCurrentIndex(
       (prevIndex) => (prevIndex + 1) % Math.ceil(events.length / slidesToShow)
     );
   };
-
+  const handleViewDetails = () => {
+    navigate(`/ticketdetails`);
+  };
   const prevSlide = () => {
     setCurrentIndex(
       (prevIndex) =>
@@ -37,19 +39,26 @@ const BannerCarousel = ({ events }) => {
               <img src={event.image} alt={event.name} />
               <div className="slide-text">
                 <div className="slide-info">
-                  <div className="slide-price">Từ {event.price}</div>
+                  <div className="slide-price text-primary">
+                    Từ {event.price}
+                  </div>
                   <div className="slide-date">{event.date}</div>
                 </div>
-                <button className="slide-button">Xem chi tiết</button>
+                <button
+                  className="slide-button hover:bg-primary hover:text-white"
+                  onClick={() => handleViewDetails(event.id)}
+                >
+                  Xem chi tiết
+                </button>
               </div>
             </div>
           </div>
         ))}
       </div>
-      <button className="carousel-control prev" onClick={prevSlide}>
+      <button className="carousel-control bg-primary prev" onClick={prevSlide}>
         ‹
       </button>
-      <button className="carousel-control next" onClick={nextSlide}>
+      <button className="carousel-control bg-primary next" onClick={nextSlide}>
         ›
       </button>
 
@@ -58,7 +67,9 @@ const BannerCarousel = ({ events }) => {
           (_, index) => (
             <span
               key={index}
-              className={`dot ${index === currentIndex ? "active" : ""}`}
+              className={`dot ${
+                index === currentIndex ? "active bg-primary" : ""
+              }`}
               onClick={() => goToSlide(index)}
             ></span>
           )

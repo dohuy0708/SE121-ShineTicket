@@ -45,7 +45,6 @@
   margin-bottom: 10px;
 }
 .slide-price {
-  color: #ffc107;
   font-weight: bold;
   margin-right: 10px;
 }
@@ -63,16 +62,13 @@
   border: none;
   background-color: white;
 }
-.slide-button:hover {
-  color: white;
-  background-color: #ffc107;
-}
+
 /* Định dạng cho nút điều khiển (trái, phải) */
 .carousel-control {
   position: absolute; /* Đặt vị trí tuyệt đối để nút nằm trên carousel */
   top: 50%; /* Đặt vị trí theo chiều dọc */
   transform: translateY(-50%); /* Căn giữa theo chiều dọc */
-  background-color: #ffc107; /* Màu nền của nút */
+  /* Màu nền của nút */
   color: #fff; /* Màu chữ */
   border: none; /* Không có đường viền */
   border-radius: 50%; /* Đường viền tròn */

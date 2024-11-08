@@ -5,32 +5,39 @@ import Nav from "../../components/Nav";
 import BannerCarousel from "../../components/BannerCarousel";
 import EventSection from "../../components/EventSection ";
 import Footer from "../../components/Footer";
-import "./Home.css";
 const Home = () => {
   const bannerEvents = [
     {
       price: "330.000đ",
-      date: "26 tháng 09, 2024",
+      date: "1 tháng 09, 2024",
     },
     {
       price: "330.000đ",
-      date: "26 tháng 09, 2024",
+      date: "2 tháng 09, 2024",
     },
     {
       price: "330.000đ",
-      date: "26 tháng 09, 2024",
+      date: "3 tháng 09, 2024",
     },
     {
       price: "330.000đ",
-      date: "26 tháng 09, 2024",
+      date: "4 tháng 09, 2024",
     },
     {
       price: "330.000đ",
-      date: "26 tháng 09, 2024",
+      date: "5 tháng 09, 2024",
     },
     {
       price: "330.000đ",
-      date: "26 tháng 09, 2024",
+      date: "6 tháng 09, 2024",
+    },
+    {
+      price: "330.000đ",
+      date: "7 tháng 09, 2024",
+    },
+    {
+      price: "330.000đ",
+      date: "8 tháng 09, 2024",
     },
     // Các sự kiện khác
   ];
@@ -74,15 +81,13 @@ const Home = () => {
   ];
 
   return (
-    <div className="home">
-      <Header />
+    <div className="bg-bg-main ">
       <Nav />
-      <div className="container">
+      <div className="mx-auto max-w-7xl p-4">
         <BannerCarousel events={bannerEvents} />
         <EventSection title="Sự kiện đặc biệt" events={specialEvents} />
         <EventSection title="Sự kiện xu hướng" events={trendingEvents} />
       </div>
-      <Footer />
     </div>
   );
 };
