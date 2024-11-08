@@ -1,6 +1,18 @@
+import { where } from "sequelize";
 import db from "../models/index.js";
 import bcrypt from "bcrypt";
-
+const salt = bcrypt.genSaltSync(10);
+// function encript password
+let hashUserPassword = (password) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let hashPassword = await bcrypt.hashSync(password, salt);
+      resolve(hashPassword);
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
 let handleUserLogin = (email, password) => {
   return new Promise(async (resolve, reject) => {
     try {
@@ -35,16 +47,20 @@ let handleUserLogin = (email, password) => {
 let checkUserEmail = (email) => {
   return new Promise(async (resolve, reject) => {
     try {
-      let user = await db.Users.findOne({
-        where: { email: email },
-      });
+      const [user] = await db.sequelize.query(
+        "SELECT * FROM Users WHERE email = :email LIMIT 1",
+        {
+          replacements: { email: email },
+          type: db.Sequelize.QueryTypes.SELECT, // ensures raw data is returned
+        }
+      );
       if (user) {
-        resolve(true);
+        resolve(true); // User exists
       } else {
-        resolve(false);
+        resolve(false); // User does not exist
       }
-    } catch (e) {
-      reject(e);
+    } catch (error) {
+      reject(error);
     }
   });
 };
@@ -57,4 +73,163 @@ let compareUserPassword = () => {
     }
   });
 };
-export { handleUserLogin };
+
+let getUser = (userid) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let users = "";
+      if (userid === "all") {
+        const [results, metadata] = await db.sequelize.query(
+          "SELECT * FROM Users"
+        );
+        users = results; // Dữ liệu trả về
+      }
+      if (userid && userid !== "all") {
+        const [results, metadata] = await db.sequelize.query(
+          "SELECT * FROM Users WHERE user_id = :userid",
+          {
+            replacements: { userid: userid },
+          }
+        );
+        users = results; // Chỉ cần người dùng đầu tiên (nếu có)
+      }
+
+      resolve(users);
+    } catch (e) {
+      console.error("Lỗi khi lấy dữ liệu người dùng:", e);
+      reject(e); // Đảm bảo reject lỗi để có thể xử lý từ bên ngoài
+    }
+  });
+};
+let createUser = (data) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      // check email
+      let check = await checkUserEmail(data.email);
+
+      //  ma hoa mat khau truoc khi gan
+      if (check === true) {
+        return resolve({
+          errCode: 1,
+          message: "Email already used",
+        });
+      }
+
+      // await db.Users.create({
+      //   email: data.email,
+      //   username: data.username,
+      //   password: data.password,
+      //   phone_number: data.phone_number,
+      //   date_of_birth: data.date_of_birth,
+      //   role_id: data.role_id,
+      // });
+
+      // Insert user using raw SQL query
+      await db.sequelize.query(
+        `INSERT INTO Users (email, username, password, phone_number, date_of_birth, role_id)
+         VALUES (:email, :username, :password, :phone_number, :date_of_birth, :role_id)`,
+        {
+          replacements: {
+            email: data.email,
+            username: data.username,
+            password: data.password, // Consider hashing the password here before storing
+            phone_number: data.phone_number,
+            date_of_birth: data.date_of_birth,
+            role_id: data.role_id,
+          },
+          type: db.Sequelize.QueryTypes.INSERT,
+        }
+      );
+      resolve({
+        errCode: 0,
+        message: "OK",
+      });
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
+let editUser = (data) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      if (!data.id) {
+        return resolve({
+          errCode: 2,
+          message: " Missing required parameter id !",
+        });
+      }
+
+      let user = await db.Users.findOne({
+        raw: false,
+        where: { id: data.id },
+      });
+
+      if (user) {
+        email = data.email;
+        username = data.username;
+        password = data.password; // Consider hashing the password here before storing
+        phone_number = data.phone_number;
+        date_of_birth = data.date_of_birth;
+        role_id = data.role_id;
+        await user.save();
+        // await db.Users.save({
+        //   email: data.email,
+        //   username: data.username,
+        //   password: data.password, // Consider hashing the password here before storing
+        //   phone_number: data.phone_number,
+        //   date_of_birth: data.date_of_birth,
+        //   role_id: data.role_id,
+        // });
+        resolve({
+          errCode: 0,
+          message: "update user successed!",
+        });
+      } else {
+        resolve({
+          errCode: 1,
+          message: "User not found !",
+        });
+      }
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
+let deleteUser = (userid) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      // Check if the user exists using a raw query
+      let user = await db.sequelize.query(
+        "SELECT * FROM Users WHERE user_id = :userid",
+        {
+          replacements: { userid: userid },
+          type: db.Sequelize.QueryTypes.SELECT,
+        }
+      );
+
+      if (user.length === 0) {
+        return resolve({
+          errCode: 2,
+          errMessage: "User not exist!",
+        });
+      }
+
+      // Delete the user using a raw query
+      await db.sequelize.query("DELETE FROM Users WHERE user_id = :userid", {
+        replacements: { userid: userid },
+        type: db.Sequelize.QueryTypes.DELETE,
+      });
+
+      resolve({
+        errCode: 0,
+        message: "User is deleted!",
+      });
+    } catch (e) {
+      rejecxt(e);
+    }
+  });
+};
+
+export { handleUserLogin, getUser, createUser, editUser, deleteUser };

@@ -29,6 +29,7 @@ if (config.use_env_variable) {
 
 fs.readdirSync(__dirname)
   .filter((file) => {
+    console.log(`Processing file: ${file}`); // Kiểm tra tên file
     return (
       file.indexOf(".") !== 0 &&
       file !== basename &&
@@ -37,10 +38,13 @@ fs.readdirSync(__dirname)
     );
   })
   .forEach(async (file) => {
-    // Sử dụng pathToFileURL để chuyển đổi thành URL
     const modelPath = pathToFileURL(path.join(__dirname, file)).href;
+
     const { default: model } = await import(modelPath);
-    db[model.name] = model(sequelize, Sequelize.DataTypes);
+    if (model) {
+      db[model.name] = new model(sequelize, Sequelize.DataTypes);
+    } else {
+    }
   });
 
 Object.keys(db).forEach((modelName) => {
@@ -51,5 +55,15 @@ Object.keys(db).forEach((modelName) => {
 
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
+
+// Thêm đoạn kiểm tra kết nối cơ sở dữ liệu
+(async () => {
+  try {
+    await sequelize.authenticate();
+    console.log("Kết nối cơ sở dữ liệu thành công!");
+  } catch (error) {
+    console.error("Không thể kết nối cơ sở dữ liệu:", error);
+  }
+})();
 
 export default db;

@@ -3,20 +3,24 @@ import bodyParser from "body-parser";
 // thư viện hỗ trợ lấy các tham số từ client gửi.  vd :query param
 import viewEngine from "./config/viewEngine.js";
 import initWebRoutes from "./routes/web.js";
+import cors from "cors"; // Import thư viện cors
 import dotenv from "dotenv"; // Sử dụng import
-
-import { connection } from "./config/connectDB.js";
 
 dotenv.config(); // Gọi config
 
 // config app
 const app = express();
+// Thiết lập CORS để cho phép các yêu cầu từ 'http://localhost:3000'
+app.use(
+  cors({
+    origin: "http://localhost:3000", // Thay bằng URL của ứng dụng React của bạn
+  })
+);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 viewEngine(app);
 
 // tesst DB
-connection();
 
 initWebRoutes(app);
 //

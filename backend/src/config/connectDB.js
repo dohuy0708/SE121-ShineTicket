@@ -6,7 +6,7 @@ const sequelize = new Sequelize("ShineTicket", "root", "123456", {
   dialect: "mysql",
 });
 
-const connection = async () => {
+export const connection = async () => {
   try {
     await sequelize.authenticate();
     console.log(" Connection successfully!");
@@ -15,4 +15,4 @@ const connection = async () => {
   }
 };
 
-export { sequelize, connection };
+export default sequelize;
