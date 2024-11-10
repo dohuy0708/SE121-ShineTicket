@@ -1,5 +1,6 @@
 // src/components/EventInfo.js
 import React from "react";
+import { Link } from "react-router-dom";
 
 const BigTicket = () => {
   return (
@@ -33,9 +34,11 @@ const BigTicket = () => {
                   </span>
                 </p>
               </div>
-              <button className="w-full bg-primary py-2 rounded-md hover:bg-white hover:text-black font-bold text-white">
-                Mua vé ngay
-              </button>
+              <Link to={"/selectTicket"}>
+                <button className="w-full bg-primary py-2 rounded-md hover:bg-white hover:text-black font-bold text-white">
+                  Mua vé ngay
+                </button>
+              </Link>
             </div>
           </div>
         </div>

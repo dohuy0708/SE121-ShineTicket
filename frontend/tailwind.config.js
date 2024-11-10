@@ -10,6 +10,9 @@ module.exports = {
       spacing: {
         18: "4.5rem", // Thêm giá trị pt-18 với 4.5rem
       },
+      maxWidth: {
+        selectTicket: "calc(100% * (7 / 8))", // hoặc một giá trị tùy chỉnh chính xác
+      },
     },
   },
   plugins: [],
