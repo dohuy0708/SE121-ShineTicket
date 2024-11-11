@@ -3,8 +3,11 @@ import React from "react";
 import BigTicket from "../../components/BigTicket";
 import EventSection from "../../components/EventSection ";
 import TicketInfo from "../../components/TicketInfo";
+import { useLocation } from "react-router-dom";
 
 const TicketDetails = () => {
+  const location = useLocation();
+  const { event } = location.state || {};
   const specialEvents = [
     {
       name: "Sân khấu Thiên Đàng",
@@ -31,7 +34,7 @@ const TicketDetails = () => {
   return (
     <div className="bg-bg-main ">
       <div className="mx-auto max-w-7xl p-4">
-        <BigTicket />
+        <BigTicket event={event} />
         <div>
           <TicketInfo />
           Có thể bạn cũng thích

@@ -1,12 +1,15 @@
 import React, { useState } from "react";
 import TicketType from "../../components/TicketType";
 import CartSummary from "../../components/CartSummary";
-
+import { useLocation } from "react-router-dom";
 const TicketSelectionPage = () => {
+  const location = useLocation();
+  const { event } = location.state || {};
+
   const [ticketQuantities, setTicketQuantities] = useState({
     vip1: 0,
-    vip2: 2,
-    ca1: 2,
+    vip2: 0,
+    ca1: 0,
   });
 
   const setQuantity = (type, quantity) => {
@@ -18,21 +21,21 @@ const TicketSelectionPage = () => {
       name: "VIP 1",
       price: 600000,
       soldOut: true,
-      description: "Thông tin thêm về vé",
+      description: "Có chỗ ngồi, trước sân khấu, được phục vụ nước uống",
       type: "vip1",
     },
     {
       name: "VIP 2",
       price: 800000,
       soldOut: false,
-      description: "Thông tin thêm về vé",
+      description: "Chỗ ngồi ngay sát sân khấu, được phục vụ nước uống",
       type: "vip2",
     },
     {
       name: "CA 1",
       price: 450000,
       soldOut: false,
-      description: "Thông tin thêm về vé",
+      description: "Đứng xung quanh sân khấu",
       type: "ca1",
     },
   ];
@@ -48,7 +51,7 @@ const TicketSelectionPage = () => {
   const total = cartItems.reduce((sum, item) => sum + item.total, 0);
 
   return (
-    <div className=" relative h-[calc(100vh-72px)] bg-black space-y-4 lg:space-y-0 lg:space-x-4">
+    <div className=" relative min-h-[calc(100vh-72px)] bg-black space-y-4 lg:space-y-0 lg:space-x-4">
       <div className="w-[75%]">
         <div className="relative pt-10 mb-8">
           <h2 className="absolute left-16 text-lg text-primary font-bold">
@@ -76,7 +79,11 @@ const TicketSelectionPage = () => {
         </div>
       </div>
       <div className="w-1/4 absolute top-0 right-0 h-[100%]">
-        <CartSummary items={cartItems} total={total.toLocaleString()} />
+        <CartSummary
+          items={cartItems}
+          total={total.toLocaleString()}
+          event={event}
+        />
       </div>
     </div>
   );

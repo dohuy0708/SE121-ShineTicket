@@ -10,8 +10,8 @@ const BannerCarousel = ({ events }) => {
       (prevIndex) => (prevIndex + 1) % Math.ceil(events.length / slidesToShow)
     );
   };
-  const handleViewDetails = () => {
-    navigate(`/ticketdetails`);
+  const handleViewDetails = (event) => {
+    navigate(`/ticketdetails`, { state: { event } });
   };
   const prevSlide = () => {
     setCurrentIndex(
@@ -46,7 +46,7 @@ const BannerCarousel = ({ events }) => {
                 </div>
                 <button
                   className="slide-button hover:bg-primary hover:text-white"
-                  onClick={() => handleViewDetails(event.id)}
+                  onClick={() => handleViewDetails(event)}
                 >
                   Xem chi tiết
                 </button>

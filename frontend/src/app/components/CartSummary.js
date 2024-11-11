@@ -1,15 +1,21 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
-const CartSummary = ({ items, total }) => {
+const CartSummary = ({ items, total, event }) => {
+  const navigate = useNavigate();
+
+  const handlePayment = () => {
+    navigate("/payment", {
+      state: { items, total, event },
+    });
+  };
   return (
     <div className="bg-bg-main flex flex-col justify-between text-white p-5 rounded-md h-[100%]">
       <div>
         <div className="border-b border-gray-300 mb-4">
-          <h2 className="text-lg font-semibold mb-4">
-            [TP.HCM] Những Thành Phố Mơ Màng Year End 2024
-          </h2>
-          <p className="text-primary mb-2">15:00, 08 tháng 12, 2024</p>
-          <p className="text-gray-300 mb-4">TP.Hồ Chí Minh (ngoài trời)</p>
+          <h2 className="text-lg font-semibold mb-4">{event.name}</h2>
+          <p className="text-primary mb-2">{event.date}</p>
+          <p className="text-gray-300 mb-4">{event.location}</p>
         </div>
 
         <table className="w-full text-sm mb-4">
@@ -36,7 +42,10 @@ const CartSummary = ({ items, total }) => {
           <span>Thành tiền</span>
           <span>{total} đ</span>
         </div>
-        <button className="w-full bg-primary text-black font-semibold py-2 rounded-md hover:bg-yellow-500">
+        <button
+          onClick={handlePayment}
+          className="w-full bg-primary text-black font-semibold py-2 rounded-md hover:bg-white"
+        >
           Thanh toán
         </button>
       </div>

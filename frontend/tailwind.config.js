@@ -13,6 +13,9 @@ module.exports = {
       maxWidth: {
         selectTicket: "calc(100% * (7 / 8))", // hoặc một giá trị tùy chỉnh chính xác
       },
+      backgroundImage: {
+        "test-image": 'url("/public/img.png")',
+      },
     },
   },
   plugins: [],
