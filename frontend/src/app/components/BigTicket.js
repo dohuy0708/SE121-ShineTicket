@@ -30,7 +30,7 @@ const BigTicket = ({ event }) => {
                   </span>
                 </p>
               </div>
-              <Link to={"/selectTicket"} state={{ event }}>
+              <Link to={"/select-ticket"} state={{ event }}>
                 <button className="w-full bg-primary py-2 rounded-md hover:bg-white hover:text-black font-bold text-white">
                   Mua vé ngay
                 </button>

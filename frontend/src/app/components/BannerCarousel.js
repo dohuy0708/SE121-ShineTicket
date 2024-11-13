@@ -11,7 +11,7 @@ const BannerCarousel = ({ events }) => {
     );
   };
   const handleViewDetails = (event) => {
-    navigate(`/ticketdetails`, { state: { event } });
+    navigate(`/ticket-details`, { state: { event } });
   };
   const prevSlide = () => {
     setCurrentIndex(

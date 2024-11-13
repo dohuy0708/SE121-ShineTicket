@@ -21,14 +21,17 @@ const Header = () => {
           </div>
           <div className="flex space-x-4">
             <Link
-              to="/MyEvents"
+              to="/my-events"
               className="bg-yellow-400 text-black font-semibold px-4 py-2 rounded-md"
             >
               Tạo sự kiện
             </Link>
-            <button className="bg-yellow-400 text-black font-semibold">
-              Vé đã mua
-            </button>
+            <Link to="my-tickets">
+              <button className="bg-yellow-400 text-black font-semibold">
+                Vé đã mua
+              </button>
+            </Link>
+
             <button className="bg-yellow-400 text-black font-semibold">
               Tài khoản
             </button>
