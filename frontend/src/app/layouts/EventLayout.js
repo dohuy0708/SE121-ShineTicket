@@ -1,11 +1,11 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
-import Sidebar from "../components/Sidebar";
+import EventSidebar from "../components/EventSidebar";
 
-function SidebarLayout() {
+function EventLayout() {
   return (
     <div className="flex bg-black">
-      <Sidebar />
+      <EventSidebar />
       <main style={{ flex: 1 }}>
         <Outlet />
       </main>
@@ -13,4 +13,4 @@ function SidebarLayout() {
   );
 }
 
-export default SidebarLayout;
+export default EventLayout;

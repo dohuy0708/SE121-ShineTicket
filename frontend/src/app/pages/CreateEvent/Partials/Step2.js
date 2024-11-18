@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Performance from "../../../components/Performance";
+import Performance from "./Performance";
 
 function Step2() {
   const [performanceList, setPerformanceList] = useState([]);

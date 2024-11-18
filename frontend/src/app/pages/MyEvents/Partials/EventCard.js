@@ -1,6 +1,6 @@
 // EventCard.js
 import React from "react";
-
+import { Link } from "react-router-dom";
 const EventCard = ({ event }) => {
   return (
     <div className="bg-bg-main p-4 rounded-lg text-white m-6">
@@ -19,13 +19,13 @@ const EventCard = ({ event }) => {
       <div className="mt-4  max-w-xl mx-auto ">
         <div className="flex  justify-around text-sm text-center text-white">
           <span className="cursor-pointer font-semibold hover:text-yellow-400">
-            Tổng kết
+            <Link to="/summary">Tổng kết</Link>
           </span>
           <span className="cursor-pointer font-semibold hover:text-yellow-400">
-            Chỉnh sửa
+            <Link to="/create-event">Chỉnh sửa</Link>
           </span>
           <span className="cursor-pointer font-semibold hover:text-yellow-400">
-            Thành viên
+            <Link to="/orders">Đơn hàng</Link>
           </span>
         </div>
       </div>

@@ -1,8 +1,8 @@
 // src/components/EventInfo.js
 import React from "react";
-import BigTicket from "../../components/BigTicket";
+import BigTicket from "./Partials/BigTicket";
 import EventSection from "../../components/EventSection ";
-import TicketInfo from "../../components/TicketInfo";
+import TicketInfo from "./Partials/TicketInfo";
 import { useLocation } from "react-router-dom";
 
 const TicketDetails = () => {

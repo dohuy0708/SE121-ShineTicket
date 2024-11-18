@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import EventCard from "../../components/EventCard";
+import EventCard from "./Partials/EventCard";
+import { Outlet } from "react-router-dom";
 const MyEvents = () => {
   const events = [
     {
@@ -18,13 +19,13 @@ const MyEvents = () => {
 
   const [activeFilter, setActiveFilter] = useState("Sắp diễn ra");
   return (
-    <div className=" flex-1 bg-black mx-auto">
+    <div className="flex-1 bg-black mx-auto">
       <div className="flex items-center text-2xl pl-4 h-16 bg-bg-main border-b-2 border-[#A19393] font-semibold text-white mb-4">
         Sự kiện đã tạo
       </div>
 
-      <div className="flex w-full mx-6">
-        <div className="flex gap-2 w-1/3">
+      <div className="grid grid-cols-2 gap-x-4 mx-6">
+        <div className="flex gap-2 ">
           <input
             type="text"
             placeholder="Tìm kiếm sự kiện"

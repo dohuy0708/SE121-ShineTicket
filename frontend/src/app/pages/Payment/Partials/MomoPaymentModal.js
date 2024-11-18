@@ -1,5 +1,4 @@
 import React from "react";
-import Timer from "./Timer";
 
 const MomoPaymentModal = ({ isOpen, onClose, amount, children }) => {
   if (!isOpen) return null;

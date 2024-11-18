@@ -1,8 +1,7 @@
 // src/pages/Home.js
 import React from "react";
-import Header from "../../components/Header";
-import Nav from "../../components/Nav";
-import BannerCarousel from "../../components/BannerCarousel";
+import Nav from "./partials/Nav";
+import BannerCarousel from "./partials/BannerCarousel";
 import EventSection from "../../components/EventSection ";
 import Footer from "../../components/Footer";
 const Home = () => {

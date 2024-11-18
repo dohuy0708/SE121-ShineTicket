@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import TicketType from "../../components/TicketType";
-import CartSummary from "../../components/CartSummary";
+import TicketType from "./Partials/TicketType";
+import CartSummary from "./Partials/CartSummary";
 import { useLocation } from "react-router-dom";
 const TicketSelectionPage = () => {
   const location = useLocation();
