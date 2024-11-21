@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-
+import UploadBox from "./UploadBox";
+import MyEditor from "./MyEditor";
 export default function Step1() {
   const [logo, setLogo] = useState(null);
   const [backgroundImage, setBackgroundImage] = useState(null);
@@ -136,10 +137,11 @@ export default function Step1() {
       </FormSection>
 
       <FormSection title="Thông tin sự kiện">
-        <textarea
+        {/* <textarea
           className="w-full p-2 bg-white outline-none border border-gray-600 rounded h-24"
           placeholder="// phần soạn thảo văn bản"
-        ></textarea>
+        ></textarea> */}
+        <MyEditor />
       </FormSection>
       <FormSection>
         <div className=" space-x-4 grid grid-cols-6">
@@ -172,34 +174,6 @@ export default function Step1() {
       </FormSection>
     </div>
   );
-
-  function UploadBox({ label, size, image, onChange, wi, he }) {
-    return (
-      <div
-        className={`${he} ${wi} border-dotted bg-[#393F4E] rounded-xl border-2 border-white flex flex-col items-center justify-center space-y-2 relative`}
-      >
-        {image ? (
-          <img
-            src={image}
-            alt="Upload Preview"
-            className="absolute rounded-lg inset-0 w-full h-full object-cover"
-          />
-        ) : (
-          <>
-            <span className="text-4xl ">📷</span>
-            <span className=" text-white ">{label}</span>
-            <span className="text-sm text-white font-semibold">({size})</span>
-          </>
-        )}
-        <input
-          type="file"
-          accept="image/*"
-          onChange={onChange}
-          className="opacity-0 absolute  inset-0 w-full h-full cursor-pointer"
-        />
-      </div>
-    );
-  }
 
   function FormSection({ title, children }) {
     return (

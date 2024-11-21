@@ -4,6 +4,7 @@ import BigTicket from "./Partials/BigTicket";
 import EventSection from "../../components/EventSection ";
 import TicketInfo from "./Partials/TicketInfo";
 import { useLocation } from "react-router-dom";
+import EventInfo from "./Partials/EventInfo";
 
 const TicketDetails = () => {
   const location = useLocation();
@@ -36,7 +37,8 @@ const TicketDetails = () => {
       <div className="mx-auto max-w-7xl p-4">
         <BigTicket event={event} />
         <div>
-          <TicketInfo />
+          <EventInfo />
+          <TicketInfo event={event} />
           Có thể bạn cũng thích
           <EventSection events={specialEvents} />
         </div>

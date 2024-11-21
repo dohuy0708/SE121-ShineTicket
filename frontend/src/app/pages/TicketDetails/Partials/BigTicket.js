@@ -38,7 +38,7 @@ const BigTicket = ({ event }) => {
             </div>
           </div>
         </div>
-        <div className="flex col-span-2 flex items-center justify-center overflow-hidden">
+        <div className="col-span-2 flex items-center justify-center overflow-hidden">
           <img
             className="w-full h-full object-cover object-center overflow-clip"
             src="/img.png"

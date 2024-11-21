@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-//import QRCode from "qrcode.react"; // Import thư viện QR Code
 import CodeModal from "./CodeModal";
+import QRCode from "react-qr-code";
 
 export default function TicketCard({ ticket }) {
   const [isQRCodeVisible, setQRCodeVisible] = useState(false);
@@ -54,7 +54,7 @@ export default function TicketCard({ ticket }) {
         <CodeModal onClose={() => setQRCodeVisible(false)}>
           <div className="flex flex-col items-center">
             <h3 className="text-2xl font-semibold mb-4">{ticket.eventName}</h3>
-            {/* <QRCode value={ticket.ticketCode} size={200} /> */}
+            <QRCode value={ticket.ticketCode} size={200} />
             <p className="text-gray-400 mt-4">Mã vé: {ticket.ticketCode}</p>
             <button
               onClick={() => setQRCodeVisible(false)}

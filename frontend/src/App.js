@@ -10,6 +10,7 @@ import MyAccount from "./app/pages/MyAccount/MyAccount";
 import MyEvents from "./app/pages/MyEvents/MyEvents";
 import MyTickets from "./app/pages/MyTickets/MyTickets";
 import Payment from "./app/pages/Payment/Payment";
+import Search from "./app/pages/Search/Search";
 import TicketDetails from "./app/pages/TicketDetails/TicketDetails";
 import TicketSelectionPage from "./app/pages/TicketSelectionPage/TicketSelectionPage";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
@@ -22,6 +23,7 @@ function App() {
           <Routes>
             <Route element={<MainLayout />}>
               <Route path="/" element={<Home />} />
+              <Route path="/search" element={<Search />} />
               <Route path="/ticket-details" element={<TicketDetails />} />
               <Route path="/select-ticket" element={<TicketSelectionPage />} />
               <Route path="/payment" element={<Payment />} />

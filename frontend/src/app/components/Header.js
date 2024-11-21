@@ -1,7 +1,11 @@
 // src/components/Header.js
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 const Header = () => {
+  const nav = useNavigate();
+  const searchEvent = () => {
+    nav("/search");
+  };
   return (
     <header className="bg-primary w-full fixed top-0 left-0 right-0 z-10">
       <div className="max-w-screen-xl  mx-auto">
@@ -15,6 +19,12 @@ const Header = () => {
               placeholder="Bạn tìm gì hôm nay?"
               className="px-4 py-2 rounded-md w-96 outline-none"
             />
+            <button
+              className="px-4 py-2 bg-black text-white rounded-md"
+              onClick={searchEvent}
+            >
+              Tìm
+            </button>
           </div>
           <div className="flex items-center space-x-4">
             <Link
