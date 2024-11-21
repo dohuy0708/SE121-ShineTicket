@@ -5,36 +5,31 @@ const Header = () => {
   return (
     <header className="bg-primary w-full fixed top-0 left-0 right-0 z-10">
       <div className="max-w-screen-xl  mx-auto">
-        <div className=" py-4 px-4 flex justify-between items-center">
+        <div className="px-4 flex justify-between items-center">
           <Link to="/" className="text-2xl font-bold">
-            SHINETICKET
+            <img src="/Logo.png" alt="Logo ShineTicket" className="h-12" />
           </Link>
-          <div className="flex space-x-4 items-center">
+          <div className="flex my-4 space-x-4 items-center">
             <input
               type="text"
               placeholder="Bạn tìm gì hôm nay?"
               className="px-4 py-2 rounded-md w-96 outline-none"
             />
-            <button className="bg-black text-white px-4 py-2 rounded-md">
-              Tìm kiếm
-            </button>
           </div>
-          <div className="flex space-x-4">
+          <div className="flex items-center space-x-4">
             <Link
               to="/my-events"
-              className="bg-yellow-400 text-black font-semibold px-4 py-2 rounded-md"
+              className="border-2 border-solid border-white text-white font-semibold px-6 py-1.5 rounded-3xl"
             >
               Tạo sự kiện
             </Link>
             <Link to="my-tickets">
-              <button className="bg-yellow-400 text-black font-semibold">
-                Vé đã mua
-              </button>
+              <button className=" text-white font-semibold">Vé đã mua</button>
             </Link>
 
-            <button className="bg-yellow-400 text-black font-semibold">
-              Tài khoản
-            </button>
+            <Link to="my-account">
+              <button className=" text-white font-semibold">Tài khoản</button>
+            </Link>
           </div>
         </div>
       </div>

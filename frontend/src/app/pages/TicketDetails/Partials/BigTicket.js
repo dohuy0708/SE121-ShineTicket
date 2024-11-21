@@ -5,8 +5,8 @@ import { Link } from "react-router-dom";
 const BigTicket = ({ event }) => {
   return (
     <div className="w-full h-max pb-8 mt-4 pl-4 pr-4">
-      <div className="w-full h-full flex text-white rounded-[1.5rem] bg-bg-primary overflow-hidden">
-        <div className="flex-2 bg-[#38383D] relative p-[1.875rem]">
+      <div className="w-full h-full grid grid-cols-3 text-white rounded-[1.5rem] bg-bg-primary overflow-hidden">
+        <div className="flex col-span-1 bg-[#38383D] relative p-[1.875rem]">
           <div className="absolute w-[3.75rem] h-[3.75rem] rounded-full z-11 top-0 right-0 transform translate-x-[1.875rem] translate-y-[-1.875rem] bg-bg-main"></div>
           <div className="absolute w-[3.75rem] h-[3.75rem] rounded-full z-11 bottom-0 right-0 transform translate-x-[1.875rem] translate-y-[1.875rem] bg-bg-main"></div>
           <div className="w-full h-full flex flex-col justify-between">
@@ -38,7 +38,7 @@ const BigTicket = ({ event }) => {
             </div>
           </div>
         </div>
-        <div className="flex-3 flex items-center justify-center overflow-hidden">
+        <div className="flex col-span-2 flex items-center justify-center overflow-hidden">
           <img
             className="w-full h-full object-cover object-center overflow-clip"
             src="/img.png"

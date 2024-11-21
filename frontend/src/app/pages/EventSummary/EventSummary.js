@@ -1,8 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import SummaryTable from "./Partials/SummaryTable";
 import RevenueChart from "./Partials/RevenueChart";
 import TicketTable from "./Partials/TicketsTable";
-import { useState } from "react";
 import ShowSelector from "./Partials/ShowSelector";
 
 export default function EventSummary() {
@@ -12,6 +11,7 @@ export default function EventSummary() {
     serviceFee: "9.600.000",
     totalRevenue: "88.400.000",
   };
+
   const showData = [
     {
       date: "18/11/2024",
@@ -59,17 +59,45 @@ export default function EventSummary() {
     },
   ];
 
+  // Dữ liệu biểu đồ toàn bộ khoảng thời gian bán vé
+  const chartData = {
+    startDate: "01/11/2024",
+    endDate: "20/11/2024",
+    sales: [
+      { date: "01/11/2024", ticketsSold: 10, revenue: 3000000 },
+      { date: "02/11/2024", ticketsSold: 15, revenue: 4500000 },
+      { date: "03/11/2024", ticketsSold: 20, revenue: 6000000 },
+      { date: "18/11/2024", ticketsSold: 70, revenue: 50000000 }, // Ngày diễn
+      { date: "19/11/2024", ticketsSold: 60, revenue: 46000000 }, // Ngày diễn
+      { date: "20/11/2024", ticketsSold: 50, revenue: 40000000 },
+    ],
+  };
+
   // Lấy dữ liệu của ngày được chọn
   const selectedShow = showData.find((show) => show.date === selectedDate);
 
+  // Lọc dữ liệu biểu đồ theo ngày được chọn
+  const filteredChartData =
+    selectedShow &&
+    chartData.sales
+      .filter((sale) => sale.date === selectedShow.date)
+      .map((sale) => ({
+        date: sale.date,
+        ticketsSold: sale.ticketsSold,
+        revenue: sale.revenue,
+      }));
+
+  // Xây dựng dữ liệu biểu đồ đúng định dạng
+  const selectedChartData = {
+    startDate: selectedShow?.date,
+    endDate: selectedShow?.date,
+    sales: filteredChartData || [],
+  };
   return (
     <div className="flex-1 bg-black mx-auto">
-      <div className="flex items-center text-2xl pl-4 h-16 bg-bg-main border-b-2 border-[#A19393] font-semibold text-white mb-4">
-        Sự kiện ----
-      </div>
-      <div className="mt-4 mx-6 bg-bg-main p-6 rounded-lg ">
-        <h1 className="text-3xl text-white font-bold mb-6">Tóm tắt sự kiện</h1>
+      <div className=" p-6 ">
         <SummaryTable summaryData={summaryData} />
+        <RevenueChart chartData={chartData} />
         {/* Dropdown chọn ngày */}
         <ShowSelector
           shows={showData}
@@ -80,7 +108,6 @@ export default function EventSummary() {
         {/* Hiển thị dữ liệu theo ngày được chọn */}
         {selectedShow ? (
           <>
-            <RevenueChart chartData={[selectedShow]} />
             <TicketTable
               tickets={selectedShow.tickets}
               date={selectedShow.date}

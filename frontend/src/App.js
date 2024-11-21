@@ -6,6 +6,7 @@ import CreateEvent from "./app/pages/CreateEvent/CreateEvent";
 import EventOrders from "./app/pages/EventOrders/EventOrders";
 import EventSummary from "./app/pages/EventSummary/EventSummary";
 import Home from "./app/pages/Home/Home";
+import MyAccount from "./app/pages/MyAccount/MyAccount";
 import MyEvents from "./app/pages/MyEvents/MyEvents";
 import MyTickets from "./app/pages/MyTickets/MyTickets";
 import Payment from "./app/pages/Payment/Payment";
@@ -31,6 +32,7 @@ function App() {
               <Route path="/my-tickets" element={<MyTickets />} />
               <Route path="/create-event" element={<CreateEvent />} />
               <Route path="/my-events" element={<MyEvents />}></Route>
+              <Route path="/my-account" element={<MyAccount />} />
             </Route>
             <Route element={<EventLayout />}>
               <Route path="/summary" element={<EventSummary />} />

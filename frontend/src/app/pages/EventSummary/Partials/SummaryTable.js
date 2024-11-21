@@ -2,7 +2,7 @@ import React from "react";
 
 const SummaryTable = ({ summaryData }) => {
   return (
-    <div className="bg-[#393F4E] text-white p-6 rounded-md shadow-md">
+    <div className="bg-bg-main text-white p-6 rounded-md shadow-md">
       <h2 className="text-xl font-bold mb-4">Tổng kết sự kiện</h2>
       <div className="space-y-2">
         <div className="flex justify-between">

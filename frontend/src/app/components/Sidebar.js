@@ -6,6 +6,7 @@ const Sidebar = () => {
     { name: "Vé đã mua", path: "/my-tickets" },
     { name: "Sự kiện đã tạo", path: "/my-events" },
     { name: "Tạo sự kiện", path: "/create-event" },
+    { name: "Tài khoản", path: "/my-account" },
     { name: "Trở về", path: "/" },
   ];
 
