@@ -1,7 +1,10 @@
 import Header from "./app/components/Header";
+import AccessLayout from "./app/layouts/AccessLayout";
 import EventLayout from "./app/layouts/EventLayout";
 import MainLayout from "./app/layouts/MainLayout";
 import SidebarLayout from "./app/layouts/SideBarLayout";
+import Login from "./app/pages/Access/Login";
+import SignUp from "./app/pages/Access/SignUp";
 import CreateEvent from "./app/pages/CreateEvent/CreateEvent";
 import EventOrders from "./app/pages/EventOrders/EventOrders";
 import EventSummary from "./app/pages/EventSummary/EventSummary";
@@ -18,30 +21,29 @@ function App() {
   return (
     <>
       <BrowserRouter>
-        <Header />
-        <div className="pt-18 m-0 p-0 box-border">
-          <Routes>
-            <Route element={<MainLayout />}>
-              <Route path="/" element={<Home />} />
-              <Route path="/search" element={<Search />} />
-              <Route path="/ticket-details" element={<TicketDetails />} />
-              <Route path="/select-ticket" element={<TicketSelectionPage />} />
-              <Route path="/payment" element={<Payment />} />
-            </Route>
-
-            {/* Các trang có sidebar: MyTicket, MyEvent, CreateEvent */}
-            <Route element={<SidebarLayout />}>
-              <Route path="/my-tickets" element={<MyTickets />} />
-              <Route path="/create-event" element={<CreateEvent />} />
-              <Route path="/my-events" element={<MyEvents />}></Route>
-              <Route path="/my-account" element={<MyAccount />} />
-            </Route>
-            <Route element={<EventLayout />}>
-              <Route path="/summary" element={<EventSummary />} />
-              <Route path="/orders" element={<EventOrders />} />
-            </Route>
-          </Routes>
-        </div>
+        <Routes>
+          <Route element={<AccessLayout />}>
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<SignUp />} />
+          </Route>
+          <Route element={<MainLayout />}>
+            <Route path="/" element={<Home />} />
+            <Route path="/search" element={<Search />} />
+            <Route path="/ticket-details" element={<TicketDetails />} />
+            <Route path="/select-ticket" element={<TicketSelectionPage />} />
+            <Route path="/payment" element={<Payment />} />
+          </Route>
+          <Route element={<SidebarLayout />}>
+            <Route path="/my-tickets" element={<MyTickets />} />
+            <Route path="/create-event" element={<CreateEvent />} />
+            <Route path="/my-events" element={<MyEvents />}></Route>
+            <Route path="/my-account" element={<MyAccount />} />
+          </Route>
+          <Route element={<EventLayout />}>
+            <Route path="/summary" element={<EventSummary />} />
+            <Route path="/orders" element={<EventOrders />} />
+          </Route>
+        </Routes>
       </BrowserRouter>
     </>
   );

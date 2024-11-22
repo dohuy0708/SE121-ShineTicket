@@ -1,14 +1,12 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
-
-function Header() {
-  return <header>Header content</header>;
-}
+import Header from "../components/Header";
 
 function MainLayout({ children }) {
   return (
     <div>
-      <main>
+      <Header />
+      <main className="pt-18 m-0 p-0 box-border">
         <Outlet />
       </main>
     </div>

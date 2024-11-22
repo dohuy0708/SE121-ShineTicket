@@ -39,7 +39,10 @@ const Sidebar = () => {
 
   return (
     <div className="w-64 bg-bg-main text-white border-r-2 border-[#A19393] font-bold text-lg  h-screen">
-      <ul className="mt-16">
+      <div className="  py-4">
+        <img src="/shineticket.png" className="h-24 mx-auto" />
+      </div>
+      <ul>
         {menuItems.map((item) => (
           <NavLink
             to={item.path}

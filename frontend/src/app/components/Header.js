@@ -92,7 +92,7 @@ const Header = () => {
                     </div>
                   </Link>
                   <div className="border-b-2 border-dashed border-gray-500"></div>
-                  <Link to="/" className="flex items-center p-1 ">
+                  <Link to="/login" className="flex items-center p-1 ">
                     <ArrowLeftStartOnRectangleIcon className="text-black h-7 inline mr-2 " />
                     <div
                       className="text-black h-7 font-semibold"
