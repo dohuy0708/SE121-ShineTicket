@@ -9,22 +9,22 @@ const EventCard = ({ event }) => {
         <div className="ml-4 flex flex-col justify-between">
           <div>
             <h3 className="text-lg font-semibold">{event.name}</h3>
-            <p className="text-md mt-4 text-yellow-400">
+            <p className="text-md mt-4 text-primary">
               📅 {event.date} ({event.time})
             </p>
-            <p className="text-md mt-2 text-yellow-400">📍 {event.location}</p>
+            <p className="text-md mt-2 text-primary">📍 {event.location}</p>
           </div>
         </div>
       </div>
       <div className="mt-4  max-w-xl mx-auto ">
         <div className="flex  justify-around text-sm text-center text-white">
-          <span className="cursor-pointer font-semibold hover:text-yellow-400">
+          <span className="cursor-pointer font-semibold hover:text-primary">
             <Link to="/summary">Tổng kết</Link>
           </span>
-          <span className="cursor-pointer font-semibold hover:text-yellow-400">
+          <span className="cursor-pointer font-semibold hover:text-primary">
             <Link to="/create-event">Chỉnh sửa</Link>
           </span>
-          <span className="cursor-pointer font-semibold hover:text-yellow-400">
+          <span className="cursor-pointer font-semibold hover:text-primary">
             <Link to="/orders">Đơn hàng</Link>
           </span>
         </div>

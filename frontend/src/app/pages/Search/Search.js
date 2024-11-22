@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import SearchFilter from "./Partials/SearchFilter";
 import { useNavigate } from "react-router-dom";
+import { CalendarDaysIcon } from "@heroicons/react/24/outline";
 
 export default function Search() {
   const [filters, setFilters] = useState({
@@ -80,14 +81,18 @@ export default function Search() {
               // onClick={() => handleCardClick()}
             >
               <div className="event-image bg-gray-300 h-[175px] rounded-lg mb-[10px]"></div>
-              <div className="event-info flex flex-col ml-2 gap-2">
-                <div className="event-name w-full overflow-hidden text-ellipsis whitespace-nowrap leading-[21px] h-[42px] font-semibold uppercase">
+              <div className="event-info flex flex-col gap-2">
+                <div className="event-name w-full overflow-hidden text-ellipsis whitespace-nowrap leading-[21px] font-semibold uppercase">
                   {<h2 className="text-lg font-medium">{result.title}</h2>}
                 </div>
                 <div className="event-price text-primary font-semibold">
-                  Giá: {result.price.toLocaleString()}đ
+                  Từ: {result.price.toLocaleString()}đ
                 </div>
-                <div className="event-date flex-1">Ngày: {result.date}</div>
+                <div className="event-date flex-1 flex items-center">
+                  {" "}
+                  <CalendarDaysIcon className="text-white inline w-5 bg-transparent mr-2" />
+                  {result.date}
+                </div>
               </div>
             </div>
           ))}

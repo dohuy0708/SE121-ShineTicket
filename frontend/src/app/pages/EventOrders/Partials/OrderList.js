@@ -27,7 +27,7 @@ const OrderList = ({ orders, onSelectOrder }) => {
                   order.status === "Paid"
                     ? "bg-green-500"
                     : order.status === "Pending"
-                    ? "bg-yellow-500"
+                    ? "bg-primary"
                     : "bg-red-500"
                 }`}
               >

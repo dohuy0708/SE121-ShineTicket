@@ -159,7 +159,7 @@ function TicketModal({ onSave, onClose }) {
           </button> */}
           <button
             onClick={handleSave}
-            className="px-4 py-2 w-full bg-yellow-500 text-lg text-white font-semibold rounded"
+            className="px-4 py-2 w-full bg-primary text-lg text-white font-semibold rounded"
           >
             Lưu
           </button>

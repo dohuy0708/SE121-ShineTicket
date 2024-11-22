@@ -104,12 +104,12 @@ function Step({ label, stepNumber, isActive, onClick }) {
     <div
       onClick={onClick}
       className={`flex items-center space-x-2  cursor-pointer ${
-        isActive ? "text-yellow-500" : "text-gray-400"
+        isActive ? "text-primary" : "text-gray-400"
       }`}
     >
       <span
         className={`w-7 h-7 rounded-full flex items-center justify-center ${
-          isActive ? "bg-yellow-500" : "bg-gray-600"
+          isActive ? "bg-primary" : "bg-gray-600"
         } text-white font-semibold`}
       >
         {stepNumber}

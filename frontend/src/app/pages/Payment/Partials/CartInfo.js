@@ -31,10 +31,10 @@ const CartInfo = ({ items, total }) => {
       </table>
       <div className="flex justify-between items-center font-bold  pt-2">
         <span>Tổng tiền</span>
-        <span className="text-yellow-500">{total}</span>
+        <span className="text-primary">{total}</span>
       </div>
       <button
-        className="bg-yellow-500 text-white w-full py-2 rounded-lg font-bold"
+        className="bg-primary text-white w-full py-2 rounded-lg font-bold"
         onClick={() => setIsModalOpen(true)}
       >
         Thanh toán

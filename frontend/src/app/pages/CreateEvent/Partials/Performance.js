@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import TicketModal from "./TicketModal";
+import { TicketIcon, PencilIcon, TrashIcon } from "@heroicons/react/24/outline";
 
 function Performance({ index, onDelete }) {
   const [tickets, setTickets] = useState([]);
@@ -11,7 +12,7 @@ function Performance({ index, onDelete }) {
   };
 
   return (
-    <div className="p-4 mb-4 border border-yellow-500 rounded-xl bg-bg-main relative">
+    <div className="p-4 mb-4 border border-primary rounded-xl bg-bg-main relative">
       <div
         className="absolute top-1 right-5 cursor-pointer font-semibold p-1 text-red-600 text-2xl"
         onClick={onDelete}
@@ -45,21 +46,24 @@ function Performance({ index, onDelete }) {
             key={ticketIndex}
             className="p-2 mt-2 bg-[#414652] text-white border border-gray-600 rounded flex justify-between items-center"
           >
-            <span>{ticket.name}</span>
+            <div className="flex items-center">
+              <TicketIcon className="h-6 inline mr-2" />
+              {ticket.name}
+            </div>
             <div>
               <button
                 onClick={() => setShowModal(true)}
-                className="text-yellow-500 mr-2"
+                className="text-black mr-2 rounded-md bg-white h-7 w-7  text-center"
               >
-                Chỉnh sửa
+                <PencilIcon className=" mx-auto h-5" />
               </button>
               <button
                 onClick={() =>
                   setTickets(tickets.filter((_, idx) => idx !== ticketIndex))
                 }
-                className="text-red-500"
+                className="text-white rounded-md bg-red-600 h-7 w-7  text-center"
               >
-                Xóa
+                <TrashIcon className="mx-auto h-5" />
               </button>
             </div>
           </div>

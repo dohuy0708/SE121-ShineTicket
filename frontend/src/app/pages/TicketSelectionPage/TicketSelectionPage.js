@@ -59,7 +59,7 @@ const TicketSelectionPage = () => {
           </h2>
 
           {/* Tiêu đề "Chọn vé" */}
-          <h2 className="text-yellow-500 text-center text-xl font-bold mb-4">
+          <h2 className="text-primary text-center text-xl font-bold mb-4">
             Chọn vé
           </h2>
         </div>

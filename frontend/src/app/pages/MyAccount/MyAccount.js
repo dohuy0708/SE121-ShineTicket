@@ -64,7 +64,7 @@ export default function MyAccount() {
               </label>
             </div>
           </div>
-          <button className="w-full bg-yellow-400 text-white font-bold py-2 rounded">
+          <button className="w-full bg-primary text-white font-bold py-2 rounded">
             Hoàn thành
           </button>
         </div>

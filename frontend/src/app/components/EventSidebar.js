@@ -1,11 +1,28 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
+import {
+  ChartPieIcon,
+  ArrowLeftIcon,
+  ShoppingCartIcon,
+} from "@heroicons/react/24/outline";
 
 const EventSidebar = () => {
   const menuItems = [
-    { name: "<- Sự kiện đã tạo", path: "/my-events" },
-    { name: "Tổng kết", path: "/summary" },
-    { name: "Đơn hàng", path: "/orders" },
+    {
+      name: "Sự kiện đã tạo",
+      path: "/my-events",
+      icon: <ArrowLeftIcon className="h-6 inline mr-2" />,
+    },
+    {
+      name: "Tổng kết",
+      path: "/summary",
+      icon: <ChartPieIcon className="h-6 inline mr-2" />,
+    },
+    {
+      name: "Đơn hàng",
+      path: "/orders",
+      icon: <ShoppingCartIcon className="h-6 inline mr-2" />,
+    },
   ];
 
   return (
@@ -16,13 +33,14 @@ const EventSidebar = () => {
             to={item.path}
             key={item.path}
             className={({ isActive }) =>
-              `py-4 px-8 cursor-pointer block ${
+              `py-4 px-8 cursor-pointer flex items-center ${
                 isActive
-                  ? "bg-[#393F4E] text-yellow-400"
-                  : "hover:bg-[#393F4E] hover:text-yellow-400"
+                  ? "bg-[#393F4E] text-primary"
+                  : "hover:bg-[#393F4E] hover:text-primary"
               }`
             }
           >
+            {item.icon}
             <li>{item.name}</li>
           </NavLink>
         ))}

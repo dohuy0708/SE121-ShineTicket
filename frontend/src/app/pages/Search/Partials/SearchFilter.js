@@ -20,7 +20,7 @@ export default function SearchFilter({ filters, setFilters, onApply }) {
   };
 
   return (
-    <div className="absolute top-8 mt-2 right-0 bg-white p-4 rounded-md shadow-lg  z-50">
+    <div className="absolute top-8 mt-2 right-0 bg-white text-black p-4 rounded-md shadow-lg  z-50">
       {/* Lọc theo ngày */}
       <div className="mb-4">
         <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -72,7 +72,7 @@ export default function SearchFilter({ filters, setFilters, onApply }) {
               onClick={() => handleFilterChange("category", cat)}
               className={`px-3 py-1 rounded-md border ${
                 filters.category === cat
-                  ? "bg-blue-500 text-white"
+                  ? "bg-primary text-white"
                   : "bg-gray-100"
               }`}
             >
@@ -95,10 +95,10 @@ export default function SearchFilter({ filters, setFilters, onApply }) {
             step={100000}
             value={filters.priceRange}
             onChange={(value) => handleFilterChange("priceRange", value)}
-            trackStyle={[{ backgroundColor: "#4caf50" }]}
+            trackStyle={[{ backgroundColor: "#ffc107" }]}
             handleStyle={[
-              { borderColor: "#4caf50" },
-              { borderColor: "#4caf50" },
+              { borderColor: "#ffc107" },
+              { borderColor: "#ffc107" },
             ]}
           />
         </div>
@@ -126,7 +126,7 @@ export default function SearchFilter({ filters, setFilters, onApply }) {
         </button>
         <button
           onClick={onApply}
-          className="bg-blue-500 text-white px-4 py-2 rounded-md w-1/2"
+          className="bg-primary text-white px-4 py-2 rounded-md w-1/2"
         >
           Áp dụng
         </button>

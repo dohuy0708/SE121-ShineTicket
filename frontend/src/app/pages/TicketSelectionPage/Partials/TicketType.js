@@ -13,7 +13,7 @@ const TicketType = ({
     <div className="border-b border-gray-700 pb-4 mb-4">
       <div className="flex justify-between items-center">
         <div>
-          <h3 className="text-yellow-500 font-bold">{name}</h3>
+          <h3 className="text-primary font-bold">{name}</h3>
           <p className="text-white">{price} đ</p>
         </div>
         {soldOut ? (

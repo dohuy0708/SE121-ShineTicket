@@ -1,13 +1,40 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
+import {
+  TicketIcon,
+  CalendarDaysIcon,
+  PencilSquareIcon,
+  UserCircleIcon,
+  ArrowLeftIcon,
+} from "@heroicons/react/24/outline";
 
 const Sidebar = () => {
   const menuItems = [
-    { name: "Vé đã mua", path: "/my-tickets" },
-    { name: "Sự kiện đã tạo", path: "/my-events" },
-    { name: "Tạo sự kiện", path: "/create-event" },
-    { name: "Tài khoản", path: "/my-account" },
-    { name: "Trở về", path: "/" },
+    {
+      name: "Vé đã mua",
+      path: "/my-tickets",
+      icon: <TicketIcon className="h-6 inline mr-2" />,
+    },
+    {
+      name: "Sự kiện đã tạo",
+      path: "/my-events",
+      icon: <CalendarDaysIcon className="h-6 inline mr-2" />,
+    },
+    {
+      name: "Tạo sự kiện",
+      path: "/create-event",
+      icon: <PencilSquareIcon className="h-6 inline mr-2" />,
+    },
+    {
+      name: "Tài khoản",
+      path: "/my-account",
+      icon: <UserCircleIcon className="h-6 inline mr-2" />,
+    },
+    {
+      name: "Trở về",
+      path: "/",
+      icon: <ArrowLeftIcon className="h-6 inline mr-2" />,
+    },
   ];
 
   return (
@@ -18,13 +45,14 @@ const Sidebar = () => {
             to={item.path}
             key={item.path}
             className={({ isActive }) =>
-              `py-4 px-8 cursor-pointer block ${
+              `h-16 px-8 cursor-pointer flex items-center ${
                 isActive
-                  ? "bg-[#393F4E] text-yellow-400"
-                  : "hover:bg-[#393F4E] hover:text-yellow-400"
+                  ? "bg-[#393F4E] text-primary"
+                  : "hover:bg-[#393F4E] hover:text-primary"
               }`
             }
           >
+            {item.icon}
             <li>{item.name}</li>
           </NavLink>
         ))}

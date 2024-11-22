@@ -40,7 +40,7 @@ const OrderFilter = ({ onFilterChange }) => {
 
       {/* Nút áp dụng */}
       <button
-        className="bg-blue-500 text-white px-4 py-2 rounded"
+        className="bg-primary text-white px-4 py-2 rounded"
         onClick={handleApplyFilters}
       >
         Áp dụng

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import { ChevronDownIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 
 const TicketInfo = ({ event }) => {
   // State để quản lý việc hiển thị thông tin vé
@@ -33,12 +34,16 @@ const TicketInfo = ({ event }) => {
       <div className="">
         {/* Thời gian và nút mũi tên */}
         <div className="flex justify-between items-center px-6 py-2 text-white">
-          <div className="text-lg font-medium">
+          <div className="text-lg font-medium flex items-center">
             <button
-              className=" text-white px-4 "
+              className=" text-white px-2 "
               onClick={() => setIsOpen(!isOpen)}
             >
-              {isOpen ? "v" : ">"}
+              {isOpen ? (
+                <ChevronDownIcon className="text-white h-5" />
+              ) : (
+                <ChevronRightIcon className="text-white h-5" />
+              )}
             </button>
             15:00 - 22:30, 08 Tháng 12, 2024
           </div>

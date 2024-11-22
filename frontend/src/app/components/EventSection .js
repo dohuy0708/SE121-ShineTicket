@@ -1,6 +1,7 @@
 // src/components/EventSection.js
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { CalendarDaysIcon } from "@heroicons/react/24/outline";
 const EventSection = ({ events }) => {
   const navigate = useNavigate();
 
@@ -25,13 +26,18 @@ const EventSection = ({ events }) => {
           >
             <div className="event-image bg-gray-300 h-[175px] rounded-lg mb-[10px]"></div>
             <div className="event-info flex flex-col gap-2">
-              <div className="event-name w-full overflow-hidden text-ellipsis whitespace-nowrap leading-[21px] h-[42px] font-semibold uppercase">
+              <div className="event-name w-full overflow-hidden text-ellipsis whitespace-nowrap leading-[21px]  font-semibold uppercase">
                 {event.name}
               </div>
               <div className="event-price text-primary font-semibold">
                 Từ {event.price}
               </div>
-              <div className="event-date flex-1">{event.date}</div>
+
+              <div className="event-date flex-1 flex items-center">
+                {" "}
+                <CalendarDaysIcon className="text-white inline w-5 bg-transparent mr-2" />
+                {event.date}
+              </div>
             </div>
           </div>
         ))}

@@ -1,6 +1,7 @@
 // src/components/EventInfo.js
 import React from "react";
 import { Link } from "react-router-dom";
+import { CalendarDaysIcon, MapPinIcon } from "@heroicons/react/24/outline";
 
 const BigTicket = ({ event }) => {
   return (
@@ -11,15 +12,17 @@ const BigTicket = ({ event }) => {
           <div className="absolute w-[3.75rem] h-[3.75rem] rounded-full z-11 bottom-0 right-0 transform translate-x-[1.875rem] translate-y-[1.875rem] bg-bg-main"></div>
           <div className="w-full h-full flex flex-col justify-between">
             <div className="flex flex-col justify-center">
-              <p className="text-[20px] font-bold font-inter leading-[150%] overflow-hidden break-words">
+              <p className="text-2xl font-bold font-inter  overflow-hidden break-words">
                 {event.name}
               </p>
-              <p className="font-bold mt-4 text-primary">📅 {event.date}</p>
-              <p className="font-bold mt-4 text-primary">📍 {event.location}</p>
-              {/* <p className="leading-[150%] font-normal text-[#C4C4CF] ml-6">
-                Số 6 Mạc Đĩnh Chi, Phường Bến Nghé, Quận 1, Thành phố Hồ Chí
-                Minh
-              </p> */}
+              <p className="font-bold mt-4 text-primary flex items-center">
+                <CalendarDaysIcon className="inline h-6 text-white mr-2" />{" "}
+                {event.date}
+              </p>
+              <p className="font-bold mt-4 text-primary flex items-center">
+                <MapPinIcon className="inline h-6 text-white mr-2" />{" "}
+                {event.location}
+              </p>
             </div>
             <div className="border-t border-[#C4C4CF]">
               <div className="flex items-center gap-2 py-4 text-2xl font-bold">
