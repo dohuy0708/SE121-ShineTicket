@@ -1,10 +1,11 @@
-import Header from "./app/components/Header";
 import AccessLayout from "./app/layouts/AccessLayout";
+import AdminLayout from "./app/layouts/AdminLayout";
 import EventLayout from "./app/layouts/EventLayout";
 import MainLayout from "./app/layouts/MainLayout";
 import SidebarLayout from "./app/layouts/SideBarLayout";
 import Login from "./app/pages/Access/Login";
 import SignUp from "./app/pages/Access/SignUp";
+import AdminDashboard from "./app/pages/AdminDashboard/AdminDashboard";
 import CreateEvent from "./app/pages/CreateEvent/CreateEvent";
 import EventOrders from "./app/pages/EventOrders/EventOrders";
 import EventSummary from "./app/pages/EventSummary/EventSummary";
@@ -42,6 +43,9 @@ function App() {
           <Route element={<EventLayout />}>
             <Route path="/summary" element={<EventSummary />} />
             <Route path="/orders" element={<EventOrders />} />
+          </Route>
+          <Route element={<AdminLayout />}>
+            <Route path="/dashboard" element={<AdminDashboard />} />
           </Route>
         </Routes>
       </BrowserRouter>

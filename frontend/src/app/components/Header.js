@@ -38,7 +38,7 @@ const Header = () => {
     <header className="bg-primary w-full fixed top-0 left-0 right-0 z-10">
       <div className="max-w-screen-xl  mx-auto">
         <div className="px-4 flex justify-between items-center">
-          <Link to="/" className="text-2xl font-bold">
+          <Link to="/dashboard" className="text-2xl font-bold">
             <img src="/Logo.png" alt="Logo ShineTicket" className="h-12" />
           </Link>
           <div className="flex my-4 items-center relative">
