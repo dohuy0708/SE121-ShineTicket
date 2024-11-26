@@ -1,19 +1,22 @@
 import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Home from "../pages/Home";
-import Header from "../layouts/Header";
-import Footer from "../layouts/Footer";
-import PageNotFound from "../layouts/PageNotFound";
+import AdminLayout from "../layouts/AdminLayout";
+import Events from "../pages/Events/Events";
+import Pay from "../pages/Pay/Pay";
+import Invoices from "../pages/Invoices/Invoices";
 
 export default function MainRoutes() {
   return (
     <BrowserRouter>
-      <Header />
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="*" element={<PageNotFound />} />
+        <Route element={<AdminLayout />}>
+          <Route path="/" element={<Home />} />
+          <Route path="/events" element={<Events />} />
+          <Route path="/pay" element={<Pay />} />
+          <Route path="/invoices" element={<Invoices />} />
+        </Route>
       </Routes>
-      <Footer />
     </BrowserRouter>
   );
 }

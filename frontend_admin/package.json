@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@heroicons/react": "^2.2.0",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
@@ -11,6 +12,7 @@
     "react-router-dom": "^6.26.1",
     "react-scripts": "5.0.1",
     "react-signify": "^1.5.1",
+    "recharts": "^2.13.3",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
