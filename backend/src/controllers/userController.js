@@ -31,6 +31,15 @@ const handleGetUser = async (req, res) => {
     users,
   });
 };
+const handleListUser = async (req, res) => {
+  let listUsers = await getUser("all");
+  return res.status(200).json({
+    errCode: 0,
+    errMessage: "OK",
+    listUsers,
+  });
+};
+
 const handleCreateUser = async (req, res) => {
   let message = await createUser(req.body);
   console.log(message);
@@ -59,4 +68,5 @@ export {
   handleCreateUser,
   handleDeleteUser,
   handleEditUser,
+  handleListUser,
 };

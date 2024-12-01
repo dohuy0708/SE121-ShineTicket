@@ -1,27 +1,30 @@
 import express from "express";
-import { getHomePage } from "../controllers/homeController.js";
-import {
-  handleCreateUser,
-  handleDeleteUser,
-  handleEditUser,
-  handleGetUser,
-  handleLogin,
-} from "../controllers/userController.js";
+
+import routerEvent from "./routeEvent.js";
+import routerOrder from "./routeOrder.js";
+import routerOrderDetail from "./routeOrderDetail.js";
+import routerOrganizer from "./routeOrganizer.js";
+import routerPayment from "./routePayment.js";
+import routerRole from "./routeRole.js";
+import routerTicket from "./routeTicket.js";
+import routerUser from "./routeUser.js";
+import routerVenue from "./routeVenue.js";
+
 let router = express.Router();
 
 let initWebRoutes = (app) => {
-  // khai baodanh sach tat ca cac role
+  // Import routes
+  app.use("/user", routerUser);
+  app.use("/order-detail", routerOrderDetail);
+  app.use("/ticket", routerTicket);
+  app.use("/venue", routerVenue);
+  app.use("/order", routerOrder);
+  app.use("/payment", routerPayment);
+  app.use("/event", routerEvent);
+  app.use("/role", routerRole);
+  app.use("/organizer", routerOrganizer);
 
-  // User controller
-  router.get("/", getHomePage);
-  router.get("/login", handleLogin);
-  router.get("/api/get-user", handleGetUser);
-  router.post("/api/create-user", handleCreateUser);
-  router.put("/api/edit-user", handleEditUser);
-  router.delete("/api/delete-user", handleDeleteUser);
-
-  // use route
-  return app.use("/", router);
+  return app;
 };
 
 export default initWebRoutes;

@@ -1,6 +1,7 @@
 import { where } from "sequelize";
 import db from "../models/index.js";
 import bcrypt from "bcrypt";
+import Users from "../models/user.js";
 const salt = bcrypt.genSaltSync(10);
 // function encript password
 let hashUserPassword = (password) => {
@@ -74,30 +75,60 @@ let compareUserPassword = () => {
   });
 };
 
+// let getUser = (userid) => {
+//   return new Promise(async (resolve, reject) => {
+//     try {
+//       let users = "";
+//       if (userid === "all") {
+//         const [results, metadata] = await db.sequelize.query(
+//           "SELECT * FROM Users"
+//         );
+//         users = results; // Dữ liệu trả về
+//       }
+//       if (userid && userid !== "all") {
+//         const [results, metadata] = await db.sequelize.query(
+//           "SELECT * FROM Users WHERE user_id = :userid",
+//           {
+//             replacements: { userid: userid },
+//           }
+//         );
+//         users = results; // Chỉ cần người dùng đầu tiên (nếu có)
+//       }
+
+//       resolve(users);
+//     } catch (e) {
+//       console.error("Lỗi khi lấy dữ liệu người dùng:", e);
+//       reject(e); // Đảm bảo reject lỗi để có thể xử lý từ bên ngoài
+//     }
+//   });
+// };
+
+// users/?
+
+// users/:id
+
 let getUser = (userid) => {
   return new Promise(async (resolve, reject) => {
     try {
       let users = "";
+      console.log(Users);
+
+      // Fetch all users if `userid` is "all"
       if (userid === "all") {
-        const [results, metadata] = await db.sequelize.query(
-          "SELECT * FROM Users"
-        );
-        users = results; // Dữ liệu trả về
+        users = await Users.findAll(); // Fetch all users
       }
+
+      // Fetch a specific user by `userid`
       if (userid && userid !== "all") {
-        const [results, metadata] = await db.sequelize.query(
-          "SELECT * FROM Users WHERE user_id = :userid",
-          {
-            replacements: { userid: userid },
-          }
-        );
-        users = results; // Chỉ cần người dùng đầu tiên (nếu có)
+        users = await Users.findAll({
+          where: { user_id: userid }, // Use Sequelize `where` clause
+        });
       }
 
       resolve(users);
     } catch (e) {
       console.error("Lỗi khi lấy dữ liệu người dùng:", e);
-      reject(e); // Đảm bảo reject lỗi để có thể xử lý từ bên ngoài
+      reject(e); // Ensure the error is rejected for handling outside
     }
   });
 };
@@ -131,11 +162,11 @@ let createUser = (data) => {
         {
           replacements: {
             email: data.email,
-            username: data.username,
+            username: data.name,
             password: data.password, // Consider hashing the password here before storing
-            phone_number: data.phone_number,
-            date_of_birth: data.date_of_birth,
-            role_id: data.role_id,
+            phone_number: data.phone,
+            date_of_birth: data.date,
+            role_id: 1,
           },
           type: db.Sequelize.QueryTypes.INSERT,
         }
@@ -156,31 +187,44 @@ let editUser = (data) => {
       if (!data.id) {
         return resolve({
           errCode: 2,
-          message: " Missing required parameter id !",
+          message: " Missing required parameter !",
         });
       }
 
-      let user = await db.Users.findOne({
-        raw: false,
-        where: { id: data.id },
-      });
+      // Check if the user exists
+      const [user] = await db.sequelize.query(
+        `SELECT * FROM Users WHERE user_id = :id`,
+        {
+          replacements: { id: data.id },
+          type: db.sequelize.QueryTypes.SELECT,
+        }
+      );
 
       if (user) {
-        email = data.email;
-        username = data.username;
-        password = data.password; // Consider hashing the password here before storing
-        phone_number = data.phone_number;
-        date_of_birth = data.date_of_birth;
-        role_id = data.role_id;
-        await user.save();
-        // await db.Users.save({
-        //   email: data.email,
-        //   username: data.username,
-        //   password: data.password, // Consider hashing the password here before storing
-        //   phone_number: data.phone_number,
-        //   date_of_birth: data.date_of_birth,
-        //   role_id: data.role_id,
-        // });
+        // Update user details
+        await db.sequelize.query(
+          `UPDATE Users 
+           SET email = :email, 
+               username = :username, 
+               password = :password, 
+               phone_number = :phone_number, 
+               date_of_birth = :date_of_birth, 
+               role_id = :role_id
+           WHERE user_id = :id`,
+          {
+            replacements: {
+              email: data.email,
+              username: data.name,
+              password: data.password, // Consider hashing the password here before storing
+              phone_number: data.phone,
+              date_of_birth: data.date,
+              role_id: 1,
+              id: data.id,
+            },
+            type: db.sequelize.QueryTypes.UPDATE,
+          }
+        );
+
         resolve({
           errCode: 0,
           message: "update user successed!",

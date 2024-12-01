@@ -40,10 +40,16 @@ fs.readdirSync(__dirname)
   .forEach(async (file) => {
     const modelPath = pathToFileURL(path.join(__dirname, file)).href;
 
-    const { default: model } = await import(modelPath);
-    if (model) {
-      db[model.name] = new model(sequelize, Sequelize.DataTypes);
+    const model = await import(modelPath);
+    if (model.default) {
+      const initializedModel = new model.default(
+        sequelize,
+        Sequelize.DataTypes
+      );
+
+      db[initializedModel.name] = initializedModel; // Gán model vào db
     } else {
+      console.error(`Model không hợp lệ tại file: ${file}`);
     }
   });
 
