@@ -1,43 +1,40 @@
-// models/Venue.js
-import { Model, DataTypes } from "sequelize";
-import sequelize from "../config/connectDB.js"; // Đảm bảo đường dẫn chính xác và có ".js" nếu bạn dùng ES Module
+import mongoose from "mongoose";
 
-class Venue extends Model {}
-
-Venue.init(
+const venueSchema = new mongoose.Schema(
   {
-    venue_id: {
-      type: DataTypes.INTEGER,
-      autoIncrement: true,
-      primaryKey: true,
-    },
     venue_name: {
-      type: DataTypes.STRING(255),
-      allowNull: true,
+      type: String,
+      maxlength: 255,
+      default: null,
     },
     street_name: {
-      type: DataTypes.STRING(255),
-      allowNull: true,
+      type: String,
+      maxlength: 255,
+      default: null,
     },
     ward: {
-      type: DataTypes.STRING(100),
-      allowNull: true,
+      type: String,
+      maxlength: 100,
+      default: null,
     },
     district: {
-      type: DataTypes.STRING(100),
-      allowNull: true,
+      type: String,
+      maxlength: 100,
+      default: null,
     },
     city: {
-      type: DataTypes.STRING(100),
-      allowNull: true,
+      type: String,
+      maxlength: 100,
+      default: null,
     },
   },
   {
-    sequelize, // Tham chiếu đến đối tượng Sequelize đã kết nối
-    modelName: "Venue", // Tên của model
-    tableName: "Venues", // Tên bảng
-    timestamps: false, // Bỏ qua các cột createdAt và updatedAt
+    versionKey: false, // Loại bỏ __v
+    timestamps: false, // Không tạo các cột thời gian mặc định
   }
 );
+
+// Tạo model từ schema
+const Venue = mongoose.models.Venue || mongoose.model("Venue", venueSchema);
 
 export default Venue;

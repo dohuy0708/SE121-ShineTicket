@@ -1,54 +1,64 @@
-// models/Users.js
-import { Model, DataTypes } from "sequelize";
-import sequelize from "../config/connectDB.js"; // Đảm bảo đường dẫn chính xác và có ".js" nếu bạn dùng ES Module
-
-class Users extends Model {}
-
-Users.init(
+import mongoose from "mongoose";
+import validator from "validator";
+import bcrypt from "bcrypt";
+const { isEmail } = validator; // Lấy ra hàm isEmail
+// Định nghĩa schema cho model Users
+const userSchema = new mongoose.Schema(
   {
-    user_id: {
-      type: DataTypes.INTEGER,
-      autoIncrement: true,
-      primaryKey: true,
-    },
     username: {
-      type: DataTypes.STRING(50),
-      allowNull: false,
-      unique: true,
+      type: String,
+      required: true,
+      unique: false,
     },
     email: {
-      type: DataTypes.STRING(100),
-      allowNull: false,
+      type: String,
+      required: [true, "Vui lòng nhập email"],
       unique: true,
+      lowercase: true, // Tương tự như Sequelize
+      validate: [isEmail, "Vui lòng nhập email đúng định dạng"],
     },
     password: {
-      type: DataTypes.STRING(255),
-      allowNull: false,
+      type: String,
+      required: [true, "Vui lòng nhập password"],
+      minlength: [8, "Mật khẩu có ít nhất 8 ký tự"],
     },
     phone_number: {
-      type: DataTypes.STRING(15),
-      allowNull: true,
+      type: String,
+      default: null,
     },
     date_of_birth: {
-      type: DataTypes.DATE,
-      allowNull: true,
+      type: Date,
+      default: null,
     },
-    role_id: {
-      type: DataTypes.INTEGER,
-      allowNull: true, // Thay đổi thành true nếu bạn cho phép không có role
-      references: {
-        model: "Roles",
-        key: "role_id",
-      },
+    role: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Role",
     },
   },
   {
-    sequelize,
-    modelName: "Users",
-    tableName: "Users",
-    timestamps: false, // Tắt timestamps tự động
-    underscored: true, // Sử dụng dạng snake_case cho tên trường
+    timestamps: false, // MongoDB sẽ không tự động thêm timestamp (createdAt, updatedAt)
+    versionKey: false, // Tắt _v field (có thể bỏ nếu muốn sử dụng)
   }
 );
 
-export default Users;
+//check role id
+// userSchema.pre("save", async function (next) {
+//   const roleExists = await mongoose
+//     .model("Role")
+//     .findOne({ role_id: this.role_id });
+//   if (!roleExists) {
+//     return next(new Error(`Role with role_id ${this.role_id} does not exist.`));
+//   }
+//   next();
+// });
+
+// hashpass
+userSchema.pre("save", async function (next) {
+  const salt = await bcrypt.genSalt();
+  this.password = await bcrypt.hash(this.password, salt);
+  next();
+});
+//Tạo model từ schema
+const User = mongoose.models.User || mongoose.model("User", userSchema);
+
+export default User;

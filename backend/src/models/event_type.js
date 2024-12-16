@@ -1,27 +1,21 @@
-// models/EventTypes.js
-import { Model, DataTypes } from "sequelize";
-import sequelize from "../config/connectDB.js"; // Đảm bảo đường dẫn chính xác và có ".js" nếu bạn dùng ES Module
+import mongoose from "mongoose";
 
-class EventTypes extends Model {}
-
-EventTypes.init(
+const eventTypeSchema = new mongoose.Schema(
   {
-    event_type_id: {
-      type: DataTypes.INTEGER,
-      primaryKey: true,
-      autoIncrement: true,
-    },
     type_name: {
-      type: DataTypes.STRING(100),
-      allowNull: false,
+      type: String,
+      required: true,
+      maxlength: 100,
     },
   },
   {
-    sequelize, // Tham chiếu đến đối tượng Sequelize đã kết nối
-    modelName: "EventTypes", // Tên của model
-    tableName: "EventTypes", // Tên bảng
-    timestamps: false, // Không tạo cột createdAt và updatedAt
+    versionKey: false, // Loại bỏ __v
+    timestamps: false, // Không tạo các cột thời gian mặc định
   }
 );
 
-export default EventTypes;
+// Tạo model từ schema
+const EventType =
+  mongoose.models.EventType || mongoose.model("EventType", eventTypeSchema);
+
+export default EventType;

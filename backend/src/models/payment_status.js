@@ -1,27 +1,24 @@
-// models/PaymentStatus.js
-import { Model, DataTypes } from "sequelize";
-import sequelize from "../config/connectDB.js"; // Đảm bảo đường dẫn chính xác
+import { MongoGCPError } from "mongodb";
+import mongoose from "mongoose";
 
-class PaymentStatus extends Model {}
-
-PaymentStatus.init(
+// Tạo schema cho PaymentStatus
+const paymentStatusSchema = new mongoose.Schema(
   {
-    payment_status_id: {
-      type: DataTypes.INTEGER,
-      autoIncrement: true,
-      primaryKey: true,
-    },
     status_name: {
-      type: DataTypes.STRING(100),
-      allowNull: false,
+      type: String,
+      required: true, // Trường này không được để trống
+      maxlength: 100, // Giới hạn độ dài tối đa
     },
   },
   {
-    sequelize, // Tham chiếu đến đối tượng Sequelize đã kết nối
-    modelName: "PaymentStatus", // Tên của model
-    tableName: "PaymentStatus", // Tên bảng
-    timestamps: false, // Bỏ qua các cột createdAt và updatedAt
+    versionKey: false, // Bỏ qua trường __v của Mongoose
+    timestamps: false, // Không tạo các trường createdAt và updatedAt
   }
 );
+
+// Tạo model từ schema
+const PaymentStatus =
+  mongoose.models.PaymentStatus ||
+  mongoose.model("PaymentStatus", paymentStatusSchema);
 
 export default PaymentStatus;

@@ -7,16 +7,21 @@ import {
   handleGetUser,
   handleListUser,
   handleLogin,
+  handleLogout,
+  handleRegister,
 } from "../controllers/userController.js";
+import { authenticate } from "../middleware/JWT/IsAuth.js";
 
 let routerUser = express.Router();
 // User controller
 routerUser.get("/", getHomePage);
+routerUser.post("/register", handleRegister);
 routerUser.get("/login", handleLogin);
-routerUser.get("/api/list-user", handleListUser);
-routerUser.get("/api/get-user", handleGetUser);
-routerUser.post("/api/create-user", handleCreateUser);
-routerUser.put("/api/edit-user", handleEditUser);
-routerUser.delete("/api/delete-user", handleDeleteUser);
+routerUser.get("/logout", handleLogout);
+routerUser.get("/list", handleListUser);
+routerUser.get("/get", handleGetUser);
+routerUser.post("/create", handleCreateUser);
+routerUser.put("/edit", handleEditUser);
+routerUser.delete("/delete", handleDeleteUser);
 
 export default routerUser;

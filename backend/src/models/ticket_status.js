@@ -1,27 +1,23 @@
-// models/TicketStatus.js
-import { Model, DataTypes } from "sequelize";
-import sequelize from "../config/connectDB.js"; // Đảm bảo đường dẫn chính xác
+import mongoose from "mongoose";
 
-class TicketStatus extends Model {}
-
-TicketStatus.init(
+// Tạo schema cho TicketStatus
+const ticketStatusSchema = new mongoose.Schema(
   {
-    ticket_status_id: {
-      type: DataTypes.INTEGER,
-      autoIncrement: true,
-      primaryKey: true,
-    },
     status_name: {
-      type: DataTypes.STRING(100),
-      allowNull: false,
+      type: String,
+      required: true, // Trường này không được để trống
+      maxlength: 100, // Giới hạn độ dài tối đa
     },
   },
   {
-    sequelize, // Tham chiếu đến đối tượng Sequelize đã kết nối
-    modelName: "TicketStatus", // Tên của model
-    tableName: "TicketStatus", // Tên bảng
-    timestamps: false, // Bỏ qua các cột createdAt và updatedAt
+    versionKey: false, // Bỏ qua trường __v do Mongoose tự động thêm vào
+    timestamps: false, // Không tạo các cột createdAt và updatedAt
   }
 );
+
+// Tạo model từ schema
+const TicketStatus =
+  mongoose.models.TicketStatus ||
+  mongoose.model("TicketStatus", ticketStatusSchema);
 
 export default TicketStatus;

@@ -1,59 +1,54 @@
-// models/Organizers.js
-import { Model, DataTypes } from "sequelize";
-import sequelize from "../config/connectDB.js"; // Đảm bảo đường dẫn chính xác và có ".js" nếu bạn dùng ES Module
+import mongoose from "mongoose";
 
-class Organizers extends Model {}
-
-Organizers.init(
+const organizerSchema = new mongoose.Schema(
   {
-    organizer_id: {
-      type: DataTypes.INTEGER,
-      primaryKey: true,
-      autoIncrement: true,
-    },
     organizer_name: {
-      type: DataTypes.STRING(100),
-      allowNull: false,
+      type: String,
+      required: true,
     },
     organizer_info: {
-      type: DataTypes.TEXT,
-      allowNull: true,
+      type: String, // TEXT trong Sequelize tương đương với String không giới hạn trong MongoDB
+      default: null,
     },
     organizer_email: {
-      type: DataTypes.STRING(100),
-      allowNull: true,
+      type: String,
+
+      default: null,
     },
     organizer_phone_number: {
-      type: DataTypes.STRING(15),
-      allowNull: true,
+      type: String,
+
+      default: null,
     },
     account_number: {
-      type: DataTypes.STRING(50),
-      allowNull: true,
+      type: String,
+
+      default: null,
     },
     bank_name: {
-      type: DataTypes.STRING(100),
-      allowNull: true,
+      type: String,
+
+      default: null,
     },
     owner_name: {
-      type: DataTypes.STRING(100),
-      allowNull: true,
+      type: String,
+
+      default: null,
     },
     user_id: {
-      type: DataTypes.INTEGER,
-      allowNull: true,
-      references: {
-        model: "User", // Tên bảng mà khóa ngoại tham chiếu
-        key: "user_id", // Tên khóa chính trong bảng Users
-      },
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User", // Tham chiếu đến model User
+      default: null,
     },
   },
   {
-    sequelize, // Tham chiếu đến đối tượng Sequelize đã kết nối
-    modelName: "Organizers", // Tên của model
-    tableName: "Organizers", // Tên bảng
-    timestamps: false, // Không tạo cột createdAt và updatedAt
+    versionKey: false, // Loại bỏ __v
+    timestamps: false, // Không tạo các cột thời gian mặc định
   }
 );
 
-export default Organizers;
+// Tạo model từ schema
+const Organizer =
+  mongoose.models.Organizer || mongoose.model("Organizer", organizerSchema);
+
+export default Organizer;

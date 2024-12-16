@@ -1,49 +1,42 @@
-// models/Tickets.js
-import { Model, DataTypes } from "sequelize";
-import sequelize from "../config/connectDB.js"; // Đảm bảo đường dẫn chính xác
+import mongoose from "mongoose";
 
-class Tickets extends Model {}
-
-Tickets.init(
+// Tạo schema cho Tickets
+const ticketSchema = new mongoose.Schema(
   {
-    ticket_id: {
-      type: DataTypes.INTEGER,
-      autoIncrement: true,
-      primaryKey: true,
-    },
     event_id: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      references: {
-        model: "Events",
-        key: "event_id",
-      },
-      onDelete: "CASCADE",
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Event", // Liên kết với collection Event
+      required: true,
     },
     ticket_type: {
-      type: DataTypes.STRING(50),
-      allowNull: false,
+      type: String,
+      required: true,
+      maxlength: 50,
     },
     price: {
-      type: DataTypes.DECIMAL(10, 2),
-      allowNull: false,
+      type: mongoose.Decimal128,
+      required: true,
     },
     ticket_status_id: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      references: {
-        model: "TicketStatus",
-        key: "ticket_status_id",
-      },
-      onDelete: "CASCADE",
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "TicketStatus", // Liên kết với collection TicketStatus
+      required: true,
+    },
+    ticket_image: {
+      type: String,
+    },
+    event_datetime: {
+      type: Date,
+      required: true,
     },
   },
   {
-    sequelize, // Tham chiếu đến đối tượng Sequelize đã kết nối
-    modelName: "Tickets", // Tên của model
-    tableName: "Tickets", // Tên bảng
-    timestamps: false, // Bỏ qua các cột createdAt và updatedAt
+    versionKey: false, // Bỏ qua trường __v của Mongoose
+    timestamps: false, // Không tạo các trường createdAt và updatedAt
   }
 );
 
-export default Tickets;
+// Tạo model từ schema
+const Ticket = mongoose.models.Ticket || mongoose.model("Ticket", ticketSchema);
+
+export default Ticket;

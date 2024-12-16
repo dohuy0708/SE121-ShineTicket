@@ -1,49 +1,36 @@
-// models/OrderDetails.js
-import { Model, DataTypes } from "sequelize";
-import sequelize from "../config/connectDB.js"; // Đảm bảo đường dẫn chính xác
+import mongoose from "mongoose";
 
-class OrderDetails extends Model {}
-
-OrderDetails.init(
+// Tạo schema cho OrderDetails
+const orderDetailsSchema = new mongoose.Schema(
   {
-    order_detail_id: {
-      type: DataTypes.INTEGER,
-      autoIncrement: true,
-      primaryKey: true,
-    },
     order_id: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      references: {
-        model: "Orders",
-        key: "order_id",
-      },
-      onDelete: "CASCADE",
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Order", // Liên kết với collection Orders
+      required: true,
     },
     ticket_id: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      references: {
-        model: "Tickets",
-        key: "ticket_id",
-      },
-      onDelete: "CASCADE",
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Ticket", // Liên kết với collection Tickets
+      required: true,
     },
     quantity: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
+      type: Number,
+      required: true, // Số lượng phải có giá trị
     },
     price: {
-      type: DataTypes.DECIMAL(10, 2),
-      allowNull: false,
+      type: mongoose.Decimal128,
+      required: true, // Giá trị phải có
     },
   },
   {
-    sequelize, // Tham chiếu đến đối tượng Sequelize đã kết nối
-    modelName: "OrderDetails", // Tên của model
-    tableName: "OrderDetails", // Tên bảng
-    timestamps: false, // Bỏ qua các cột createdAt và updatedAt
+    versionKey: false, // Bỏ qua trường __v của Mongoose
+    timestamps: false, // Không tạo các trường createdAt và updatedAt
   }
 );
 
-export default OrderDetails;
+// Tạo model từ schema
+const OrderDetail =
+  mongoose.models.OrderDetail ||
+  mongoose.model("OrderDetail", orderDetailsSchema);
+
+export default OrderDetail;

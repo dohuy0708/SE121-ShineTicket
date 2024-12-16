@@ -1,27 +1,22 @@
-// models/EventStatuses.js
-import { Model, DataTypes } from "sequelize";
-import sequelize from "../config/connectDB.js"; // Đảm bảo đường dẫn chính xác và có ".js" nếu bạn dùng ES Module
+import mongoose from "mongoose";
 
-class EventStatuses extends Model {}
-
-EventStatuses.init(
+const eventStatusSchema = new mongoose.Schema(
   {
-    event_status_id: {
-      type: DataTypes.INTEGER,
-      primaryKey: true,
-      autoIncrement: true,
-    },
     status_name: {
-      type: DataTypes.STRING(100),
-      allowNull: false,
+      type: String,
+      required: true,
+      maxlength: 100,
     },
   },
   {
-    sequelize, // Tham chiếu đến đối tượng Sequelize đã kết nối
-    modelName: "EventStatuses", // Tên của model
-    tableName: "EventStatuses", // Tên bảng
-    timestamps: false, // Không tạo cột createdAt và updatedAt
+    versionKey: false, // Loại bỏ __v
+    timestamps: false, // Không tạo các cột thời gian mặc định
   }
 );
 
-export default EventStatuses;
+// Tạo model từ schema
+const EventStatus =
+  mongoose.models.EventStatus ||
+  mongoose.model("EventStatus", eventStatusSchema);
+
+export default EventStatus;

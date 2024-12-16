@@ -1,41 +1,71 @@
 import {
+  createAccessToken,
+  createRefreshToken,
+  sendAccessToken,
+  sendRefreshToken,
+} from "../middleware/JWT/Token.js";
+import {
   createUser,
   deleteUser,
   editUser,
   getUser,
   handleUserLogin,
+  handleUserRegister,
+  listUser,
 } from "../services/userService.js";
-let handleLogin = async (req, res) => {
-  let email = req.body.email;
-  let password = req.body.password;
 
-  // check null , empty , undefine
+const handleRegister = async (req, res) => {
+  const data = req.body;
+  const result = await handleUserRegister(data);
+
+  return res.status(result.errCode === 0 ? 200 : 400).json(result); // Trả về kết quả
+};
+
+let handleLogin = async (req, res) => {
+  const { email, password } = req.body;
+
+  // Kiểm tra input
   if (!email || !password) {
-    return res.status(500).json({
-      errcode: 1,
-      message: "Missing inputs",
+    return res.status(400).json({
+      errCode: 1,
+      message: "Missing inputs!",
     });
   }
 
-  let userData = await handleUserLogin(email, password);
+  // Kiểm tra email và password
+  const userData = await handleUserLogin(email, password);
+  if (userData.errCode === 0) {
+    // Gửi token khi đăng nhập thành công
+    sendRefreshToken(res, userData.refreshToken); // Gửi refresh token trong cookie
+    return res.status(200).json({
+      errCode: 0,
+      message: userData.message,
+      data: userData,
+      accessToken: userData.accessToken, // Trả access token cho client
+    });
+  }
+
+  // Trả lỗi khi đăng nhập thất bại
+  return res.status(400).json(userData);
+};
+
+const handleLogout = async (req, res) => {
+  res.clearCookie("refreshtoken");
   return res.status(200).json({
-    userData,
+    errCode: 0,
+    message: "log out success",
   });
 };
 const handleGetUser = async (req, res) => {
-  let id = req.query.id; // all , id
-  let users = await getUser(id);
-  return res.status(200).json({
-    errCode: 0,
-    errMessage: "OK",
-    users,
+  const id = req.body.id; // all , id
+  const user = await getUser(id);
+  return res.status(user.errCode === 0 ? 200 : 400).json({
+    user,
   });
 };
 const handleListUser = async (req, res) => {
-  let listUsers = await getUser("all");
-  return res.status(200).json({
-    errCode: 0,
-    errMessage: "OK",
+  let listUsers = await listUser();
+  return res.status(listUsers.errCode === 0 ? 200 : 400).json({
     listUsers,
   });
 };
@@ -43,13 +73,18 @@ const handleListUser = async (req, res) => {
 const handleCreateUser = async (req, res) => {
   let message = await createUser(req.body);
   console.log(message);
-  return res.status(200).json(message);
+  return res.status(listUsers.errCode === 0 ? 200 : 400).json({
+    message,
+  });
 };
 
 const handleEditUser = async (req, res) => {
   let data = req.body;
+
   let message = await editUser(data);
-  return res.status(200).json(message);
+  return res.status(message.errCode === 0 ? 200 : 400).json({
+    message,
+  });
 };
 
 const handleDeleteUser = async (req, res) => {
@@ -60,13 +95,18 @@ const handleDeleteUser = async (req, res) => {
     });
   }
   let message = await deleteUser(req.body.id);
-  return res.status(200).json(message);
+
+  return res.status(message.errCode === 0 ? 200 : 400).json({
+    message,
+  });
 };
 export {
+  handleRegister,
   handleLogin,
   handleGetUser,
   handleCreateUser,
   handleDeleteUser,
   handleEditUser,
   handleListUser,
+  handleLogout,
 };
