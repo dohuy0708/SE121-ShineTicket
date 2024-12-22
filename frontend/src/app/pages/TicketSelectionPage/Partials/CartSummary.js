@@ -1,3 +1,4 @@
+import { CalendarDaysIcon, MapPinIcon } from "@heroicons/react/24/outline";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -5,17 +6,34 @@ const CartSummary = ({ items, total, event }) => {
   const navigate = useNavigate();
 
   const handlePayment = () => {
-    navigate("/payment", {
-      state: { items, total, event },
-    });
+    if (items?.length) {
+      console.log("items đay:", items);
+      navigate("/payment", {
+        state: { items, total, event },
+      });
+    } else {
+      alert("Vui lòng chọn vé");
+    }
   };
   return (
     <div className="bg-bg-main flex flex-col justify-between text-white p-5 rounded-md h-[100%]">
       <div>
         <div className="border-b border-gray-300 mb-4">
-          <h2 className="text-lg font-semibold mb-4">{event.name}</h2>
-          <p className="text-primary mb-2">{event.date}</p>
-          <p className="text-gray-300 mb-4">{event.location}</p>
+          <h2 className="text-lg font-semibold mb-4">{event?.event_name}</h2>
+          <p className="font-medium mt-2 text-primary flex items-center">
+            <CalendarDaysIcon className="inline h-6 text-white mr-2" />{" "}
+            {event?.start_date}
+          </p>
+          <p className="font-medium mt-2 text-primary flex items-center">
+            <MapPinIcon className="inline h-6 text-white mr-2" />{" "}
+            {event?.venue?.venue_name}
+          </p>
+          <p className="font-medium mt-2 mb-4 text-white flex items-center">
+            {event?.venue?.street_name.charAt(0).toUpperCase() +
+              event?.venue?.street_name.slice(1)}
+            , {event?.venue?.ward}, {event?.venue?.district},{" "}
+            {event?.venue?.city}
+          </p>
         </div>
 
         <table className="w-full text-sm mb-4">
@@ -31,7 +49,9 @@ const CartSummary = ({ items, total, event }) => {
               <tr key={index}>
                 <td className="text-left py-1">{item.name}</td>
                 <td className="text-center py-1">{item.quantity}</td>
-                <td className="text-right py-1">{item.total} đ</td>
+                <td className="text-right py-1">
+                  {item.total.toLocaleString()} đ
+                </td>
               </tr>
             ))}
           </tbody>

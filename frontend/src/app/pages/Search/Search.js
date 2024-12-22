@@ -41,10 +41,10 @@ export default function Search() {
       },
     ].filter((event) => {
       return (
-        event.price >= filters.priceRange[0] &&
-        event.price <= filters.priceRange[1] &&
+        event?.price >= filters.priceRange[0] &&
+        event?.price <= filters.priceRange[1] &&
         (filters.location === "Toàn quốc" ||
-          event.location === filters.location)
+          event?.location === filters.location)
       );
     });
   };

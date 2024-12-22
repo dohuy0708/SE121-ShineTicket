@@ -1,4 +1,3 @@
-// src/components/EventInfo.js
 import React from "react";
 import { Link } from "react-router-dom";
 import { CalendarDaysIcon, MapPinIcon } from "@heroicons/react/24/outline";
@@ -13,15 +12,21 @@ const BigTicket = ({ event }) => {
           <div className="w-full h-full flex flex-col justify-between">
             <div className="flex flex-col justify-center">
               <p className="text-2xl font-bold font-inter  overflow-hidden break-words">
-                {event.name}
+                {event?.event_name}
               </p>
               <p className="font-bold mt-4 text-primary flex items-center">
                 <CalendarDaysIcon className="inline h-6 text-white mr-2" />{" "}
-                {event.date}
+                {event?.start_date}
               </p>
               <p className="font-bold mt-4 text-primary flex items-center">
                 <MapPinIcon className="inline h-6 text-white mr-2" />{" "}
-                {event.location}
+                {event?.venue?.venue_name}
+              </p>
+              <p className="font-bold mt-2 text-white flex items-center">
+                {event?.venue?.street_name.charAt(0).toUpperCase() +
+                  event?.venue?.street_name.slice(1)}
+                , {event?.venue?.ward}, {event?.venue?.district},{" "}
+                {event?.venue?.city}
               </p>
             </div>
             <div className="border-t border-[#C4C4CF]">
@@ -29,22 +34,31 @@ const BigTicket = ({ event }) => {
                 <p className="text-lg font-semibold ">
                   Giá từ:{" "}
                   <span className="text-xl font-bold text-primary">
-                    {event.price}
+                    {event?.min_price?.toLocaleString()} vnđ
                   </span>
                 </p>
               </div>
-              <Link to={"/select-ticket"} state={{ event }}>
-                <button className="w-full bg-primary py-2 rounded-md hover:bg-white hover:text-black font-bold text-white">
-                  Mua vé ngay
+              {event?.available_tickets > 0 ? (
+                <Link to="/select-ticket" state={{ event }}>
+                  <button className="w-full bg-primary py-2 rounded-md hover:bg-white hover:text-black font-bold text-white">
+                    Mua vé ngay
+                  </button>
+                </Link>
+              ) : (
+                <button
+                  className="w-full bg-gray-400 py-2 rounded-md font-bold text-white"
+                  disabled
+                >
+                  Hết vé
                 </button>
-              </Link>
+              )}
             </div>
           </div>
         </div>
         <div className="col-span-2 flex items-center justify-center overflow-hidden">
           <img
             className="w-full h-full object-cover object-center overflow-clip"
-            src="/img.png"
+            src={event?.cover_image_url}
             alt="Image"
           />
         </div>

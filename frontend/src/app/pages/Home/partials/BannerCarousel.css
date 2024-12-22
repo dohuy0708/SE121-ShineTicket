@@ -31,7 +31,6 @@
 /* Định dạng cho ảnh trong slide */
 .carousel-slide img {
   max-width: 100%; /* Ảnh không vượt quá chiều rộng của slide */
-  height: auto; /* Chiều cao tự động */
 }
 
 .slide-text {
@@ -47,10 +46,12 @@
 .slide-price {
   font-weight: bold;
   margin-right: 10px;
+  margin-left: 10px;
 }
 .slide-date {
   color: white;
   font-weight: 600;
+  margin-right: 10px;
   margin-left: 10px;
 }
 .slide-button {

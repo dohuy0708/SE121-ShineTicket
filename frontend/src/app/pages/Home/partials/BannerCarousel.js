@@ -3,15 +3,15 @@ import "./BannerCarousel.css";
 import { useNavigate } from "react-router-dom";
 const BannerCarousel = ({ events }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const slidesToShow = 2; // Số lượng slide hiển thị
+  const slidesToShow = 2;
   const navigate = useNavigate();
   const nextSlide = () => {
     setCurrentIndex(
       (prevIndex) => (prevIndex + 1) % Math.ceil(events.length / slidesToShow)
     );
   };
-  const handleViewDetails = (event) => {
-    navigate(`/ticket-details`, { state: { event } });
+  const handleViewDetails = (id) => {
+    navigate(`/ticket-details/${id}`);
   };
   const prevSlide = () => {
     setCurrentIndex(
@@ -34,19 +34,23 @@ const BannerCarousel = ({ events }) => {
         }} // Chia tỷ lệ theo số slide hiển thị
       >
         {events.map((event, index) => (
-          <div className="carousel-slide-container">
-            <div key={index} className="carousel-slide">
-              <img src={event.image} alt={event.name} />
+          <div key={event?.event_id} className="carousel-slide-container">
+            <div className="carousel-slide">
+              <img
+                className="w-full h-full object-cover"
+                src={event?.cover_image_url}
+                alt={event?.event_name}
+              />
               <div className="slide-text">
-                <div className="slide-info">
+                <div className="slide-info bg-gray-500 bg-opacity-70 rounded-md">
                   <div className="slide-price text-primary">
-                    Từ {event.price}
+                    Từ {event?.min_price.toLocaleString()} đ
                   </div>
-                  <div className="slide-date">{event.date}</div>
+                  <div className="slide-date">{event?.start_date}</div>
                 </div>
                 <button
                   className="slide-button hover:bg-primary hover:text-white"
-                  onClick={() => handleViewDetails(event)}
+                  onClick={() => handleViewDetails(event?.event_id)}
                 >
                   Xem chi tiết
                 </button>

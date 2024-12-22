@@ -7,9 +7,8 @@ const CartInfo = ({ items, total }) => {
     <div className="bg-white text-black p-4 rounded-lg shadow-lg space-y-4">
       <div className="flex justify-between items-center border-b border-gray-300 pb-2">
         <h3 className="font-bold">Thông tin đặt vé</h3>
-        <button className="text-blue-500 text-sm">Chọn lại vé</button>
       </div>
-      <table className="w-full text-sm mb-4">
+      <table className="w-full text-sm mb-4 font-semibold">
         <thead>
           <tr>
             <th className="text-left ">Vé</th>
@@ -24,14 +23,16 @@ const CartInfo = ({ items, total }) => {
                 {item.name}
               </td>
               <td className="text-center  pt-4 pb-2 ">{item.quantity}</td>
-              <td className="text-right pt-4 pb-2 ">{item.total} đ</td>
+              <td className="text-right pt-4 pb-2 ">
+                {item.total?.toLocaleString()} đ
+              </td>
             </tr>
           ))}
         </tbody>
       </table>
       <div className="flex justify-between items-center font-bold  pt-2">
         <span>Tổng tiền</span>
-        <span className="text-primary">{total}</span>
+        <span className="text-primary">{total.toLocaleString()} đ</span>
       </div>
       <button
         className="bg-primary text-white w-full py-2 rounded-lg font-bold"

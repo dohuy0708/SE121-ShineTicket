@@ -1,22 +1,37 @@
 import React, { useState } from "react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { Link, useNavigate } from "react-router-dom";
+import { mockLogin } from "../../../services/service";
+
 export default function Login() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
   const [isModalOpen, setModalOpen] = useState(false);
 
   const nav = useNavigate();
+
   const toggleModal = () => {
     setModalOpen(!isModalOpen);
   };
-  const signIn = () => {
-    nav("/");
+
+  const signIn = async () => {
+    try {
+      const userData = await mockLogin(email, password); // Gọi service login
+      localStorage.setItem("id", userData.id); // Lưu thông tin user vào localStorage
+      nav("/"); // Điều hướng đến trang chủ
+    } catch (error) {
+      alert(error);
+    }
   };
+
   const confirmSendPassword = () => {
     toggleModal();
   };
+
   return (
-    <div class="w-full bg-bg-main text-white rounded-lg shadow  md:mt-0 sm:max-w-md xl:p-0">
-      <div class="p-6 space-y-4 md:space-y-6 sm:p-8 relative">
+    <div className="w-full bg-bg-main text-white rounded-lg shadow  md:mt-0 sm:max-w-md xl:p-0">
+      <div className="p-6 space-y-4 md:space-y-6 sm:p-8 relative">
         <XMarkIcon
           onClick={() => {
             nav("/");
@@ -24,17 +39,20 @@ export default function Login() {
           className="absolute h-6 top-4 right-4 hover:text-primary cursor-pointer"
         />
         <div className="text-center">
-          <img src="./shineticket.png" className="h-20 mx-auto" />
+          <img src="./shineticket.png" className="h-20 mx-auto" alt="Logo" />
         </div>
-        <h1 class="text-xl  font-bold leading-tight text-white ">
+        <h1 className="text-xl font-bold leading-tight text-white">
           Đăng nhập vào{" "}
           <span className="text-primary text-2xl">ShineTicket</span>
         </h1>
-        <form class="space-y-4 md:space-y-6" action="#">
+        {errorMessage && (
+          <p className="text-sm text-red-500 text-center">{errorMessage}</p>
+        )}
+        <form className="space-y-4 md:space-y-6">
           <div>
             <label
-              for="email"
-              class="block mb-2 text-sm font-medium text-white"
+              htmlFor="email"
+              className="block mb-2 text-sm font-medium text-white"
             >
               Email
             </label>
@@ -42,15 +60,17 @@ export default function Login() {
               type="email"
               name="email"
               id="email"
-              class="bg-gray-50 border border-gray-300 text-black rounded-lg  focus:outline-primary block w-full p-2.5"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="bg-gray-50 border border-gray-300 text-black rounded-lg focus:outline-primary block w-full p-2.5"
               placeholder="name@company.com"
-              required=""
+              required
             />
           </div>
           <div>
             <label
-              for="password"
-              class="block mb-2 text-sm font-medium text-white"
+              htmlFor="password"
+              className="block mb-2 text-sm font-medium text-white"
             >
               Mật khẩu
             </label>
@@ -58,17 +78,19 @@ export default function Login() {
               type="password"
               name="password"
               id="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               placeholder="••••••••"
-              class="bg-gray-50  text-black  rounded-lg focus:outline-primary  block w-full p-2.5"
-              required=""
+              className="bg-gray-50 text-black rounded-lg focus:outline-primary block w-full p-2.5"
+              required
             />
           </div>
-          <div class="flex items-center justify-between">
-            <p class="text-sm font-light text-gray-200">
+          <div className="flex items-center justify-between">
+            <p className="text-sm font-light text-gray-200">
               Chưa có tài khoản?{" "}
               <Link
                 to="/signup"
-                class="font-medium text-primary hover:underline"
+                className="font-medium text-primary hover:underline"
               >
                 Đăng ký
               </Link>
@@ -82,8 +104,9 @@ export default function Login() {
             </button>
           </div>
           <button
+            type="button"
             onClick={signIn}
-            class="w-full  text-white bg-primary hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+            className="w-full text-white bg-primary hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
           >
             Đăng nhập
           </button>
@@ -114,12 +137,13 @@ export default function Login() {
                   id="reset-email"
                   placeholder="name@company.com"
                   className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg block w-full p-2.5"
-                  required=""
+                  required
                 />
               </div>
               <button
+                type="button"
                 onClick={confirmSendPassword}
-                className="w-full text-white bg-primary hover:bg-primary-700 focus:ring-4 focus:outline-none  font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                className="w-full text-white bg-primary hover:bg-primary-700 focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center"
               >
                 Xác nhận
               </button>

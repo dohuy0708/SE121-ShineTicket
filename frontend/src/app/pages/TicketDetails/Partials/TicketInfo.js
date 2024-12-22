@@ -47,11 +47,17 @@ const TicketInfo = ({ event }) => {
             </button>
             15:00 - 22:30, 08 Tháng 12, 2024
           </div>
-          <Link to={"/select-ticket"} state={{ event }}>
-            <button className="py-2 my-2 rounded-md bg-primary px-10">
-              Mua vé ngay
+          {event?.available_tickets > 0 ? (
+            <Link to={"/select-ticket"} state={{ event }}>
+              <button className="py-2 my-2 rounded-md bg-primary px-10">
+                Mua vé ngay
+              </button>
+            </Link>
+          ) : (
+            <button className="py-2 my-2 rounded-md bg-gray-400 px-10 cursor-default">
+              Hết vé
             </button>
-          </Link>
+          )}
         </div>
 
         {/* Hiển thị thông tin vé nếu isOpen là true */}

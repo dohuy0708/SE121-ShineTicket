@@ -1,106 +1,39 @@
 // src/pages/Home.js
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Nav from "./partials/Nav";
 import BannerCarousel from "./partials/BannerCarousel";
 import EventSection from "../../components/EventSection ";
 import Footer from "../../components/Footer";
+import { getEvents } from "../../../services/service";
 const Home = () => {
-  const bannerEvents = [
-    {
-      name: "Live Concert: Sơn Tùng M-TP",
-      price: "500.000đ",
-      date: "15 tháng 12, 2024",
-      location: "SVĐ Mỹ Đình, Nam Từ Liêm, Hà Nội",
-    },
-    {
-      name: "Hội chợ Tết 2024",
-      price: "Miễn phí",
-      date: "20 tháng 1, 2024",
-      location: "Công viên Thống Nhất, Quận Hai Bà Trưng, Hà Nội",
-    },
-    {
-      name: "Workshop Làm gốm",
-      price: "120.000đ",
-      date: "25 tháng 11, 2024",
-      location: "Tầng 3, tòa nhà ABC, Quận 1, TP.HCM",
-    },
-    {
-      name: "Triển lãm Nghệ Thuật Đương Đại",
-      price: "80.000đ",
-      date: "5 tháng 2, 2024",
-      location: "Bảo tàng Mỹ thuật Việt Nam, Quận Ba Đình, Hà Nội",
-    },
-    {
-      name: "Kịch 'Romeo và Juliet'",
-      price: "300.000đ",
-      date: "10 tháng 3, 2024",
-      location: "Nhà hát Tuổi Trẻ, Hoàn Kiếm, Hà Nội",
-    },
-    {
-      name: "Chương trình hài kịch Xuân Bắc - Tự Long",
-      price: "150.000đ",
-      date: "8 tháng 12, 2024",
-      location: "Nhà hát Lớn, Quận 1, TP.HCM",
-    },
-    {
-      name: "Hòa nhạc Mùa Xuân",
-      price: "200.000đ",
-      date: "30 tháng 4, 2024",
-      location: "Nhà hát TP, Quận 3, TP.HCM",
-    },
-    {
-      name: "Talkshow Tạo động lực với Nguyễn Phương Nam",
-      price: "50.000đ",
-      date: "12 tháng 11, 2024",
-      location: "Phòng hội thảo tầng 5, tòa nhà Landmark 81, TP.HCM",
-    },
-  ];
+  const [events, setEvents] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const specialEvents = [
-    {
-      name: "Sân khấu Thiên Đàng",
-      price: "330.000đ",
-      date: "26 tháng 09, 2024",
-    },
-    {
-      name: "Sân khấu Thiên Đàng: Ngũ quý Tương phùng",
-      price: "330.000đ",
-      date: "26 tháng 09, 2024",
-    },
-    {
-      name: "Sân khấu Thiên Đàng: Ngũ quý Tương phùng Ngũ quý Tương phùng Ngũ quý Tương phùng",
-      price: "330.000đ",
-      date: "26 tháng 09, 2024",
-    },
-    {
-      name: "Sân khấu Thiên Đàng: quý Tương phùng ",
-      price: "330.000đ",
-      date: "26 tháng 09, 2024",
-    },
-    // Các sự kiện khác
-  ];
+  useEffect(() => {
+    const fetchEvents = async () => {
+      try {
+        const data = await getEvents();
+        setEvents(data); // Lưu danh sách sự kiện vào state
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  const trendingEvents = [
-    {
-      name: "Sân khấu Thiên Đàng: Ngũ quý Tương phùng",
-      price: "330.000đ",
-      date: "26 tháng 09, 2024",
-    },
-    {
-      name: "Sân khấu Thiên Đàng: Ngũ quý Tương phùng",
-      price: "330.000đ",
-      date: "26 tháng 09, 2024",
-    },
-    // Các sự kiện khác
-  ];
+    fetchEvents();
+  }, []);
 
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error: {error}</p>;
   return (
     <div className="bg-bg-main ">
       <Nav />
       <div className="mx-auto max-w-7xl p-4">
-        <BannerCarousel events={bannerEvents} />
-        <EventSection title="Sự kiện đặc biệt" events={specialEvents} />
-        <EventSection title="Sự kiện xu hướng" events={trendingEvents} />
+        <BannerCarousel events={events} />
+        <EventSection title="Sự kiện đặc biệt" events={events.slice(0, 4)} />
+        <EventSection title="Sự kiện xu hướng" events={events.slice(-4)} />
       </div>
       <Footer />
     </div>
