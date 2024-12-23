@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import TicketModal from "./TicketModal";
 import { TicketIcon, PencilIcon, TrashIcon } from "@heroicons/react/24/outline";
-
+import { sEvent2 } from "../eventStore";
 function Performance({ index, onDelete }) {
+  const eventInfo = sEvent2.use();
   const [tickets, setTickets] = useState([]);
   const [showModal, setShowModal] = useState(false);
 
@@ -12,31 +13,61 @@ function Performance({ index, onDelete }) {
   };
 
   return (
-    <div className="p-4 mb-4 border border-primary rounded-xl bg-bg-main relative">
-      <div
-        className="absolute top-1 right-5 cursor-pointer font-semibold p-1 text-red-600 text-2xl"
-        onClick={onDelete}
-      >
-        x
-      </div>
-      <h4 className="text-lg text-white font-semibold mb-2">Ngày sự kiện</h4>
-      <div className="grid grid-cols-2 space-x-4 mb-4">
+    <div className="p-4 mb-4 border border-primary rounded-xl bg-bg-main ">
+      <h4 className="text-lg text-white font-semibold mb-2">
+        {eventInfo.event_name}
+      </h4>
+      <div className="grid grid-cols-2 gap-4 mb-4">
         <label className="text-white">
           Thời gian bắt đầu
           <br />
           <input
-            type="text"
+            type="date"
             placeholder="Thời gian bắt đầu"
             className="w-full p-2 mt-2 text-black bg-white border border-gray-600 rounded"
+            value={eventInfo.start_date}
+            onChange={(e) =>
+              sEvent2.set((pre) => (pre.value.start_date = e.target.value))
+            }
           />
         </label>
         <label className="text-white">
           Thời gian kết thúc
           <br />
           <input
-            type="text"
+            type="date"
             placeholder="Thời gian kết thúc"
             className="w-full p-2 mt-2 text-black bg-white border border-gray-600 rounded"
+            value={eventInfo.end_date}
+            onChange={(e) =>
+              sEvent2.set((pre) => (pre.value.end_date = e.target.value))
+            }
+          />
+        </label>
+        <label className="text-white">
+          Thời gian bắt đầu bán vé
+          <br />
+          <input
+            type="date"
+            placeholder="Thời gian bắt đầu"
+            className="w-full p-2 mt-2 text-black bg-white border border-gray-600 rounded"
+            value={eventInfo.start_sell_date}
+            onChange={(e) =>
+              sEvent2.set((pre) => (pre.value.start_sell_date = e.target.value))
+            }
+          />
+        </label>
+        <label className="text-white">
+          Thời gian kết thúc bán vé
+          <br />
+          <input
+            type="date"
+            placeholder="Thời gian kết thúc"
+            className="w-full p-2 mt-2 text-black bg-white border border-gray-600 rounded"
+            value={eventInfo.end_sell_date}
+            onChange={(e) =>
+              sEvent2.set((pre) => (pre.value.end_sell_date = e.target.value))
+            }
           />
         </label>
       </div>

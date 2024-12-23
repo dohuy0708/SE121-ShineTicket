@@ -34,7 +34,7 @@ const TicketInfo = ({ event }) => {
       <div className="">
         {/* Thời gian và nút mũi tên */}
         <div className="flex justify-between items-center px-6 py-2 text-white">
-          <div className="text-lg font-medium flex items-center">
+          <div className="text-base font-medium flex items-center">
             <button
               className=" text-white px-2 "
               onClick={() => setIsOpen(!isOpen)}
@@ -69,8 +69,8 @@ const TicketInfo = ({ event }) => {
                 className="pl-16 pr-6 bg-gray-800 pt-4 pb-6 odd:bg-[#2F3033] even:bg-[#38383D] last:rounded-b-xl"
               >
                 <div className="flex justify-between items-center text-white">
-                  <div className="text-xl font-semibold">{ticket.name}</div>
-                  <div className="text-lg font-semibold text-primary">
+                  <div className="text-base font-semibold">{ticket.name}</div>
+                  <div className="text-base font-semibold text-primary">
                     {ticket.price}
                   </div>
                 </div>

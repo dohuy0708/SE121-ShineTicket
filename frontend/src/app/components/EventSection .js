@@ -12,7 +12,7 @@ const EventSection = ({ title, events }) => {
   return (
     <section className="event-section text-white text-[15px] my-[50px]">
       <div className="event-header flex justify-between p-[5px]">
-        <div className="event-type mb-[15px] cursor-pointer font-bold">
+        <div className="event-type text-lg mb-3 cursor-pointer font-bold">
           {title}
         </div>
         <div className="more cursor-pointer text-[#8c94a1]">Xem thêm</div>

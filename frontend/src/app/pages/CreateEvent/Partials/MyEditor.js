@@ -3,11 +3,7 @@ import { Editor } from "@tinymce/tinymce-react";
 
 export default function MyEditor() {
   const editorRef = useRef(null);
-  const log = () => {
-    if (editorRef.current) {
-      console.log(editorRef.current.getContent());
-    }
-  };
+
   return (
     <>
       <Editor
@@ -46,7 +42,6 @@ export default function MyEditor() {
             "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
         }}
       />
-      <button onClick={log}>Log editor content</button>
     </>
   );
 }

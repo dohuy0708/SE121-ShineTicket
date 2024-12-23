@@ -1,10 +1,11 @@
 import { signify } from "react-signify";
-export const sEvent = signify({
+export const sEvent2 = signify({
+  event_id: "",
   logo_url: "",
   cover_image_url: "",
-  evetn_name: "",
+  event_name: "",
   event_type_id: 1,
-  event_format: "",
+  event_format: "offline",
   venue_name: "",
   city: "",
   district: "",
@@ -12,5 +13,11 @@ export const sEvent = signify({
   street_name: "",
   organizer_name: "",
   organizer_info: "",
+  organizer_logo: "",
   description: "",
+  start_date: "",
+  end_date: "",
+  start_sell_date: "",
+  end_sell_date: "",
+  tickets: [], // { ticket_id:"",ticket_type:"",price:0,total:0, remain:0, start_time:"",end_time:""}
 });
