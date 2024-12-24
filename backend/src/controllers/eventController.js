@@ -7,7 +7,7 @@ import {
 } from "../services/eventService.js";
 
 const handleGetEvent = async (req, res) => {
-  let id = req.query.id;
+  let id = req.body.id;
   let result;
   result = await getEventById(id); // Lấy sự kiện theo id
   // Trả về kết quả dựa trên kết quả từ service

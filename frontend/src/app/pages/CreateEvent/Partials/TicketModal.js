@@ -1,17 +1,20 @@
-import React, { useState } from "react";
-import { sEvent2 } from "../eventStore";
-function TicketModal({ onSave, onClose }) {
-  const ticketInfo = sEvent2.slice((n) => n.tickets).use();
+import React, { useState, useEffect } from "react";
+
+function TicketModal({ ticket, onSave, onClose, index }) {
   const [ticketData, setTicketData] = useState({
-    name: "",
+    ticket_type: "",
     price: "",
     totalTickets: "",
-    minPerOrder: "",
-    maxPerOrder: "",
     saleStartTime: "",
     saleEndTime: "",
     description: "",
   });
+
+  useEffect(() => {
+    if (ticket) {
+      setTicketData(ticket); // Nếu sửa vé, điền thông tin vé vào form
+    }
+  }, [ticket]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -19,7 +22,17 @@ function TicketModal({ onSave, onClose }) {
   };
 
   const handleSave = () => {
-    onSave(ticketData);
+    if (
+      !ticketData.ticket_type ||
+      !ticketData.price ||
+      !ticketData.totalTickets ||
+      !ticketData.saleStartTime ||
+      !ticketData.saleEndTime
+    ) {
+      alert("Vui lòng điền đầy đủ thông tin");
+      return;
+    }
+    onSave(ticketData, index); // Lưu thông tin vé
   };
 
   return (
@@ -32,108 +45,85 @@ function TicketModal({ onSave, onClose }) {
           x
         </div>
         <h2 className="text-xl text-white text-center font-semibold mb-4">
-          Tạo loại vé mới
+          {ticket ? "Chỉnh sửa vé" : "Tạo loại vé mới"}
         </h2>
-        <div className="">
-          <div className="grid grid-cols-2 gap-x-3 mb-6">
-            <label className="text-white">
-              <span className="text-[#C83030] font-bold text-lg">* </span> Tên
-              vé
-              <br />
-              <input
-                type="text"
-                name="name"
-                value={ticketInfo.name}
-                onChange={handleChange}
-                className="w-full  text-black p-2 bg-white mt-2 border border-gray-600 rounded"
-              />
-            </label>
-            <label className="text-white">
-              <span className="text-[#C83030] font-bold text-lg">* </span> Giá
-              vé{" "}
-              <label className="text-white">
-                {" "}
-                <input
-                  type="checkbox"
-                  name="isFree"
-                  onChange={(e) =>
-                    setTicketData((prev) => ({
-                      ...prev,
-                      price: e.target.checked ? "0" : prev.price,
-                    }))
-                  }
-                />
-                Miễn phí
-              </label>
-              <br />
-              <input
-                type="text"
-                name="price"
-                value={ticketData.price}
-                onChange={handleChange}
-                className="w-full  text-black p-2 bg-white mt-2 border border-gray-600 rounded"
-              />
-            </label>
-          </div>
-          <div className="grid grid-cols-3  gap-x-4 mb-6">
-            <label className="text-white col-span-1">
-              <span className="text-[#C83030] font-bold text-lg">* </span> Tổng
-              số vé
-              <br />
-              <input
-                type="text"
-                name="totalTickets"
-                value={ticketData.totalTickets}
-                onChange={handleChange}
-                className="w-full  text-black p-2 bg-white mt-2 border border-gray-600 rounded"
-              />
-            </label>
-          </div>
-          <div className="grid grid-cols-2  gap-x-4 mb-6">
-            <label className="text-white col-span-1 ">
-              <span className="text-[#C83030] font-bold text-lg">* </span> Ngày
-              bắt đầu hiệu lực
-              <br />
-              <input
-                type="date"
-                name="saleStartTime"
-                value={ticketData.saleStartTime}
-                onChange={handleChange}
-                className="w-full  text-black p-2 bg-white mt-2 border border-gray-600 rounded"
-              />
-            </label>
-            <label className="text-white col-span-1">
-              <span className="text-[#C83030] font-bold text-lg">* </span> Ngày
-              hết hiệu lực
-              <br />
-              <input
-                type="date"
-                name="saleEndTime"
-                value={ticketData.saleEndTime}
-                onChange={handleChange}
-                className="w-full  text-black p-2 bg-white mt-2 border border-gray-600 rounded"
-              />
-            </label>
-          </div>
+        <div className="grid grid-cols-3 gap-x-3 mb-6">
           <label className="text-white">
-            <span className="text-[#C83030] font-bold text-lg">* </span> Thông
-            tin vé
+            <span className="text-[#C83030] font-bold text-lg">* </span> Tên vé
             <br />
-            <textarea
-              name="description"
-              value={ticketData.description}
+            <input
+              type="text"
+              name="ticket_type"
+              value={ticketData.ticket_type}
               onChange={handleChange}
-              className="w-full  text-black p-2 bg-white mt-2 border border-gray-600 rounded"
-            ></textarea>
+              className="w-full text-black p-2 bg-white mt-2 border border-gray-600 rounded"
+            />
+          </label>
+          <label className="text-white">
+            <span className="text-[#C83030] font-bold text-lg">* </span> Giá vé
+            <br />
+            <input
+              type="number"
+              name="price"
+              value={ticketData.price}
+              onChange={handleChange}
+              className="w-full text-black p-2 bg-white mt-2 border border-gray-600 rounded"
+            />
+          </label>
+          <label className="text-white">
+            <span className="text-[#C83030] font-bold text-lg">* </span> Tổng số
+            vé
+            <br />
+            <input
+              type="number"
+              name="totalTickets"
+              value={ticketData.totalTickets}
+              onChange={handleChange}
+              className="w-full text-black p-2 bg-white mt-2 border border-gray-600 rounded"
+            />
           </label>
         </div>
+
+        <div className="grid grid-cols-2 gap-x-4 mb-6">
+          <label className="text-white">
+            <span className="text-[#C83030] font-bold text-lg">* </span> Ngày
+            bắt đầu hiệu lực
+            <br />
+            <input
+              type="date"
+              name="saleStartTime"
+              value={ticketData.saleStartTime}
+              onChange={handleChange}
+              className="w-full text-black p-2 bg-white mt-2 border border-gray-600 rounded"
+            />
+          </label>
+          <label className="text-white">
+            <span className="text-[#C83030] font-bold text-lg">* </span> Ngày
+            hết hiệu lực
+            <br />
+            <input
+              type="date"
+              name="saleEndTime"
+              value={ticketData.saleEndTime}
+              onChange={handleChange}
+              className="w-full text-black p-2 bg-white mt-2 border border-gray-600 rounded"
+            />
+          </label>
+        </div>
+
+        <label className="text-white">
+          <span className="text-[#C83030] font-bold text-lg">* </span> Thông tin
+          vé
+          <br />
+          <textarea
+            name="description"
+            value={ticketData.description}
+            onChange={handleChange}
+            className="w-full text-black p-2 bg-white mt-2 border border-gray-600 rounded"
+          ></textarea>
+        </label>
+
         <div className="flex justify-end mt-4">
-          {/* <button
-            onClick={onClose}
-            className="px-4 py-2 bg-red-500 text-white rounded mr-2"
-          >
-            Đóng
-          </button> */}
           <button
             onClick={handleSave}
             className="px-4 py-2 w-full bg-primary text-lg text-white font-semibold rounded"

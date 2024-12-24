@@ -13,11 +13,19 @@ export const sEvent2 = signify({
   street_name: "",
   organizer_name: "",
   organizer_info: "",
-  organizer_logo: "",
   description: "",
   start_date: "",
   end_date: "",
   start_sell_date: "",
   end_sell_date: "",
   tickets: [], // { ticket_id:"",ticket_type:"",price:0,total:0, remain:0, start_time:"",end_time:""}
+});
+export const sOrg = signify({
+  organizer_name: "",
+  organizer_info: "",
+  organizer_email: "",
+  organizer_phone_number: "",
+  account_number: "",
+  bank_name: "",
+  owner_name: "",
 });

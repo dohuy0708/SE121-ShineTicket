@@ -1,19 +1,37 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import TicketModal from "./TicketModal";
 import { TicketIcon, PencilIcon, TrashIcon } from "@heroicons/react/24/outline";
 import { sEvent2 } from "../eventStore";
-function Performance({ index, onDelete }) {
-  const eventInfo = sEvent2.use();
-  const [tickets, setTickets] = useState([]);
-  const [showModal, setShowModal] = useState(false);
 
+function Performance() {
+  const eventInfo = sEvent2.use();
+  const tickets = sEvent2.slice((n) => n.tickets).use();
+  const [showModal, setShowModal] = useState(false);
+  const [selectedTicket, setSelectedTicket] = useState(null); // Thêm state để lưu vé cần chỉnh sửa
+  const [ticketIndex, setTicketIndex] = useState(-1); // Thêm state để lưu vé cần chỉnh sửa
+
+  useEffect(() => {
+    console.log(tickets);
+  });
   // Hàm thêm vé vào danh sách vé
   const handleAddTicket = (newTicket) => {
-    setTickets([...tickets, newTicket]);
+    sEvent2.set(
+      (prev) => (prev.value.tickets = [...prev.value.tickets, newTicket])
+    );
+  };
+
+  // Hàm chỉnh sửa vé trong danh sách
+  const handleEditTicket = (updatedTicket, ticketIndex) => {
+    sEvent2.set(
+      (prev) =>
+        (prev.value.tickets = prev.value.tickets.map((ticket, index) =>
+          index === ticketIndex ? updatedTicket : ticket
+        ))
+    );
   };
 
   return (
-    <div className="p-4 mb-4 border border-primary rounded-xl bg-bg-main ">
+    <div className="p-4 mb-4 border border-primary rounded-xl bg-bg-main">
       <h4 className="text-lg text-white font-semibold mb-2">
         {eventInfo.event_name}
       </h4>
@@ -27,7 +45,7 @@ function Performance({ index, onDelete }) {
             className="w-full p-2 mt-2 text-black bg-white border border-gray-600 rounded"
             value={eventInfo.start_date}
             onChange={(e) =>
-              sEvent2.set((pre) => (pre.value.start_date = e.target.value))
+              sEvent2.set((prev) => (prev.value.start_date = e.target.value))
             }
           />
         </label>
@@ -40,7 +58,7 @@ function Performance({ index, onDelete }) {
             className="w-full p-2 mt-2 text-black bg-white border border-gray-600 rounded"
             value={eventInfo.end_date}
             onChange={(e) =>
-              sEvent2.set((pre) => (pre.value.end_date = e.target.value))
+              sEvent2.set((prev) => (prev.value.end_date = e.target.value))
             }
           />
         </label>
@@ -53,7 +71,9 @@ function Performance({ index, onDelete }) {
             className="w-full p-2 mt-2 text-black bg-white border border-gray-600 rounded"
             value={eventInfo.start_sell_date}
             onChange={(e) =>
-              sEvent2.set((pre) => (pre.value.start_sell_date = e.target.value))
+              sEvent2.set(
+                (prev) => (prev.value.start_sell_date = e.target.value)
+              )
             }
           />
         </label>
@@ -66,7 +86,7 @@ function Performance({ index, onDelete }) {
             className="w-full p-2 mt-2 text-black bg-white border border-gray-600 rounded"
             value={eventInfo.end_sell_date}
             onChange={(e) =>
-              sEvent2.set((pre) => (pre.value.end_sell_date = e.target.value))
+              sEvent2.set((prev) => (prev.value.end_sell_date = e.target.value))
             }
           />
         </label>
@@ -79,20 +99,27 @@ function Performance({ index, onDelete }) {
           >
             <div className="flex items-center">
               <TicketIcon className="h-6 inline mr-2" />
-              {ticket.name}
+              {ticket.ticket_type}
             </div>
             <div>
               <button
-                onClick={() => setShowModal(true)}
-                className="text-black mr-2 rounded-md bg-white h-7 w-7  text-center"
+                onClick={() => {
+                  setSelectedTicket(ticket); // Lưu vé để sửa
+                  setTicketIndex(ticketIndex); // Lưu vé để sửa
+                  setShowModal(true); // Hiển thị modal
+                }}
+                className="text-black mr-2 rounded-md bg-white h-7 w-7 text-center"
               >
-                <PencilIcon className=" mx-auto h-5" />
+                <PencilIcon className="mx-auto h-5" />
               </button>
               <button
                 onClick={() =>
-                  setTickets(tickets.filter((_, idx) => idx !== ticketIndex))
+                  sEvent2.set((prev) => ({
+                    ...prev.value,
+                    tickets: tickets.filter((_, idx) => idx !== ticketIndex),
+                  }))
                 }
-                className="text-white rounded-md bg-red-600 h-7 w-7  text-center"
+                className="text-white rounded-md bg-red-600 h-7 w-7 text-center"
               >
                 <TrashIcon className="mx-auto h-5" />
               </button>
@@ -102,10 +129,14 @@ function Performance({ index, onDelete }) {
       </div>
       <div className="flex text-center justify-center">
         <button
-          onClick={() => setShowModal(true)}
-          className="mt-4 px-4 py-2 bg-transparent text-primary font-semibold "
+          onClick={() => {
+            setSelectedTicket(null); // Khi tạo mới, không có vé nào chọn
+            setTicketIndex(-1); // Khi tạo mới, không có vé nào chọn
+            setShowModal(true); // Hiển thị modal
+          }}
+          className="mt-4 px-4 py-2 bg-transparent text-primary font-semibold"
         >
-          <span className=" rounded-2xl  text-center mr-2  text-black px-1.5 pb-0.5  bg-primary">
+          <span className="rounded-2xl text-center mr-2 text-black px-1.5 pb-0.5 bg-primary">
             +
           </span>
           Tạo loại vé mới
@@ -115,11 +146,17 @@ function Performance({ index, onDelete }) {
       {/* Modal Tạo loại vé */}
       {showModal && (
         <TicketModal
+          ticket={selectedTicket} // Truyền thông tin vé nếu sửa
           onSave={(ticket) => {
-            handleAddTicket(ticket);
-            setShowModal(false);
+            if (selectedTicket) {
+              handleEditTicket(ticket, ticketIndex); // Sửa vé nếu có thông tin
+            } else {
+              handleAddTicket(ticket); // Thêm vé mới
+            }
+            setShowModal(false); // Đóng modal
           }}
-          onClose={() => setShowModal(false)}
+          onClose={() => setShowModal(false)} // Đóng modal khi click nút đóng
+          index={ticketIndex}
         />
       )}
     </div>
