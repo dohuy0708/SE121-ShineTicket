@@ -42,7 +42,7 @@ const eventSchema = new mongoose.Schema(
     event_status_id: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "EventStatus",
-      default: null,
+      default: "676ece5d50c4e95732edbadd", // ID mặc định cho "Chờ xử lý"
     },
     total_tickets: {
       type: Number,

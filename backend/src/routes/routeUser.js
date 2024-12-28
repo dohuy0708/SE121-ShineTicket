@@ -18,6 +18,7 @@ routerUser.get("/", getHomePage);
 routerUser.post("/register", handleRegister);
 routerUser.get("/login", handleLogin);
 routerUser.get("/logout", handleLogout);
+
 routerUser.get("/list", handleListUser);
 routerUser.get("/get", handleGetUser);
 routerUser.post("/create", handleCreateUser);

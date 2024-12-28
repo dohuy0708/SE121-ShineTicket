@@ -20,10 +20,14 @@ const ticketSchema = new mongoose.Schema(
     ticket_status_id: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "TicketStatus", // Liên kết với collection TicketStatus
-      required: true,
+      default: "675ea3974a84ab0379d42190", // ID mặc định cho trạng thái "Còn vé"
     },
-    ticket_image: {
+
+    ticket_des: {
       type: String,
+    },
+    ticket_quantity: {
+      type: Number,
     },
     event_datetime: {
       type: Date,
