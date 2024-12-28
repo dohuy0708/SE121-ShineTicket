@@ -7,13 +7,30 @@ import Ticket from "../models/ticket.js";
 import TicketStatus from "../models/ticket_status.js";
 import EventStatus from "../models/event_status.js";
 import EventType from "../models/event_type.js";
+
 // export const listEvents = async () => {
 //   try {
 //     const events = await Event.find({});
+
+//     const eventsWithPrices = await Promise.all(
+//       events.map(async (event) => {
+//         const tickets = await Ticket.find({ event_id: event._id });
+//         const minPrice = tickets.reduce((min, ticket) => {
+//           const ticketPrice = parseFloat(ticket.price.toString());
+//           return ticketPrice < min ? ticketPrice : min;
+//         }, Infinity);
+
+//         return {
+//           ...event.toObject(),
+//           ticketPrice: minPrice === Infinity ? null : minPrice, // Nếu không có vé, giá vé là null
+//         };
+//       })
+//     );
+
 //     return {
 //       errCode: 0,
 //       message: "Success",
-//       data: events,
+//       data: eventsWithPrices,
 //     };
 //   } catch (error) {
 //     console.error("Error fetching Events:", error.message);
@@ -24,9 +41,36 @@ import EventType from "../models/event_type.js";
 //   }
 // };
 
-export const listEvents = async () => {
+export const listEvents = async (filters) => {
   try {
-    const events = await Event.find({});
+    const filterConditions = {};
+
+    // Lọc theo ngày diễn ra (start_date)
+    if (filters.startDate) {
+      filterConditions.start_date = { $gte: new Date(filters.startDate) }; // Ngày bắt đầu lớn hơn hoặc bằng startDate
+    }
+
+    // Lọc theo thể loại sự kiện (event_type)
+    if (filters.eventType) {
+      filterConditions.event_type_id = filters.eventType; // eventType là ID của loại sự kiện
+    }
+
+    // Lọc theo vị trí (venue.city)
+    if (filters.City) {
+      // Lọc tất cả các venue có city trùng với yêu cầu từ FE
+      const venues = await Venue.find({ city: filters.City });
+
+      // Nếu có ít nhất một venue có city trùng, lấy tất cả venue_ids
+      if (venues.length > 0) {
+        filterConditions.venue_id = { $in: venues.map((venue) => venue._id) }; // $in giúp tìm tất cả venue_id trùng
+      } else {
+        // Nếu không có venue nào, trả về kết quả rỗng
+        filterConditions.venue_id = null;
+      }
+    }
+
+    // Lọc sự kiện với các điều kiện đã tạo
+    const events = await Event.find(filterConditions);
 
     const eventsWithPrices = await Promise.all(
       events.map(async (event) => {
@@ -53,6 +97,72 @@ export const listEvents = async () => {
     return {
       errCode: 1,
       message: "Unable to fetch Events.",
+    };
+  }
+};
+
+export const listEventsByUser = async (userId) => {
+  try {
+    // Bước 1: Tìm tất cả Organizer có user_id trùng với userId
+    const organizers = await Organizer.find({ user_id: userId });
+
+    if (organizers.length === 0) {
+      return {
+        errCode: 2,
+        message: "No organizer found for the given user ID.",
+      };
+    }
+
+    // Lấy tất cả các organizer_id từ danh sách organizers
+    const organizerIds = organizers.map((organizer) => organizer._id);
+
+    // Bước 2: Tìm tất cả Event có organizer_id trùng với các organizer_id
+    const events = await Event.find({ organizer_id: { $in: organizerIds } });
+
+    return {
+      errCode: 0,
+      message: "Success",
+      events: events, // Trả về danh sách sự kiện
+    };
+  } catch (error) {
+    console.error("Error fetching events:", error.message);
+    return {
+      errCode: 1,
+      message: "Unable to fetch events.",
+      error: error.message,
+    };
+  }
+};
+
+export const getEventsByUserId = async (userId) => {
+  try {
+    // Bước 1: Tìm tất cả Organizer có user_id trùng với userId
+    const organizers = await Organizer.find({ user_id: userId });
+
+    if (organizers.length === 0) {
+      return {
+        errCode: 2,
+        message: "No organizer found for the given user ID.",
+      };
+    }
+
+    // Lấy tất cả các organizer_id từ danh sách organizers
+    const organizerIds = organizers.map((organizer) => organizer._id);
+
+    // Bước 2: Tìm tất cả Event có organizer_id trùng với các organizer_id
+    const events = await Event.find({ organizer_id: { $in: organizerIds } });
+
+    return {
+      errCode: 0,
+      message: "Success",
+      events: events, // Trả về danh sách sự kiện
+    };
+  } catch (error) {
+    console.error("Error fetching events:", error.message);
+    return {
+      errCode: 1,
+      message: "Unable to fetch events.",
+      error: error.message,
     };
   }
 };
