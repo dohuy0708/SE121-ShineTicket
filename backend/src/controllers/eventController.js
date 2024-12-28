@@ -7,7 +7,7 @@ import {
 } from "../services/eventService.js";
 
 const handleGetEvent = async (req, res) => {
-  let id = req.query.id;
+  let id = req.body.id;
   let result;
   result = await getEventById(id); // Lấy sự kiện theo id
   // Trả về kết quả dựa trên kết quả từ service
@@ -18,29 +18,30 @@ const handleListEvents = async (req, res) => {
   const result = await listEvents(); // Lấy danh sách sự kiện
   return res.status(result.errCode === 0 ? 200 : 400).json(result); // Trả về kết quả
 };
-
 const handleCreateEvent = async (req, res) => {
   try {
     const eventData = req.body; // Lấy dữ liệu sự kiện từ request body
     const files = req.files; // Lấy dữ liệu file từ Multer
 
-    // Kiểm tra file bắt buộc
-    if (!files || !files.logo_url || !files.cover_image_url) {
-      return res.status(400).json({
-        errCode: 1,
-        message: "Thiếu file logo_url hoặc cover_image_url",
-      });
+    // Kiểm tra file bắt buộc và xử lý ảnh nếu có
+    let logoUrlPath = null;
+    let coverImageUrlPath = null;
+
+    if (files) {
+      if (files.logo_url) {
+        logoUrlPath = files.logo_url[0].filename; // Đường dẫn ảnh logo
+      }
+
+      if (files.cover_image_url) {
+        coverImageUrlPath = files.cover_image_url[0].filename; // Đường dẫn ảnh cover image
+      }
     }
 
-    // Lấy đường dẫn của file đã upload
-    const logoUrlPath = files.logo_url[0].filename; // Đường dẫn ảnh logo
-    const coverImageUrlPath = files.cover_image_url[0].filename; // Đường dẫn ảnh cover image
-
-    // Thêm thông tin file vào dữ liệu sự kiện
+    // Thêm thông tin file vào dữ liệu sự kiện, chỉ thêm ảnh nếu có
     const newEvent = {
       ...eventData,
-      logo_url: logoUrlPath,
-      cover_image_url: coverImageUrlPath,
+      logo_url: logoUrlPath || null, // Nếu không có logo, để null
+      cover_image_url: coverImageUrlPath || null, // Nếu không có cover image, để null
     };
 
     // Gọi service để tạo sự kiện
