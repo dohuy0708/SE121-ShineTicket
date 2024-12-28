@@ -3,11 +3,10 @@ import React, { useState, useEffect } from "react";
 function TicketModal({ ticket, onSave, onClose, index }) {
   const [ticketData, setTicketData] = useState({
     ticket_type: "",
-    price: "",
-    totalTickets: "",
-    saleStartTime: "",
-    saleEndTime: "",
-    description: "",
+    price: 0,
+    ticket_des: "",
+    ticket_quantity: 0,
+    event_datetime: "",
   });
 
   useEffect(() => {
@@ -25,9 +24,8 @@ function TicketModal({ ticket, onSave, onClose, index }) {
     if (
       !ticketData.ticket_type ||
       !ticketData.price ||
-      !ticketData.totalTickets ||
-      !ticketData.saleStartTime ||
-      !ticketData.saleEndTime
+      !ticketData.ticket_quantity ||
+      !ticketData.event_datetime
     ) {
       alert("Vui lòng điền đầy đủ thông tin");
       return;
@@ -76,8 +74,8 @@ function TicketModal({ ticket, onSave, onClose, index }) {
             <br />
             <input
               type="number"
-              name="totalTickets"
-              value={ticketData.totalTickets}
+              name="ticket_quantity"
+              value={ticketData.ticket_quantity}
               onChange={handleChange}
               className="w-full text-black p-2 bg-white mt-2 border border-gray-600 rounded"
             />
@@ -91,20 +89,8 @@ function TicketModal({ ticket, onSave, onClose, index }) {
             <br />
             <input
               type="date"
-              name="saleStartTime"
-              value={ticketData.saleStartTime}
-              onChange={handleChange}
-              className="w-full text-black p-2 bg-white mt-2 border border-gray-600 rounded"
-            />
-          </label>
-          <label className="text-white">
-            <span className="text-[#C83030] font-bold text-lg">* </span> Ngày
-            hết hiệu lực
-            <br />
-            <input
-              type="date"
-              name="saleEndTime"
-              value={ticketData.saleEndTime}
+              name="event_datetime"
+              value={ticketData.event_datetime}
               onChange={handleChange}
               className="w-full text-black p-2 bg-white mt-2 border border-gray-600 rounded"
             />
@@ -116,8 +102,8 @@ function TicketModal({ ticket, onSave, onClose, index }) {
           vé
           <br />
           <textarea
-            name="description"
-            value={ticketData.description}
+            name="ticket_des"
+            value={ticketData.ticket_des}
             onChange={handleChange}
             className="w-full text-black p-2 bg-white mt-2 border border-gray-600 rounded"
           ></textarea>

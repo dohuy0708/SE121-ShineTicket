@@ -15,7 +15,9 @@ function CreateEvent() {
   const [visitedSteps, setVisitedSteps] = useState(new Set([1]));
 
   const handleNextStep = () => {
-    if (currentStep === 3) nav("/my-events");
+    if (currentStep === 3) {
+      nav("/my-events");
+    }
     setVisitedSteps((prev) => new Set([...prev, currentStep + 1]));
     setCurrentStep((prevStep) => prevStep + 1);
   };

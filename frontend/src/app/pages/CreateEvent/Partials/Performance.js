@@ -62,34 +62,6 @@ function Performance() {
             }
           />
         </label>
-        <label className="text-white">
-          Thời gian bắt đầu bán vé
-          <br />
-          <input
-            type="date"
-            placeholder="Thời gian bắt đầu"
-            className="w-full p-2 mt-2 text-black bg-white border border-gray-600 rounded"
-            value={eventInfo.start_sell_date}
-            onChange={(e) =>
-              sEvent2.set(
-                (prev) => (prev.value.start_sell_date = e.target.value)
-              )
-            }
-          />
-        </label>
-        <label className="text-white">
-          Thời gian kết thúc bán vé
-          <br />
-          <input
-            type="date"
-            placeholder="Thời gian kết thúc"
-            className="w-full p-2 mt-2 text-black bg-white border border-gray-600 rounded"
-            value={eventInfo.end_sell_date}
-            onChange={(e) =>
-              sEvent2.set((prev) => (prev.value.end_sell_date = e.target.value))
-            }
-          />
-        </label>
       </div>
       <div>
         {tickets.map((ticket, ticketIndex) => (
@@ -105,7 +77,7 @@ function Performance() {
               <button
                 onClick={() => {
                   setSelectedTicket(ticket); // Lưu vé để sửa
-                  setTicketIndex(ticketIndex); // Lưu vé để sửa
+                  setTicketIndex(ticketIndex);
                   setShowModal(true); // Hiển thị modal
                 }}
                 className="text-black mr-2 rounded-md bg-white h-7 w-7 text-center"

@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { sOrg } from "../eventStore";
+import { sEvent2 } from "../eventStore";
 import getBanks from "../services/bankService"; // Đảm bảo bạn có service lấy ngân hàng
 
 export default function PaymentInfo() {
-  const orgInfo = sOrg.use();
+  const eventInfo = sEvent2.use();
   const [banks, setBanks] = useState([]);
-  const [selectedBank, setSelectedBank] = useState(orgInfo.bank_name);
+  const [selectedBank, setSelectedBank] = useState(eventInfo.bank_name);
 
   useEffect(() => {
     // Fetch danh sách ngân hàng khi component được render
@@ -28,7 +28,7 @@ export default function PaymentInfo() {
   const handleBankChange = (e) => {
     const selected = e.target.value;
     setSelectedBank(selected);
-    sOrg.set((prev) => ({ ...prev.value, bank_name: selected }));
+    sEvent2.set((prev) => ({ ...prev.value, bank_name: selected }));
   };
 
   return (
@@ -50,9 +50,9 @@ export default function PaymentInfo() {
             <input
               className="rounded-lg text-black p-2 col-span-8"
               type="text"
-              value={orgInfo.owner_name}
+              value={eventInfo.owner_name}
               onChange={(e) =>
-                sOrg.set((pre) => (pre.value.owner_name = e.target.value))
+                sEvent2.set((pre) => (pre.value.owner_name = e.target.value))
               }
             />
           </div>
@@ -61,9 +61,11 @@ export default function PaymentInfo() {
             <input
               className="rounded-lg text-black p-2 col-span-8"
               type="text"
-              value={orgInfo.account_number}
+              value={eventInfo.account_number}
               onChange={(e) =>
-                sOrg.set((pre) => (pre.value.account_number = e.target.value))
+                sEvent2.set(
+                  (pre) => (pre.value.account_number = e.target.value)
+                )
               }
             />
           </div>

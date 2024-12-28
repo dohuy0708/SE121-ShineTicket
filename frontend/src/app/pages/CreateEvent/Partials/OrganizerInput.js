@@ -1,9 +1,9 @@
 import React from "react";
 import FormSection from "./FormSection";
-import { sOrg } from "../eventStore";
+import { sEvent2 } from "../eventStore";
 
 export default function OrganizerInput() {
-  const orgInfo = sOrg.use();
+  const eventInfo = sEvent2.use();
 
   return (
     <FormSection>
@@ -16,9 +16,11 @@ export default function OrganizerInput() {
             <input
               type="text"
               className="w-full mt-2 p-2 mb-4 bg-white text-black outline-none border border-gray-600 rounded"
-              value={orgInfo.organizer_name}
+              value={eventInfo.organizer_name}
               onChange={(e) =>
-                sOrg.set((pre) => (pre.value.organizer_name = e.target.value))
+                sEvent2.set(
+                  (pre) => (pre.value.organizer_name = e.target.value)
+                )
               }
             />
           </label>
@@ -30,9 +32,9 @@ export default function OrganizerInput() {
               <input
                 type="text"
                 className="w-full mt-2 p-2 mb-4 bg-white text-black outline-none border border-gray-600 rounded"
-                value={orgInfo.organizer_email}
+                value={eventInfo.organizer_email}
                 onChange={(e) =>
-                  sOrg.set(
+                  sEvent2.set(
                     (pre) => (pre.value.organizer_email = e.target.value)
                   )
                 }
@@ -45,9 +47,9 @@ export default function OrganizerInput() {
               <input
                 type="text"
                 className="w-full mt-2 p-2 mb-4 bg-white text-black outline-none border border-gray-600 rounded"
-                value={orgInfo.organizer_phone_number}
+                value={eventInfo.organizer_phone_number}
                 onChange={(e) =>
-                  sOrg.set(
+                  sEvent2.set(
                     (pre) => (pre.value.organizer_phone_number = e.target.value)
                   )
                 }
@@ -60,9 +62,11 @@ export default function OrganizerInput() {
             <br />
             <textarea
               className="w-full mt-2 p-2 bg-white text-black outline-none border border-gray-600 rounded h-20"
-              value={orgInfo.organizer_info}
+              value={eventInfo.organizer_info}
               onChange={(e) =>
-                sOrg.set((pre) => (pre.value.organizer_info = e.target.value))
+                sEvent2.set(
+                  (pre) => (pre.value.organizer_info = e.target.value)
+                )
               }
             ></textarea>
           </label>

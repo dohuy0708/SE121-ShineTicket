@@ -1,27 +1,28 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { sEvent2 } from "../eventStore";
 import FormSection from "./FormSection";
 import UploadBox from "./UploadBox";
+import { getEventType } from "../services/eventService";
 export default function BasicInput() {
   const eventInfo = sEvent2.use();
-  const types = [
-    {
-      id: 1,
-      type_name: "Nhạc sống",
-    },
-    {
-      id: 2,
-      type_name: "Sân khấu & Nghệ thuật",
-    },
-    {
-      id: 3,
-      type_name: "Thể thao",
-    },
-    {
-      id: 4,
-      type_name: "Khác",
-    },
-  ];
+  const [types, setTypes] = useState([]);
+  const [loading, setLoading] = useState(true); // State hiển thị loading
+  const [error, setError] = useState(null); // State lưu lỗi nếu có
+  useEffect(() => {
+    const fetchEventTypes = async () => {
+      try {
+        const data = await getEventType(); // Gọi API từ service
+        setTypes(data); // Lưu kết quả vào state
+      } catch (err) {
+        setError(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchEventTypes();
+  }, []);
+
   const handleFileChange = (e, field) => {
     const file = e.target.files[0];
     if (file) {
@@ -34,7 +35,8 @@ export default function BasicInput() {
       reader.readAsDataURL(file);
     }
   };
-
+  if (loading) return <p>Loading event types...</p>;
+  if (error) return <p>Error loading event types: {error.message}</p>;
   return (
     <div className="space-y-6">
       <FormSection title={"Upload hình ảnh"}>
