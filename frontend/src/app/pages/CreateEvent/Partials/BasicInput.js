@@ -15,6 +15,28 @@ export default function BasicInput() {
         setTypes(data); // Lưu kết quả vào state
       } catch (err) {
         setError(err);
+        setTypes([
+          {
+            _id: "675ea2da3f6438a553ef0afe",
+            type_name: "Nhạc sống",
+          },
+          {
+            _id: "675ea2f53f6438a553ef0b00",
+            type_name: "Sân khấu & Nghệ thuật",
+          },
+          {
+            _id: "675ea2fc3f6438a553ef0b02",
+            type_name: "Thể thao",
+          },
+          {
+            _id: "675ea3013f6438a553ef0b04",
+            type_name: "Workshop",
+          },
+          {
+            _id: "675ea3083f6438a553ef0b06",
+            type_name: "Khác",
+          },
+        ]);
       } finally {
         setLoading(false);
       }
@@ -35,8 +57,8 @@ export default function BasicInput() {
       reader.readAsDataURL(file);
     }
   };
-  if (loading) return <p>Loading event types...</p>;
-  if (error) return <p>Error loading event types: {error.message}</p>;
+  // if (loading) return <p>Loading event types...</p>;
+  // if (error) return <p>Error loading event types: {error.message}</p>;
   return (
     <div className="space-y-6">
       <FormSection title={"Upload hình ảnh"}>
@@ -84,7 +106,7 @@ export default function BasicInput() {
         >
           <option value="">Chọn thể loại sự kiện</option>
           {types.map((type) => (
-            <option key={type.id} value={type.id}>
+            <option key={type._id} value={type._id}>
               {type.type_name}
             </option>
           ))}

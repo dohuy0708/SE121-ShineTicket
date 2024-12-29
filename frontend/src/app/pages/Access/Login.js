@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { Link, useNavigate } from "react-router-dom";
-import { mockLogin } from "../../../services/service";
+import { handleLogin } from "./services/loginService";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -17,11 +17,17 @@ export default function Login() {
 
   const signIn = async () => {
     try {
-      const userData = await mockLogin(email, password); // Gọi service login
-      localStorage.setItem("id", userData.id); // Lưu thông tin user vào localStorage
-      nav("/"); // Điều hướng đến trang chủ
+      const result = await handleLogin(email, password);
+      console.log("Login successful", result.data.user);
+      // Lưu accessToken và refreshToken trong localStorage hoặc context
+      localStorage.setItem("accessToken", result.data.accessToken);
+      localStorage.setItem("refreshToken", result.data.refreshToken);
+      localStorage.setItem("user_id", result.data.user._id);
+      setErrorMessage("");
+      nav("/");
+      // Điều hướng người dùng tới trang khác sau khi đăng nhập thành công
     } catch (error) {
-      alert(error);
+      setErrorMessage(error.message || "Login failed");
     }
   };
 

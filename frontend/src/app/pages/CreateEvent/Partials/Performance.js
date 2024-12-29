@@ -86,10 +86,12 @@ function Performance() {
               </button>
               <button
                 onClick={() =>
-                  sEvent2.set((prev) => ({
-                    ...prev.value,
-                    tickets: tickets.filter((_, idx) => idx !== ticketIndex),
-                  }))
+                  sEvent2.set(
+                    (prev) =>
+                      (prev.value.tickets = tickets.filter(
+                        (_, idx) => idx !== ticketIndex
+                      ))
+                  )
                 }
                 className="text-white rounded-md bg-red-600 h-7 w-7 text-center"
               >

@@ -3,8 +3,10 @@ import { useNavigate } from "react-router-dom";
 import Step1 from "./Partials/Step1";
 import Step2 from "./Partials/Step2";
 import Step3 from "./Partials/Step3";
-
+import { postEvent } from "./services/eventService";
+import { sEvent2 } from "./eventStore";
 function CreateEvent() {
+  const event = sEvent2.use();
   const nav = useNavigate();
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState({
@@ -13,10 +15,19 @@ function CreateEvent() {
     step3: {}, // Dữ liệu của bước 3
   });
   const [visitedSteps, setVisitedSteps] = useState(new Set([1]));
-
+  const createEvent = async () => {
+    try {
+      console.log(event);
+      const result = await postEvent(event);
+      console.log("Event created successfully:", result);
+    } catch (error) {
+      console.error("Error creating event:", error);
+    }
+  };
   const handleNextStep = () => {
     if (currentStep === 3) {
-      nav("/my-events");
+      createEvent();
+      // nav("/my-events");
     }
     setVisitedSteps((prev) => new Set([...prev, currentStep + 1]));
     setCurrentStep((prevStep) => prevStep + 1);
@@ -38,13 +49,13 @@ function CreateEvent() {
 
   return (
     <div className="flex-1 bg-black mx-auto">
-      <div className="flex items-center text-2xl pl-4 h-16 bg-bg-main border-b-2 border-[#A19393] font-semibold text-white ">
+      {/* Header - Tạo sự kiện */}
+      <div className="flex items-center text-2xl pl-4 h-16 bg-bg-main border-b-2 border-[#A19393] font-semibold text-white">
         Tạo sự kiện
       </div>
 
       {/* Steps Indicator */}
-
-      <div className="flex items-center justify-between px-6 py-2  mb-4 border-b-2 border-[#A19393] space-x-6">
+      <div className="sticky top-0 z-10 flex items-center justify-between px-6 py-2 mb-4 border-b-2 border-[#A19393] space-x-6 bg-bg-main bg-opacity-50">
         <div className="flex items-center space-x-6">
           <Step
             label="Thông tin sự kiện"
@@ -65,13 +76,13 @@ function CreateEvent() {
             onClick={() => handleStepClick(3)}
           />
         </div>
-        <div className=" space-x-2">
-          <button className="ml-auto  w-24 px-4 py-2 bg-white text-black font-semibold rounded">
+        <div className="space-x-2">
+          <button className="ml-auto w-24 px-4 py-2 bg-white text-black font-semibold rounded">
             Lưu
           </button>
           <button
             onClick={handleNextStep}
-            className="ml-auto w-24 px-4 py-2 bg-primary   text-white font-semibold rounded"
+            className="ml-auto w-24 px-4 py-2 bg-primary text-white font-semibold rounded"
           >
             Tiếp tục
           </button>

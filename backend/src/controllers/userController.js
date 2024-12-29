@@ -57,7 +57,7 @@ const handleLogout = async (req, res) => {
   });
 };
 const handleGetUser = async (req, res) => {
-  const id = req.body.id; // all , id
+  const id = req.params.id; // all , id
   const user = await getUser(id);
   return res.status(user.errCode === 0 ? 200 : 400).json({
     user,

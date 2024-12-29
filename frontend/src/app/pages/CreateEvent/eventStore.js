@@ -21,13 +21,10 @@ export const sEvent2 = signify({
   ward: "",
   district: "",
   city: "",
-  // logo_url: "",
-  // cover_image_url: "",
+  logo_url: "",
+  cover_image_url: "",
 
-  // start_sell_date: "",
-  // end_sell_date: "",
-  tickets: [], // { ticket_id:"",ticket_type:"",price:0,}
+  tickets: [],
 });
-// venue
 
 export const sOrg = signify({});

@@ -7,6 +7,7 @@ import {
   ArrowLeftStartOnRectangleIcon,
 } from "@heroicons/react/24/outline";
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
+import { getUserById } from "../../services/service";
 
 const Header = () => {
   const nav = useNavigate();
@@ -20,10 +21,27 @@ const Header = () => {
 
   // Kiểm tra trạng thái đăng nhập
   useEffect(() => {
-    const userId = localStorage.getItem("id"); // Lấy `id` từ localStorage
-    setIsLoggedIn(!!userId); // Đặt trạng thái đăng nhập
-  }, []);
+    const userId = localStorage.getItem("user_id");
+    console.log("id: ", userId);
 
+    if (userId) {
+      const fetchUser = async () => {
+        try {
+          const response = await getUserById(userId);
+          if (response.user.errCode === 0) {
+            localStorage.setItem("user", JSON.stringify(response.user.user));
+          } else {
+            console.error("Lỗi:", response.user.message);
+          }
+        } catch (error) {
+          console.error("Lỗi khi lấy thông tin người dùng:", error);
+        }
+      };
+
+      fetchUser();
+    }
+    setIsLoggedIn(!!userId);
+  }, []);
   // Ẩn menu khi nhấn bên ngoài
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -43,7 +61,8 @@ const Header = () => {
   };
   const handleLogout = () => {
     setIsVisible(!isVisible);
-    localStorage.removeItem("id");
+    localStorage.removeItem("user");
+    localStorage.removeItem("user_id");
   };
   // Chuyển đến trang login nếu chưa đăng nhập
   const handleLogin = () => {

@@ -1,5 +1,27 @@
 import { events } from "../mocks/mock";
 
+import axios from "axios";
+
+//  "http://localhost:8080/api/user/login",
+//       { email, password }, // Dữ liệu gửi trong body
+//       {
+//         headers: {
+//           "Content-Type": "application/json", // Sử dụng JSON format cho body
+//         },
+//       }
+export const getUserById = async (userId) => {
+  try {
+    const response = await axios.get(
+      `http://localhost:8080/api/user/get/${userId}`
+    );
+    // Hoặc dùng query string
+    // const response = await axios.get(`http://localhost:8080/api/user/get?id=${userId}`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
 const mockLogin = async (userName, password) => {
   return new Promise((resolve, reject) => {
     setTimeout(() => {

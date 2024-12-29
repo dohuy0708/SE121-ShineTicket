@@ -23,12 +23,13 @@ export default function PaymentInfo() {
     };
 
     fetchBanks();
+    sEvent2.set((pre) => (pre.value.user_id = localStorage.getItem("user_id")));
   }, []);
 
   const handleBankChange = (e) => {
     const selected = e.target.value;
     setSelectedBank(selected);
-    sEvent2.set((prev) => ({ ...prev.value, bank_name: selected }));
+    sEvent2.set((pre) => (pre.value.bank_name = e.target.value));
   };
 
   return (

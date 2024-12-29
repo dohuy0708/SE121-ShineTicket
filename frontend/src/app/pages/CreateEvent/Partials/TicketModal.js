@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { sEvent2 } from "../eventStore";
 
 function TicketModal({ ticket, onSave, onClose, index }) {
   const [ticketData, setTicketData] = useState({
@@ -11,26 +12,85 @@ function TicketModal({ ticket, onSave, onClose, index }) {
 
   useEffect(() => {
     if (ticket) {
-      setTicketData(ticket); // Nếu sửa vé, điền thông tin vé vào form
+      // Đảm bảo dữ liệu được format đúng khi edit
+      setTicketData({
+        ticket_type: ticket.ticket_type || "",
+        price: Number(ticket.price) || 0,
+        ticket_des: ticket.ticket_des || "",
+        ticket_quantity: Number(ticket.ticket_quantity) || 0,
+        event_datetime: ticket.event_datetime || "",
+      });
     }
   }, [ticket]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setTicketData((prevData) => ({ ...prevData, [name]: value }));
+    let formatValue = value;
+
+    // Format giá trị dựa trên loại input
+    if (name === "price" || name === "ticket_quantity") {
+      formatValue = value === "" ? 0 : Number(value);
+    }
+
+    setTicketData((prevData) => ({ ...prevData, [name]: formatValue }));
+  };
+
+  const validateTicketData = (data) => {
+    if (!data.ticket_type || data.ticket_type.trim() === "") {
+      alert("Vui lòng nhập tên vé");
+      return false;
+    }
+
+    if (!data.price || data.price <= 0) {
+      alert("Giá vé phải lớn hơn 0");
+      return false;
+    }
+
+    if (!data.ticket_quantity || data.ticket_quantity <= 0) {
+      alert("Số lượng vé phải lớn hơn 0");
+      return false;
+    }
+
+    if (!data.event_datetime) {
+      alert("Vui lòng chọn ngày hiệu lực");
+      return false;
+    }
+
+    return true;
   };
 
   const handleSave = () => {
-    if (
-      !ticketData.ticket_type ||
-      !ticketData.price ||
-      !ticketData.ticket_quantity ||
-      !ticketData.event_datetime
-    ) {
-      alert("Vui lòng điền đầy đủ thông tin");
+    // Format dữ liệu trước khi validate
+    const formattedData = {
+      ...ticketData,
+      price: ticketData.price,
+      ticket_quantity: Number(ticketData.ticket_quantity),
+      event_datetime: ticketData.event_datetime,
+    };
+
+    if (!validateTicketData(formattedData)) {
       return;
     }
-    onSave(ticketData, index); // Lưu thông tin vé
+
+    // Log dữ liệu để kiểm tra
+    console.log("Formatted ticket data:", formattedData);
+
+    onSave(formattedData, index);
+
+    // Cập nhật tổng số vé
+    sEvent2.set((pre) => {
+      const total = pre.value.tickets.reduce((sum, ticket) => {
+        return sum + Number(ticket.ticket_quantity);
+      }, 0);
+
+      return {
+        ...pre,
+        value: {
+          ...pre.value,
+          total_tickets: total,
+        },
+      };
+    });
   };
 
   return (
@@ -55,6 +115,7 @@ function TicketModal({ ticket, onSave, onClose, index }) {
               value={ticketData.ticket_type}
               onChange={handleChange}
               className="w-full text-black p-2 bg-white mt-2 border border-gray-600 rounded"
+              required
             />
           </label>
           <label className="text-white">
@@ -63,9 +124,11 @@ function TicketModal({ ticket, onSave, onClose, index }) {
             <input
               type="number"
               name="price"
+              min="0"
               value={ticketData.price}
               onChange={handleChange}
               className="w-full text-black p-2 bg-white mt-2 border border-gray-600 rounded"
+              required
             />
           </label>
           <label className="text-white">
@@ -75,9 +138,11 @@ function TicketModal({ ticket, onSave, onClose, index }) {
             <input
               type="number"
               name="ticket_quantity"
+              min="1"
               value={ticketData.ticket_quantity}
               onChange={handleChange}
               className="w-full text-black p-2 bg-white mt-2 border border-gray-600 rounded"
+              required
             />
           </label>
         </div>
@@ -93,6 +158,7 @@ function TicketModal({ ticket, onSave, onClose, index }) {
               value={ticketData.event_datetime}
               onChange={handleChange}
               className="w-full text-black p-2 bg-white mt-2 border border-gray-600 rounded"
+              required
             />
           </label>
         </div>

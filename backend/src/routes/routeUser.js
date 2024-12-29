@@ -16,11 +16,11 @@ let routerUser = express.Router();
 // User controller
 routerUser.get("/", getHomePage);
 routerUser.post("/register", handleRegister);
-routerUser.get("/login", handleLogin);
+routerUser.post("/login", handleLogin);
 routerUser.get("/logout", handleLogout);
 
 routerUser.get("/list", handleListUser);
-routerUser.get("/get", handleGetUser);
+routerUser.get("/get/:id", handleGetUser);
 routerUser.post("/create", handleCreateUser);
 routerUser.put("/edit", handleEditUser);
 routerUser.delete("/delete", handleDeleteUser);
