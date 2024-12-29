@@ -16,7 +16,7 @@ let routerUser = express.Router();
 // User controller
 routerUser.get("/", getHomePage);
 routerUser.post("/register", handleRegister);
-routerUser.get("/login", handleLogin);
+routerUser.post("/login", handleLogin);
 routerUser.get("/logout", handleLogout);
 
 routerUser.get("/list", handleListUser);

@@ -7,40 +7,7 @@ import Ticket from "../models/ticket.js";
 import TicketStatus from "../models/ticket_status.js";
 import EventStatus from "../models/event_status.js";
 import EventType from "../models/event_type.js";
-
-// export const listEvents = async () => {
-//   try {
-//     const events = await Event.find({});
-
-//     const eventsWithPrices = await Promise.all(
-//       events.map(async (event) => {
-//         const tickets = await Ticket.find({ event_id: event._id });
-//         const minPrice = tickets.reduce((min, ticket) => {
-//           const ticketPrice = parseFloat(ticket.price.toString());
-//           return ticketPrice < min ? ticketPrice : min;
-//         }, Infinity);
-
-//         return {
-//           ...event.toObject(),
-//           ticketPrice: minPrice === Infinity ? null : minPrice, // Nếu không có vé, giá vé là null
-//         };
-//       })
-//     );
-
-//     return {
-//       errCode: 0,
-//       message: "Success",
-//       data: eventsWithPrices,
-//     };
-//   } catch (error) {
-//     console.error("Error fetching Events:", error.message);
-//     return {
-//       errCode: 1,
-//       message: "Unable to fetch Events.",
-//     };
-//   }
-// };
-
+import mongoose from "mongoose";
 export const listEvents = async (filters) => {
   try {
     const filterConditions = {};
@@ -215,8 +182,11 @@ export const getEventById = async (eventId) => {
 };
 
 export const createEvent = async (eventData) => {
+  const session = await mongoose.startSession(); // Bắt đầu session cho transaction
+  session.startTransaction(); // Bắt đầu transaction
+
   try {
-    // Tạo mới Organizer và Venue (Giả sử bạn có hàm createOrganizer và createVenue)
+    // 1. Tạo mới Organizer
     const organizer = {
       organizer_name: eventData.organizer_name,
       organizer_info: eventData.organizer_info,
@@ -227,7 +197,9 @@ export const createEvent = async (eventData) => {
       owner_name: eventData.owner_name,
       user_id: eventData.user_id,
     };
+    const organizerInstance = await Organizer.create([organizer], { session });
 
+    // 2. Tạo mới Venue
     const venue = {
       venue_name: eventData.venue_name,
       street_name: eventData.street_name,
@@ -235,12 +207,9 @@ export const createEvent = async (eventData) => {
       district: eventData.district,
       city: eventData.city,
     };
+    const venueInstance = await Venue.create([venue], { session });
 
-    // Lưu Organizer và Venue vào cơ sở dữ liệu (Giả sử các hàm này sẽ trả về ID)
-    const organizerId = await Organizer.create(organizer); // Tạo tổ chức
-    const venueId = await Venue.create(venue); // Tạo địa điểm
-
-    // Tạo sự kiện mới với thông tin từ FE
+    // 3. Tạo mới Event
     const newEvent = {
       event_name: eventData.event_name,
       description: eventData.description,
@@ -250,28 +219,39 @@ export const createEvent = async (eventData) => {
       end_date: eventData.end_date,
       total_tickets: eventData.total_tickets,
       available_tickets: eventData.available_tickets,
-      organizer_id: organizerId,
-      venue_id: venueId,
+      organizer_id: organizerInstance[0]._id,
+      venue_id: venueInstance[0]._id,
     };
-
-    // Lưu sự kiện vào cơ sở dữ liệu (Giả sử bạn có hàm createEvent)
-    const event = await Event.create(newEvent);
+    const eventInstance = await Event.create([newEvent], { session });
 
     // 4. Tạo Tickets
     const ticketPromises = eventData.tickets.map((ticket) =>
-      Ticket.create({
-        ...ticket,
-        event_id: event._id,
-      })
+      Ticket.create(
+        [
+          {
+            ...ticket,
+            event_id: eventInstance[0]._id,
+          },
+        ],
+        { session }
+      )
     );
     await Promise.all(ticketPromises);
+
+    // Commit transaction
+    await session.commitTransaction();
+    session.endSession();
 
     return {
       errCode: 0,
       message: "Event created successfully.",
-      data: event,
+      data: eventInstance[0],
     };
   } catch (error) {
+    // Rollback transaction nếu có lỗi
+    await session.abortTransaction();
+    session.endSession();
+
     console.error("Error creating Event:", error.message);
 
     return {
@@ -281,68 +261,6 @@ export const createEvent = async (eventData) => {
     };
   }
 };
-
-// export const updateEvent = async (eventId, eventData) => {
-//   try {
-//     // Lấy URL của các hình ảnh cũ từ cơ sở dữ liệu (nếu có)
-//     const event = await Event.findById(eventId);
-
-//     if (!event) {
-//       return {
-//         errCode: 2,
-//         message: "Event not found",
-//       };
-//     }
-
-//     const { logo_url, cover_image_url } = event;
-
-//     // Xóa hình ảnh cũ nếu có
-//     if (logo_url) {
-//       // Kiểm tra và xóa logo cũ nếu có
-//       const oldLogoPath = path.join("public/images", logo_url);
-//       if (fs.existsSync(oldLogoPath)) {
-//         fs.unlinkSync(oldLogoPath); // Xóa file cũ
-//       }
-//     }
-
-//     if (cover_image_url) {
-//       // Kiểm tra và xóa cover image cũ nếu có
-//       const oldCoverPath = path.join("public/images", cover_image_url);
-//       if (fs.existsSync(oldCoverPath)) {
-//         fs.unlinkSync(oldCoverPath); // Xóa file cũ
-//       }
-//     }
-
-//     // // Nếu có hình ảnh mới, thì update URL của hình ảnh vào eventData
-//     // if (req.files.logo_url) {
-//     //   eventData.logo_url = req.files.logo_url[0].filename; // Lưu tên file mới
-//     // }
-//     // if (req.files.cover_image_url) {
-//     //   eventData.cover_image_url = req.files.cover_image_url[0].filename; // Lưu tên file mới
-//     // }
-
-//     const updateEvent = await Event.findByIdAndUpdate(eventId, eventData);
-
-//     if (!updateEvent) {
-//       return {
-//         errCode: 2,
-//         message: "Event not found",
-//       };
-//     }
-
-//     return {
-//       errCode: 0,
-//       message: "Event updated successfully.",
-//     };
-//   } catch (error) {
-//     console.error("Error updating Event:", error.message);
-//     return {
-//       errCode: 1,
-//       error: error.message,
-//       message: "Unable to update Event.",
-//     };
-//   }
-// };
 
 export const updateEvent = async (eventId, eventData) => {
   try {

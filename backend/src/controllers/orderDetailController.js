@@ -15,9 +15,9 @@ const handleGetOrderDetail = async (req, res) => {
   return res.status(result.errCode === 0 ? 200 : 400).json(result);
 };
 
-const handleListOrderDetails = async (req, res) => {
-  const orderId = req.query.orderId; // Lấy id đơn hàng từ query string
-  const result = await listOrderDetails(orderId); // Lấy danh sách chi tiết đơn hàng theo orderId
+const handleListOrderDetailsByUser = async (req, res) => {
+  const UserId = req.body.UserId; // Lấy id đơn hàng từ query string
+  const result = await listOrderDetails(UserId); // Lấy danh sách chi tiết đơn hàng theo orderId
   return res.status(result.errCode === 0 ? 200 : 400).json(result); // Trả về kết quả
 };
 
@@ -47,5 +47,5 @@ export {
   handleCreateOrderDetail,
   handleDeleteOrderDetail,
   handleEditOrderDetail,
-  handleListOrderDetails,
+  handleListOrderDetailsByUser,
 };

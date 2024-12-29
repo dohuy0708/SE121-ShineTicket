@@ -1,12 +1,44 @@
-import OrderDetails from "../models/order_detail.js";
+import Order from "../models/order.js";
+import OrderDetail from "../models/order_detail.js";
 
-export const listOrderDetails = async () => {
+export const listOrderDetails = async (userId) => {
   try {
-    const orderDetails = await OrderDetails.findAll();
+    // Tìm tất cả các đơn hàng theo userId
+    const orders = await Order.find({ user_id: userId });
+
+    // Kiểm tra nếu không có đơn hàng nào
+    if (orders.length === 0) {
+      return {
+        errCode: 2,
+        message: "No orders found for this user.",
+        data: [],
+      };
+    }
+
+    // Sử dụng Promise.all để lấy tất cả order_details cho từng đơn hàng
+    const orderDetailsList = await Promise.all(
+      orders.map(async (order) => {
+        const orderDetails = await OrderDetail.find({ order_id: order._id });
+
+        // Map các order_details và gắn thêm thông tin từ order
+        return orderDetails.map((detail) => ({
+          event_name: order.event_name,
+          event_address: order.event_address,
+          ticket_id: detail.ticket_id,
+          ticket_type: detail.ticket_type,
+          ticket_date: detail.ticket_date,
+          price: detail.price.toString(), // Chuyển Decimal128 thành chuỗi
+        }));
+      })
+    );
+
+    // Gộp tất cả danh sách orderDetails thành một mảng duy nhất
+    const flattenedDetails = orderDetailsList.flat();
+
     return {
       errCode: 0,
       message: "Order details fetched successfully.",
-      data: orderDetails,
+      data: flattenedDetails,
     };
   } catch (error) {
     console.error("Error fetching order details:", error.message);
