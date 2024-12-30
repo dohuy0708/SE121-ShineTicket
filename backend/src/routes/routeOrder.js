@@ -10,10 +10,10 @@ import {
 let routerOrder = express.Router();
 
 // Order controller
-routerOrder.get("/api/list-orders", handleListOrders);
-routerOrder.get("/api/get-order", handleGetOrder); // Query string: /api/get-order?orderId=value
-routerOrder.post("/api/create-order", handleCreateOrder);
-routerOrder.put("/api/edit-order", handleEditOrder); // Query string: /api/edit-order?orderId=value
-routerOrder.delete("/api/delete-order", handleDeleteOrder); // Query string: /api/delete-order?orderId=value
+routerOrder.get("/list-orders", handleListOrders);
+routerOrder.get("/get-order", handleGetOrder); // Query string: /api/get-order?orderId=value
+routerOrder.post("/create-order", handleCreateOrder);
+routerOrder.put("/edit-order", handleEditOrder); // Query string: /api/edit-order?orderId=value
+routerOrder.delete("/delete-order", handleDeleteOrder); // Query string: /api/delete-order?orderId=value
 
 export default routerOrder;

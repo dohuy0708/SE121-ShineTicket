@@ -1,10 +1,14 @@
 import express from "express";
 
-import { handleDeleteEvent } from "../controllers/eventController.js";
+import {
+  handleDeleteEvent,
+  handleListEventsByUser,
+} from "../controllers/eventController.js";
 import { handleListEvents } from "../controllers/eventController.js";
 import { handleGetEvent } from "../controllers/eventController.js";
 import { handleCreateEvent } from "../controllers/eventController.js";
 import { handleEditEvent } from "../controllers/eventController.js";
+
 import upload from "../middleware/Image/Upload.js";
 
 let routerEvent = express.Router();
@@ -12,6 +16,7 @@ let routerEvent = express.Router();
 // Event controller
 routerEvent.get("/list", handleListEvents);
 routerEvent.get("/get", handleGetEvent);
+routerEvent.get("/get_by_user", handleListEventsByUser);
 routerEvent.post(
   "/create",
   upload.fields([

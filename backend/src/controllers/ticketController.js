@@ -4,12 +4,21 @@ import {
   createTicket,
   updateTicket,
   deleteTicket,
+  getTicketPriceByEvent,
 } from "../services/ticketService.js"; // Nhập các hàm từ ticketService
 
 const handleGetTicket = async (req, res) => {
   const ticketId = req.query.id; // Lấy id ticket từ query string
   let result;
   result = await getTicketById(ticketId); // Lấy thông tin ticket theo id
+
+  // Trả về kết quả dựa trên kết quả từ service
+  return res.status(result.errCode === 0 ? 200 : 400).json(result);
+};
+const handleGetTicketPrice = async (req, res) => {
+  const EventId = req.body.EventId; // Lấy id ticket từ query string
+  let result;
+  result = await getTicketPriceByEvent(EventId); // Lấy thông tin ticket theo id
 
   // Trả về kết quả dựa trên kết quả từ service
   return res.status(result.errCode === 0 ? 200 : 400).json(result);
@@ -47,4 +56,5 @@ export {
   handleDeleteTicket,
   handleEditTicket,
   handleListTickets,
+  handleGetTicketPrice,
 };

@@ -10,10 +10,10 @@ import {
 let routerRole = express.Router();
 
 // Role controller
-routerRole.get("/api/list-roles", handleListRoles);
-routerRole.get("/api/get-role", handleGetRole);
-routerRole.post("/api/create-role", handleCreateRole);
-routerRole.put("/api/edit-role", handleEditRole);
-routerRole.delete("/api/delete-role", handleDeleteRole);
+routerRole.get("/list-roles", handleListRoles);
+routerRole.get("/get-role", handleGetRole);
+routerRole.post("/create-role", handleCreateRole);
+routerRole.put("/edit-role", handleEditRole);
+routerRole.delete("/delete-role", handleDeleteRole);
 
 export default routerRole;

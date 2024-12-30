@@ -1,13 +1,13 @@
 import {
-  listOrders,
   createOrder,
   updateOrder,
   deleteOrder,
   getOrderById,
+  listOrdersByEvent,
 } from "../services/orderService.js"; // Nhập các hàm từ orderService
 
 const handleGetOrder = async (req, res) => {
-  const orderId = req.query.id; // Lấy id đơn hàng từ query string
+  const orderId = req.body.id; // Lấy id đơn hàng từ query string
   let result;
   result = await getOrderById(orderId); // Lấy đơn hàng theo id
 
@@ -16,7 +16,8 @@ const handleGetOrder = async (req, res) => {
 };
 
 const handleListOrders = async (req, res) => {
-  const result = await listOrders(); // Lấy danh sách đơn hàng
+  const eventId = req.body.eventId;
+  const result = await listOrdersByEvent(eventId); // Lấy danh sách đơn hàng
   return res.status(result.errCode === 0 ? 200 : 400).json(result); // Trả về kết quả
 };
 

@@ -16,6 +16,22 @@ const orderSchema = new mongoose.Schema(
       type: mongoose.Decimal128,
       required: true,
     },
+    event_id: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Event", // Liên kết với collection Event
+      required: true,
+    },
+    event_name: {
+      type: String,
+      required: true,
+    },
+    event_date: {
+      type: Date,
+    },
+    event_address: {
+      type: String,
+    },
+
     order_status_id: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "OrderStatus", // Liên kết với collection OrderStatus

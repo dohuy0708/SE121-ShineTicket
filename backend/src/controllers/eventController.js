@@ -3,6 +3,7 @@ import {
   deleteEvent,
   getEventById,
   listEvents,
+  listEventsByUser,
   updateEvent,
 } from "../services/eventService.js";
 
@@ -15,7 +16,12 @@ const handleGetEvent = async (req, res) => {
 };
 
 const handleListEvents = async (req, res) => {
-  const result = await listEvents(); // Lấy danh sách sự kiện
+  const result = await listEvents(req.query); // Lấy danh sách sự kiện với tham số lọc
+  return res.status(result.errCode === 0 ? 200 : 400).json(result); // Trả về kết quả
+};
+const handleListEventsByUser = async (req, res) => {
+  const userId = req.body.userId;
+  const result = await listEventsByUser(userId); // Lấy danh sách sự kiện
   return res.status(result.errCode === 0 ? 200 : 400).json(result); // Trả về kết quả
 };
 const handleCreateEvent = async (req, res) => {
@@ -79,4 +85,5 @@ export {
   handleDeleteEvent,
   handleEditEvent,
   handleListEvents,
+  handleListEventsByUser,
 };

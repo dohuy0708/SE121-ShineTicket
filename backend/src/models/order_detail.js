@@ -13,9 +13,11 @@ const orderDetailsSchema = new mongoose.Schema(
       ref: "Ticket", // Liên kết với collection Tickets
       required: true,
     },
-    quantity: {
-      type: Number,
-      required: true, // Số lượng phải có giá trị
+    ticket_type: {
+      type: String,
+    },
+    ticket_date: {
+      type: Date,
     },
     price: {
       type: mongoose.Decimal128,

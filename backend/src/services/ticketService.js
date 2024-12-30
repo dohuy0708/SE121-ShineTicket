@@ -1,3 +1,4 @@
+import Ticket from "../models/ticket.js";
 import Tickets from "../models/ticket.js";
 
 export const listTickets = async () => {
@@ -10,6 +11,50 @@ export const listTickets = async () => {
     };
   } catch (error) {
     console.error("Error fetching tickets:", error.message);
+    return {
+      errCode: 1,
+      message: "Unable to fetch tickets.",
+    };
+  }
+};
+
+export const getTicketPriceByEvent = async (eventId) => {
+  try {
+    if (!eventId) {
+      return {
+        errCode: 2,
+        message: "Event ID is required.",
+        data: [],
+      };
+    }
+    // Lấy tất cả các ticket theo eventId
+    const tickets = await Ticket.find({ event_id: eventId });
+
+    // Kiểm tra nếu không có ticket nào
+    if (tickets.length === 0) {
+      return {
+        errCode: 2,
+        message: "No tickets found for the given event.",
+        data: [],
+      };
+    }
+
+    // Trả về thông tin tickets
+    return {
+      errCode: 0,
+      message: "Tickets fetched successfully.",
+      data: tickets.map((ticket) => ({
+        ticket_id: ticket._id,
+        ticket_type: ticket.ticket_type,
+        ticket_des: ticket.ticket_des,
+        ticket_quantity: ticket.ticket_quantity,
+        event_datetime: ticket.event_datetime,
+        price: ticket.price.toString(),
+        // Chuyển Decimal128 thành chuỗi
+      })),
+    };
+  } catch (error) {
+    console.error("Error fetching tickets by event:", error.message);
     return {
       errCode: 1,
       message: "Unable to fetch tickets.",
