@@ -31,8 +31,8 @@ const userSchema = new mongoose.Schema(
       default: null,
     },
     role: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Role",
+      type: Number,
+      default: 0,
     },
   },
   {

@@ -81,6 +81,46 @@ const handleUserLogin = async (email, password) => {
   }
 };
 
+const handleUserAdminLogin = async (email, password) => {
+  try {
+    // Tìm user trong DB
+    const user = await User.findOne({ email: email, role: 1 }); /// admin role = 1
+    if (!user) {
+      return {
+        errCode: 1,
+        message: "Email does not exist!",
+      };
+    }
+
+    // So sánh mật khẩu
+    const valid = await bcrypt.compare(password, user.password);
+    if (!valid) {
+      return {
+        errCode: 1,
+        message: "Password is incorrect!",
+      };
+    }
+
+    // Tạo token
+    const accessToken = createAccessToken(user._id); // Thay thế với hàm tạo access token
+    const refreshToken = createRefreshToken(user._id); // Thay thế với hàm tạo refresh token
+
+    return {
+      errCode: 0,
+      message: "Login successful!",
+      user,
+      accessToken,
+      refreshToken,
+    };
+  } catch (error) {
+    console.error("Error:", error.message);
+    return {
+      errCode: 1,
+      message: error.message,
+    };
+  }
+};
+
 const listUser = async () => {
   try {
     const users = await User.find({});
@@ -270,4 +310,5 @@ export {
   ResetPassword,
   ForgotPassword,
   Verify,
+  handleUserAdminLogin,
 };

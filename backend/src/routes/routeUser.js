@@ -8,6 +8,7 @@ import {
   handleGetUser,
   handleListUser,
   handleLogin,
+  handleLoginAdmin,
   handleLogout,
   handleRegister,
   handleResetPassword,
@@ -20,6 +21,7 @@ let routerUser = express.Router();
 routerUser.get("/", getHomePage);
 routerUser.post("/register", handleRegister);
 routerUser.post("/login", handleLogin);
+routerUser.post("/login_admin", handleLoginAdmin);
 routerUser.get("/logout", handleLogout);
 routerUser.post("/reset", handleResetPassword);
 routerUser.post("/forgot", handleForgotPassword);

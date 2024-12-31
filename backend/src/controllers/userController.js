@@ -10,6 +10,7 @@ import {
   editUser,
   ForgotPassword,
   getUser,
+  handleUserAdminLogin,
   handleUserLogin,
   handleUserRegister,
   listUser,
@@ -37,6 +38,34 @@ let handleLogin = async (req, res) => {
 
   // Kiểm tra email và password
   const userData = await handleUserLogin(email, password);
+  if (userData.errCode === 0) {
+    // Gửi token khi đăng nhập thành công
+    sendRefreshToken(res, userData.refreshToken); // Gửi refresh token trong cookie
+    return res.status(200).json({
+      errCode: 0,
+      message: userData.message,
+      data: userData,
+      accessToken: userData.accessToken, // Trả access token cho client
+    });
+  }
+
+  // Trả lỗi khi đăng nhập thất bại
+  return res.status(400).json(userData);
+};
+
+const handleLoginAdmin = async (req, res) => {
+  const { email, password } = req.body;
+
+  // Kiểm tra input
+  if (!email || !password) {
+    return res.status(400).json({
+      errCode: 1,
+      message: "Missing inputs!",
+    });
+  }
+
+  // Kiểm tra email và password
+  const userData = await handleUserAdminLogin(email, password);
   if (userData.errCode === 0) {
     // Gửi token khi đăng nhập thành công
     sendRefreshToken(res, userData.refreshToken); // Gửi refresh token trong cookie
@@ -139,4 +168,5 @@ export {
   handleForgotPassword,
   handleResetPassword,
   handleVerify,
+  handleLoginAdmin,
 };
