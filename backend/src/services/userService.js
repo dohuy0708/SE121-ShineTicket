@@ -8,6 +8,7 @@ import {
   sendRefreshToken,
 } from "../middleware/JWT/Token.js";
 import User from "../models/user.js";
+import { sendEmail } from "../middleware/Mail/mail_helper.js";
 
 // function encript password
 const handleUserRegister = async (data) => {
@@ -167,6 +168,97 @@ let deleteUser = async (userid) => {
   }
 };
 
+const ResetPassword = async (Email, Password, NewPassword) => {
+  try {
+    // Tìm user trong DB
+    const user = await User.findOne({ email: Email });
+    if (!user) {
+      return {
+        errCode: 1,
+        message: "Email does not exist!",
+      };
+    }
+
+    // So sánh mật khẩu
+    const valid = await bcrypt.compare(Password, user.password);
+    if (!valid) {
+      return {
+        errCode: 1,
+        message: "Password is incorrect!",
+      };
+    }
+
+    // update pass
+    user.password = NewPassword;
+    await user.save();
+    // update pasword
+    return {
+      errCode: 0,
+      message: "Success",
+    };
+  } catch (error) {
+    console.error("Error:", error);
+    return {
+      errCode: 1,
+      message: "Error",
+    };
+  }
+};
+
+const ForgotPassword = async (Email) => {
+  try {
+    // Tìm user trong DB
+    const user = await User.findOne({ email: Email });
+    if (!user) {
+      return {
+        errCode: 1,
+        message: "Email does not exist!",
+      };
+    }
+
+    // Tạo mật khẩu mới ngẫu nhiên (8 chữ số)
+    const generateRandomPassword = () => {
+      return Math.floor(10000000 + Math.random() * 90000000).toString(); // 8 chữ số
+    };
+    const newPassword = generateRandomPassword();
+
+    // Cập nhật mật khẩu mới trong DB
+    user.password = newPassword;
+    await user.save();
+
+    // Gửi email với mật khẩu mới
+    const subject = "[ShineTicket] Reset Password Notification";
+    const content = `Your new password is: ${newPassword}. Please log in and change it immediately for security.`;
+
+    await sendEmail(Email, subject, content);
+
+    return {
+      errCode: 0,
+      message: "New password has been sent to your email.",
+    };
+  } catch (error) {
+    console.error("Error:", error);
+    return {
+      errCode: 1,
+      message: "Error resetting password.",
+    };
+  }
+};
+const Verify = async (data) => {
+  try {
+    return {
+      errCode: 0,
+      message: "Success",
+    };
+  } catch (error) {
+    console.error("Error:", error);
+    return {
+      errCode: 1,
+      message: "Error",
+    };
+  }
+};
+
 export {
   handleUserLogin,
   getUser,
@@ -175,4 +267,7 @@ export {
   deleteUser,
   handleUserRegister,
   listUser,
+  ResetPassword,
+  ForgotPassword,
+  Verify,
 };

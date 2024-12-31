@@ -4,11 +4,14 @@ import {
   handleCreateUser,
   handleDeleteUser,
   handleEditUser,
+  handleForgotPassword,
   handleGetUser,
   handleListUser,
   handleLogin,
   handleLogout,
   handleRegister,
+  handleResetPassword,
+  handleVerify,
 } from "../controllers/userController.js";
 import { authenticate } from "../middleware/JWT/IsAuth.js";
 
@@ -18,6 +21,9 @@ routerUser.get("/", getHomePage);
 routerUser.post("/register", handleRegister);
 routerUser.post("/login", handleLogin);
 routerUser.get("/logout", handleLogout);
+routerUser.post("/reset", handleResetPassword);
+routerUser.post("/forgot", handleForgotPassword);
+//routerUser.post("/verify", handleVerify);
 
 routerUser.get("/list", handleListUser);
 routerUser.get("/get", handleGetUser);

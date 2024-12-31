@@ -8,10 +8,13 @@ import {
   createUser,
   deleteUser,
   editUser,
+  ForgotPassword,
   getUser,
   handleUserLogin,
   handleUserRegister,
   listUser,
+  ResetPassword,
+  Verify,
 } from "../services/userService.js";
 
 const handleRegister = async (req, res) => {
@@ -63,6 +66,30 @@ const handleGetUser = async (req, res) => {
     user,
   });
 };
+
+// Account
+const handleResetPassword = async (req, res) => {
+  const Email = req.body.Email;
+  const Password = req.body.Password;
+  const NewPassword = req.body.NewPassword;
+  const result = await ResetPassword(Email, Password, NewPassword);
+
+  return res.status(result.errCode === 0 ? 200 : 400).json(result); // Trả về kết quả
+};
+
+const handleForgotPassword = async (req, res) => {
+  const Email = req.body.Email;
+  const result = await ForgotPassword(Email);
+
+  return res.status(result.errCode === 0 ? 200 : 400).json(result); // Trả về kết quả
+};
+const handleVerify = async (req, res) => {
+  const data = req.body;
+  const result = await Verify(data);
+
+  return res.status(result.errCode === 0 ? 200 : 400).json(result); // Trả về kết quả
+};
+
 const handleListUser = async (req, res) => {
   let listUsers = await listUser();
   return res.status(listUsers.errCode === 0 ? 200 : 400).json({
@@ -109,4 +136,7 @@ export {
   handleEditUser,
   handleListUser,
   handleLogout,
+  handleForgotPassword,
+  handleResetPassword,
+  handleVerify,
 };
