@@ -1,9 +1,18 @@
 import {
+  addBannerEvent,
+  addSpecialEvent,
+  addTrendEvent,
   createEvent,
+  deleteBannerEvent,
   deleteEvent,
+  deleteSpecialEvent,
+  deleteTrendEvent,
   getEventById,
+  listBannerEvent,
   listEvents,
   listEventsByUser,
+  listSpecialEvent,
+  listTrendEvent,
   updateEvent,
 } from "../services/eventService.js";
 
@@ -79,6 +88,54 @@ const handleDeleteEvent = async (req, res) => {
   return res.status(result.errCode === 0 ? 200 : 400).json(result); // Trả về kết quả
 };
 
+// special
+const handleListSpecialEvent = async (req, res) => {
+  const result = await listSpecialEvent(); // Gọi service để xóa sự kiện
+  return res.status(result.errCode === 0 ? 200 : 400).json(result); // Trả về kết quả
+};
+const handleAddSpecialEvent = async (req, res) => {
+  const EventId = req.body.EventId;
+  const result = await addSpecialEvent(EventId); // Gọi service để xóa sự kiện
+  return res.status(result.errCode === 0 ? 200 : 400).json(result); // Trả về kết quả
+};
+const handleDeleteSpecialEvent = async (req, res) => {
+  const EventId = req.body.EventId;
+  const result = await deleteSpecialEvent(EventId); // Gọi service để xóa sự kiện
+  return res.status(result.errCode === 0 ? 200 : 400).json(result); // Trả về kết quả
+};
+
+// trend
+const handleListTrendEvent = async (req, res) => {
+  const result = await listTrendEvent(); // Gọi service để xóa sự kiện
+  return res.status(result.errCode === 0 ? 200 : 400).json(result); // Trả về kết quả
+};
+const handleAddTrendEvent = async (req, res) => {
+  const EventId = req.body.EventId;
+  const result = await addTrendEvent(EventId); // Gọi service để xóa sự kiện
+  return res.status(result.errCode === 0 ? 200 : 400).json(result); // Trả về kết quả
+};
+const handleDeleteTrendEvent = async (req, res) => {
+  const EventId = req.body.EventId;
+  const result = await deleteTrendEvent(EventId); // Gọi service để xóa sự kiện
+  return res.status(result.errCode === 0 ? 200 : 400).json(result); // Trả về kết quả
+};
+
+// banner
+const handleListBannerEvent = async (req, res) => {
+  const result = await listBannerEvent(); // Gọi service để xóa sự kiện
+  return res.status(result.errCode === 0 ? 200 : 400).json(result); // Trả về kết quả
+};
+const handleAddBannerEvent = async (req, res) => {
+  const EventId = req.body.EventId;
+  const result = await addBannerEvent(EventId); // Gọi service để xóa sự kiện
+  return res.status(result.errCode === 0 ? 200 : 400).json(result); // Trả về kết quả
+};
+const handleDeleteBannerEvent = async (req, res) => {
+  const EventId = req.body.EventId;
+  const result = await deleteBannerEvent(EventId); // Gọi service để xóa sự kiện
+  return res.status(result.errCode === 0 ? 200 : 400).json(result); // Trả về kết quả
+};
+
 export {
   handleGetEvent,
   handleCreateEvent,
@@ -86,4 +143,13 @@ export {
   handleEditEvent,
   handleListEvents,
   handleListEventsByUser,
+  handleAddBannerEvent,
+  handleAddSpecialEvent,
+  handleAddTrendEvent,
+  handleDeleteBannerEvent,
+  handleDeleteSpecialEvent,
+  handleDeleteTrendEvent,
+  handleListBannerEvent,
+  handleListSpecialEvent,
+  handleListTrendEvent,
 };

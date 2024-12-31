@@ -8,6 +8,9 @@ import TicketStatus from "../models/ticket_status.js";
 import EventStatus from "../models/event_status.js";
 import EventType from "../models/event_type.js";
 import mongoose from "mongoose";
+import TrendEvent from "../models/event_trend.js";
+import SpecialEvent from "../models/event_special.js";
+import Banner from "../models/banner.js";
 export const listEvents = async (filters) => {
   try {
     const filterConditions = {};
@@ -419,57 +422,6 @@ export const updateEvent = async (eventId, eventData) => {
   }
 };
 
-// export const deleteEvent = async (eventId) => {
-//   try {
-//     const event = await Event.findById(eventId);
-
-//     if (!event) {
-//       return {
-//         errCode: 21,
-//         message: "Event not found.",
-//       };
-//     }
-
-//     // Lấy các hình ảnh cần xóa
-//     const { logo_url, cover_image_url } = event;
-
-//     // Xóa hình ảnh logo nếu có
-//     if (logo_url) {
-//       const oldLogoPath = path.join("public/images", logo_url);
-//       if (fs.existsSync(oldLogoPath)) {
-//         fs.unlinkSync(oldLogoPath); // Xóa file cũ
-//       }
-//     }
-
-//     // Xóa hình ảnh cover image nếu có
-//     if (cover_image_url) {
-//       const oldCoverPath = path.join("public/images", cover_image_url);
-//       if (fs.existsSync(oldCoverPath)) {
-//         fs.unlinkSync(oldCoverPath); // Xóa file cũ
-//       }
-//     }
-
-//     const delete_event = await Event.findByIdAndDelete(eventId);
-//     if (!delete_event) {
-//       return {
-//         errCode: 2,
-//         message: "Event not found.",
-//       };
-//     }
-//     return {
-//       errCode: 0,
-//       message: "Event deleted successfully.",
-//     };
-//   } catch (error) {
-//     console.error("Error deleting Event:", error.message);
-//     return {
-//       errCode: 1,
-//       error: error.message,
-//       message: "Unable to delete Event.",
-//     };
-//   }
-// };
-
 export const deleteEvent = async (eventId) => {
   try {
     // Lấy sự kiện cần xóa
@@ -528,6 +480,343 @@ export const deleteEvent = async (eventId) => {
       errCode: 1,
       error: error.message,
       message: "Unable to delete Event.",
+    };
+  }
+};
+
+/// Trend
+
+export const listTrendEvent = async () => {
+  try {
+    // Lấy danh sách các TrendEvent
+    const trendEvents = await TrendEvent.find({}); // .lean() để giảm tải object Mongoose
+
+    // Lấy danh sách EventId từ TrendEvent
+    const eventIds = trendEvents.map((trend) => trend.Event_id);
+
+    // Lấy thông tin chi tiết sự kiện
+    const events = await Event.find({ _id: { $in: eventIds } })
+      .select("_id event_name start_date cover_image_url logo_url")
+      .lean();
+
+    // Thêm thông tin giá vé thấp nhất
+    const eventWithLowestPrice = await Promise.all(
+      events.map(async (event) => {
+        const lowestTicket = await Ticket.findOne({ event_id: event._id })
+          .sort({ price: 1 }) // Sắp xếp theo giá tăng dần
+          .select("price")
+          .lean();
+
+        return {
+          ...event,
+          lowest_price: lowestTicket
+            ? parseFloat(lowestTicket.price.toString())
+            : null, // Chuyển Decimal128 sang Number
+        };
+      })
+    );
+
+    return {
+      errCode: 0,
+      data: eventWithLowestPrice,
+      message: "Successfully listed trend events.",
+    };
+  } catch (error) {
+    console.error("Error listing TrendEvent:", error.message);
+    return {
+      errCode: 1,
+      error: error.message,
+      message: "Unable to list TrendEvent.",
+    };
+  }
+};
+export const addTrendEvent = async (EventId) => {
+  try {
+    // Kiểm tra xem EventId có tồn tại trong bảng Event
+    const eventExists = await Event.findById(EventId);
+    if (!eventExists) {
+      return {
+        errCode: 1,
+        message: "Event does not exist.",
+      };
+    }
+
+    // Kiểm tra xem EventId đã tồn tại trong bảng TrendEvent
+    const trendExists = await TrendEvent.findOne({ Event_id: EventId });
+    if (trendExists) {
+      return {
+        errCode: 2,
+        message: "Event is already in the trend list.",
+      };
+    }
+
+    // Thêm EventId vào bảng TrendEvent
+    const newTrendEvent = new TrendEvent({ Event_id: EventId });
+    await newTrendEvent.save();
+
+    return {
+      errCode: 0,
+      message: "Event added to trend list successfully.",
+    };
+  } catch (error) {
+    console.error("Error adding TrendEvent:", error.message);
+    return {
+      errCode: 3,
+      error: error.message,
+      message: "Unable to add Event to trend list.",
+    };
+  }
+};
+
+export const deleteTrendEvent = async (EventId) => {
+  try {
+    // Kiểm tra xem EventId có tồn tại trong bảng TrendEvent không
+    const trendEventExists = await TrendEvent.findOne({ Event_id: EventId });
+    if (!trendEventExists) {
+      return {
+        errCode: 1,
+        message: "TrendEvent does not exist.",
+      };
+    }
+
+    // Xóa TrendEvent với EventId
+    await TrendEvent.deleteOne({ Event_id: EventId });
+
+    return {
+      errCode: 0,
+      message: "TrendEvent deleted successfully.",
+    };
+  } catch (error) {
+    console.error("Error deleting TrendEvent:", error.message);
+    return {
+      errCode: 2,
+      error: error.message,
+      message: "Unable to delete TrendEvent.",
+    };
+  }
+};
+/// Special
+export const listSpecialEvent = async () => {
+  try {
+    // Lấy danh sách các SpecialEvent
+    const specialEvents = await SpecialEvent.find({}); // Lấy tất cả SpecialEvent
+
+    // Lấy danh sách EventId từ SpecialEvent
+    const eventIds = specialEvents.map((special) => special.Event_id);
+
+    // Lấy thông tin chi tiết sự kiện
+    const events = await Event.find({ _id: { $in: eventIds } })
+      .select("_id event_name start_date cover_image_url logo_url")
+      .lean();
+
+    // Thêm thông tin giá vé thấp nhất
+    const eventWithLowestPrice = await Promise.all(
+      events.map(async (event) => {
+        const lowestTicket = await Ticket.findOne({ event_id: event._id })
+          .sort({ price: 1 }) // Sắp xếp theo giá tăng dần
+          .select("price")
+          .lean();
+
+        return {
+          ...event,
+          lowest_price: lowestTicket
+            ? parseFloat(lowestTicket.price.toString())
+            : null, // Chuyển Decimal128 sang Number
+        };
+      })
+    );
+
+    return {
+      errCode: 0,
+      data: eventWithLowestPrice,
+      message: "Successfully listed special events.",
+    };
+  } catch (error) {
+    console.error("Error listing SpecialEvent:", error.message);
+    return {
+      errCode: 1,
+      error: error.message,
+      message: "Unable to list SpecialEvent.",
+    };
+  }
+};
+
+export const addSpecialEvent = async (EventId) => {
+  try {
+    // Kiểm tra xem EventId có tồn tại trong bảng Event
+    const eventExists = await Event.findById(EventId);
+    if (!eventExists) {
+      return {
+        errCode: 1,
+        message: "Event does not exist.",
+      };
+    }
+
+    // Kiểm tra xem EventId đã tồn tại trong bảng SpecialEvent
+    const specialExists = await SpecialEvent.findOne({ Event_id: EventId });
+    if (specialExists) {
+      return {
+        errCode: 2,
+        message: "Event is already in the special event list.",
+      };
+    }
+
+    // Thêm EventId vào bảng SpecialEvent
+    const newSpecialEvent = new SpecialEvent({ Event_id: EventId });
+    await newSpecialEvent.save();
+
+    return {
+      errCode: 0,
+      message: "Event added to special event list successfully.",
+    };
+  } catch (error) {
+    console.error("Error adding SpecialEvent:", error.message);
+    return {
+      errCode: 3,
+      error: error.message,
+      message: "Unable to add Event to special event list.",
+    };
+  }
+};
+
+export const deleteSpecialEvent = async (EventId) => {
+  try {
+    // Kiểm tra xem EventId có tồn tại trong bảng SpecialEvent không
+    const specialEventExists = await SpecialEvent.findOne({
+      Event_id: EventId,
+    });
+    if (!specialEventExists) {
+      return {
+        errCode: 1,
+        message: "SpecialEvent does not exist.",
+      };
+    }
+
+    // Xóa SpecialEvent với EventId
+    await SpecialEvent.deleteOne({ Event_id: EventId });
+
+    return {
+      errCode: 0,
+      message: "SpecialEvent deleted successfully.",
+    };
+  } catch (error) {
+    console.error("Error deleting SpecialEvent:", error.message);
+    return {
+      errCode: 2,
+      error: error.message,
+      message: "Unable to delete SpecialEvent.",
+    };
+  }
+};
+/// Banner
+
+export const listBannerEvent = async () => {
+  try {
+    // Lấy danh sách các Banner
+    const banners = await Banner.find({}); // Lấy tất cả Banner
+
+    // Lấy danh sách EventId từ Banner
+    const eventIds = banners.map((banner) => banner.Event_id);
+
+    // Lấy thông tin chi tiết sự kiện
+    const events = await Event.find({ _id: { $in: eventIds } })
+      .select("_id event_name start_date cover_image_url logo_url")
+      .lean();
+
+    // Thêm thông tin giá vé thấp nhất
+    const eventWithLowestPrice = await Promise.all(
+      events.map(async (event) => {
+        const lowestTicket = await Ticket.findOne({ event_id: event._id })
+          .sort({ price: 1 }) // Sắp xếp theo giá tăng dần
+          .select("price")
+          .lean();
+
+        return {
+          ...event,
+          lowest_price: lowestTicket
+            ? parseFloat(lowestTicket.price.toString())
+            : null, // Chuyển Decimal128 sang Number
+        };
+      })
+    );
+
+    return {
+      errCode: 0,
+      data: eventWithLowestPrice,
+      message: "Successfully listed banners.",
+    };
+  } catch (error) {
+    console.error("Error listing Banner:", error.message);
+    return {
+      errCode: 1,
+      error: error.message,
+      message: "Unable to list Banner.",
+    };
+  }
+};
+
+export const addBannerEvent = async (EventId) => {
+  try {
+    // Kiểm tra xem EventId có tồn tại trong bảng Event
+    const eventExists = await Event.findById(EventId);
+    if (!eventExists) {
+      return {
+        errCode: 1,
+        message: "Event does not exist.",
+      };
+    }
+
+    // Kiểm tra xem EventId đã tồn tại trong bảng Banner
+    const bannerExists = await Banner.findOne({ Event_id: EventId });
+    if (bannerExists) {
+      return {
+        errCode: 2,
+        message: "Event is already in the banner list.",
+      };
+    }
+
+    // Thêm EventId vào bảng Banner
+    const newBanner = new Banner({ Event_id: EventId });
+    await newBanner.save();
+
+    return {
+      errCode: 0,
+      message: "Event added to banner list successfully.",
+    };
+  } catch (error) {
+    console.error("Error adding BannerEvent:", error.message);
+    return {
+      errCode: 3,
+      error: error.message,
+      message: "Unable to add Event to banner list.",
+    };
+  }
+};
+
+export const deleteBannerEvent = async (EventId) => {
+  try {
+    // Kiểm tra xem EventId có tồn tại trong bảng Banner không
+    const bannerExists = await Banner.findOne({ Event_id: EventId });
+    if (!bannerExists) {
+      return {
+        errCode: 1,
+        message: "Banner Event does not exist.",
+      };
+    }
+
+    // Xóa Banner với EventId
+    await Banner.deleteOne({ Event_id: EventId });
+
+    return {
+      errCode: 0,
+      message: "Banner Event deleted successfully.",
+    };
+  } catch (error) {
+    console.error("Error deleting Banner Event:", error.message);
+    return {
+      errCode: 2,
+      error: error.message,
+      message: "Unable to delete Banner Event.",
     };
   }
 };
