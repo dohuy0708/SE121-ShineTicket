@@ -64,33 +64,7 @@ export default function BasicInput() {
     <div className="space-y-6">
       <FormSection title={"Upload hình ảnh"}>
         <div className="space-x-4 grid grid-cols-4">
-          <input
-            type="file"
-            name="logo_url"
-            required
-            onChange={(e) => handleFileChange(e, "logo_url")}
-          />
-          {eventInfo.logo_url && (
-            <img
-              src={eventInfo.logo_url}
-              alt="Preview"
-              style={{ maxWidth: "100%" }}
-            />
-          )}
-          <input
-            type="file"
-            name="cover_image_url"
-            required
-            onChange={(e) => handleFileChange(e, "cover_image_url")}
-          />
-          {eventInfo.cover_image_url && (
-            <img
-              src={eventInfo.cover_image_url}
-              alt="Preview"
-              style={{ maxWidth: "100%" }}
-            />
-          )}
-          {/* <UploadBox
+          <UploadBox
             name="logo_url"
             wi="col-span-1"
             he="h-[26.25rem]"
@@ -107,7 +81,7 @@ export default function BasicInput() {
             size="1280x720"
             image={eventInfo.cover_image_url}
             onChange={(e) => handleFileChange(e, "cover_image_url")}
-          /> */}
+          />
         </div>
       </FormSection>
       {/* Event Details Form */}

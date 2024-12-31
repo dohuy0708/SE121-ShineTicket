@@ -16,7 +16,7 @@ const TicketType = ({
           <h3 className="text-primary font-bold">{name}</h3>
           <p className="text-white">{price} đ</p>
         </div>
-        {soldOut ? (
+        {soldOut === "Hết vé" ? (
           <span className="text-white bg-red-600 px-3 py-1 rounded-full">
             Hết vé
           </span>

@@ -12,7 +12,7 @@ import axios from "axios";
 export const getUserById = async (userId) => {
   try {
     const response = await axios.get(
-      `http://localhost:8080/api/user/get/${userId}`
+      `http://localhost:8080/api/user/get/?id=${userId}`
     );
     // Hoặc dùng query string
     // const response = await axios.get(`http://localhost:8080/api/user/get?id=${userId}`);

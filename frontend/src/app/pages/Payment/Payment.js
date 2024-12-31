@@ -36,7 +36,7 @@ export default function Payment() {
   }, [seconds]);
 
   return (
-    <div className="bg-black text-white min-h-screen space-y-4">
+    <div className="bg-black text-white  min-h-screen ">
       <div className="bg-bg-main  bg-cover bg-center">
         <div className="flex flex-col max-w-7xl mx-auto  md:flex-row text-white px-8 pt-4 pb-4 rounded-lg  space-y-4 md:space-y-0 md:space-x-4">
           <EventInfo event={event} />
@@ -48,10 +48,10 @@ export default function Payment() {
       </div>
 
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3">
-        <div className="lg:col-span-2 space-y-4">
-          <PaymentInfo />
+        <div className="lg:col-span-2 ">
+          <PaymentInfo info={event.organizer_id} />
         </div>
-        <div className="space-y-4 mr-4 max-w-[25rem]">
+        <div className="space-y-4 mr-4 mt-6 max-w-[25rem]">
           <CartInfo items={items} total={total} />
         </div>
       </div>
@@ -60,6 +60,7 @@ export default function Payment() {
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         amount={total}
+        info={event?.organizer_id}
       />
     </div>
   );

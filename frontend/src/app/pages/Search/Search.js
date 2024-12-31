@@ -12,7 +12,7 @@ export default function Search() {
     category: "Tất cả",
     priceRange: [0, 1000000],
   });
-
+  const nav = useNavigate();
   const [isFilterVisible, setFilterVisible] = useState(false);
   const [searchResults, setSearchResults] = useState([]); // Mock kết quả tìm kiếm
 
@@ -30,6 +30,10 @@ export default function Search() {
     const results = mockSearch(filters);
     setSearchResults(results);
     setFilterVisible(false);
+  };
+
+  const handleViewDetail = (id) => {
+    nav(`/ticket-details/${id}`);
   };
 
   const mockSearch = (filters) => {
@@ -87,15 +91,21 @@ export default function Search() {
             <div
               className="event-card w-full p-[5px] cursor-pointer"
               key={result._id}
-              // onClick={() => handleCardClick()}
+              onClick={() => handleViewDetail(result._id)}
             >
-              <div className="event-image bg-gray-300 h-[175px] rounded-lg mb-[10px]"></div>
+              <div className="event-image bg-gray-200 h-[175px] rounded-lg mb-[10px]">
+                <image
+                  src={result?.cover_image_url}
+                  className="w-full h-full object-cover"
+                  alt={result?.event_name}
+                />
+              </div>
               <div className="event-info flex flex-col gap-2">
                 <div className="event-name w-full overflow-hidden text-ellipsis whitespace-nowrap leading-[21px] font-semibold uppercase">
                   {<h2 className="text-lg font-medium">{result.event_name}</h2>}
                 </div>
                 <div className="event-price text-primary font-semibold">
-                  Từ: {result?.ticketPrice}đ
+                  Từ: {result?.ticketPrice?.toLocaleString()} đ
                 </div>
                 <div className="event-date flex-1 flex items-center">
                   {" "}

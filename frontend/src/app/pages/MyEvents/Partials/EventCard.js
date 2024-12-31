@@ -10,9 +10,14 @@ const EventCard = ({ event }) => {
           <div>
             <h3 className="text-lg font-semibold">{event?.event_name}</h3>
             <p className="text-md mt-4 text-primary">
-              📅 {event?.date} ({event?.time})
+              📅
+              {new Date(event.start_date).toLocaleDateString("vi-VN", {
+                day: "2-digit",
+                month: "2-digit",
+                year: "numeric",
+              })}
             </p>
-            <p className="text-md mt-2 text-primary">📍 {event?.location}</p>
+            <p className="text-md mt-2 text-primary">📍 {event?.venue_name}</p>
           </div>
         </div>
       </div>

@@ -3,6 +3,10 @@ import { Link } from "react-router-dom";
 import { CalendarDaysIcon, MapPinIcon } from "@heroicons/react/24/outline";
 
 const BigTicket = ({ event }) => {
+  const getMinPrice = (tickets) => {
+    if (!tickets || tickets.length === 0) return "N/A";
+    return Math.min(...tickets.map((ticket) => ticket.price));
+  };
   return (
     <div className="w-full h-max pb-8 mt-4 pl-4 pr-4">
       <div className="w-full h-full grid grid-cols-3 text-white rounded-[1.5rem] bg-bg-primary overflow-hidden">
@@ -14,19 +18,23 @@ const BigTicket = ({ event }) => {
               <p className="text-2xl font-bold font-inter  overflow-hidden break-words">
                 {event?.event_name}
               </p>
-              <p className="font-bold mt-4 text-primary flex items-center">
+              <p className="font-bold mt-4 text-prim  ary flex items-center">
                 <CalendarDaysIcon className="inline h-6 text-white mr-2" />{" "}
-                {event?.start_date}
+                {new Date(event?.start_date).toLocaleDateString("vi-VN", {
+                  day: "2-digit",
+                  month: "2-digit",
+                  year: "numeric",
+                })}
               </p>
               <p className="font-bold mt-4 text-primary flex items-center">
                 <MapPinIcon className="inline h-6 text-white mr-2" />{" "}
-                {event?.venue?.venue_name}
+                {event?.venue_id?.venue_name}
               </p>
               <p className="font-bold mt-2 text-white flex items-center">
-                {event?.venue?.street_name.charAt(0).toUpperCase() +
-                  event?.venue?.street_name.slice(1)}
-                , {event?.venue?.ward}, {event?.venue?.district},{" "}
-                {event?.venue?.city}
+                {event?.venue_id?.street_name.charAt(0).toUpperCase() +
+                  event?.venue_id?.street_name.slice(1)}
+                , {event?.venue_id?.ward}, {event?.venue_id?.district},{" "}
+                {event?.venue_id?.city}
               </p>
             </div>
             <div className="border-t border-[#C4C4CF]">
@@ -34,7 +42,7 @@ const BigTicket = ({ event }) => {
                 <p className="text-lg font-semibold ">
                   Giá từ:{" "}
                   <span className="text-xl font-bold text-primary">
-                    {event?.min_price?.toLocaleString()} vnđ
+                    {getMinPrice(event?.tickets).toLocaleString()} vnđ
                   </span>
                 </p>
               </div>

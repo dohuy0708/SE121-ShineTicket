@@ -4,8 +4,8 @@ import MomoPaymentModal from "./MomoPaymentModal";
 const CartInfo = ({ items, total }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   return (
-    <div className="bg-white text-black p-4 rounded-lg shadow-lg space-y-4">
-      <div className="flex justify-between items-center border-b border-gray-300 pb-2">
+    <div className="bg-white text-black p-4 rounded-lg shadow-lg ">
+      <div className="flex justify-between items-center border-b border-gray-300 pb-2 mb-2">
         <h3 className="font-bold">Thông tin đặt vé</h3>
       </div>
       <table className="w-full text-sm mb-4 font-semibold">

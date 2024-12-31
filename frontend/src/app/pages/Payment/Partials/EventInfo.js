@@ -10,16 +10,21 @@ const EventInfo = ({ event }) => {
 
       <h2 className="font-bold mt-4 text-primary flex items-center">
         <CalendarDaysIcon className="inline h-6 text-white mr-2" />{" "}
-        {event?.start_date}
+        {new Date(event?.start_date).toLocaleDateString("vi-VN", {
+          day: "2-digit",
+          month: "2-digit",
+          year: "numeric",
+        })}
       </h2>
       <h2 className="font-bold mt-4 text-primary flex items-center">
         <MapPinIcon className="inline h-6 text-white mr-2" />{" "}
-        {event?.venue?.venue_name}
+        {event?.venue_id?.venue_name}
       </h2>
       <h2 className="font-bold mt-2 text-white flex items-center">
-        {event?.venue?.street_name.charAt(0).toUpperCase() +
-          event?.venue?.street_name.slice(1)}
-        , {event?.venue?.ward}, {event?.venue?.district}, {event?.venue?.city}
+        {event?.venue_id?.street_name.charAt(0).toUpperCase() +
+          event?.venue_id?.street_name.slice(1)}
+        , {event?.venue_id?.ward}, {event?.venue_id?.district},{" "}
+        {event?.venue_id?.city}
       </h2>
     </div>
   );

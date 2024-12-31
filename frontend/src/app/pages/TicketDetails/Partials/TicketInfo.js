@@ -45,7 +45,11 @@ const TicketInfo = ({ event }) => {
                 <ChevronRightIcon className="text-white h-5" />
               )}
             </button>
-            15:00 - 22:30, 08 Tháng 12, 2024
+            {new Date(event?.start_date).toLocaleDateString("vi-VN", {
+              day: "2-digit",
+              month: "2-digit",
+              year: "numeric",
+            })}
           </div>
           {event?.available_tickets > 0 ? (
             <Link to={"/select-ticket"} state={{ event }}>
@@ -63,15 +67,17 @@ const TicketInfo = ({ event }) => {
         {/* Hiển thị thông tin vé nếu isOpen là true */}
         {isOpen && (
           <div className="ticket-list">
-            {ticketData.map((ticket, index) => (
+            {event?.tickets.map((ticket, index) => (
               <div
                 key={index}
                 className="pl-16 pr-6 bg-gray-800 pt-4 pb-6 odd:bg-[#2F3033] even:bg-[#38383D] last:rounded-b-xl"
               >
                 <div className="flex justify-between items-center text-white">
-                  <div className="text-base font-semibold">{ticket.name}</div>
+                  <div className="text-base font-semibold">
+                    {ticket.ticketType}
+                  </div>
                   <div className="text-base font-semibold text-primary">
-                    {ticket.price}
+                    {ticket.price.toLocaleString()} đ
                   </div>
                 </div>
                 {/* <div className="text-sm text-red-500">{ticket.status}</div> */}

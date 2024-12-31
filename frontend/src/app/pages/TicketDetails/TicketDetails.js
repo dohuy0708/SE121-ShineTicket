@@ -3,7 +3,7 @@ import BigTicket from "./Partials/BigTicket";
 import TicketInfo from "./Partials/TicketInfo";
 import { useParams } from "react-router-dom";
 import EventInfo from "./Partials/EventInfo";
-import { getEventById } from "../../../services/service";
+import { getEventById } from "./eventService";
 
 const TicketDetails = () => {
   const { id } = useParams();
@@ -13,6 +13,7 @@ const TicketDetails = () => {
     const fetchEvent = async () => {
       try {
         const data = await getEventById(id);
+        console.log("fetch: ", data);
         setEvent(data); // Set dữ liệu sau khi lấy về
       } catch (error) {
         console.error("Error fetching event:", error);
