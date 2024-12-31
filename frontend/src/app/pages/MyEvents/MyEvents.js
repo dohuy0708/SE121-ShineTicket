@@ -1,21 +1,17 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import EventCard from "./Partials/EventCard";
 import { Outlet } from "react-router-dom";
+import { getEventsByUser } from "./services/eventService";
 const MyEvents = () => {
-  const events = [
-    {
-      name: "Sự kiện chào đón tân sinh viên 2024",
-      date: "Thứ Ba, 24/09/2024",
-      time: "08:00",
-      location: "Đại học Công Nghệ Thông Tin",
-    },
-    {
-      name: "Máy tính cũ - Tri  thức mới",
-      date: "24/11/2024",
-      time: "08:00",
-      location: "Nhà văn hóa sinh viên, Đại học quốc gia Hồ Chí Minh",
-    },
-  ];
+  const [events, setEvents] = useState([]);
+  useEffect(() => {
+    const fetchEvents = () => {
+      const userId = localStorage.getItem("user_id");
+      const eventFormApi = getEventsByUser(userId);
+      setEvents(eventFormApi);
+    };
+    fetchEvents();
+  }, []);
 
   const [activeFilter, setActiveFilter] = useState("Sắp diễn ra");
   return (
@@ -34,7 +30,7 @@ const MyEvents = () => {
         </div>
 
         <div className="flex  space-x-2 ml-6">
-          {["Tất cả", "Sắp diễn ra", "Đã kết thúc", "Chờ duyệt", "Nháp"].map(
+          {["Tất cả", "Sắp diễn ra", "Đã kết thúc", "Chờ duyệt"].map(
             (filter) => (
               <button
                 key={filter}

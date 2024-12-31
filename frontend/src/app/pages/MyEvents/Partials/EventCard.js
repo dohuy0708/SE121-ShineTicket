@@ -8,7 +8,7 @@ const EventCard = ({ event }) => {
         <div className="w-80 bg-gray-500 h-[9.5rem] rounded-lg"></div>
         <div className="ml-4 flex flex-col justify-between">
           <div>
-            <h3 className="text-lg font-semibold">{event?.name}</h3>
+            <h3 className="text-lg font-semibold">{event?.event_name}</h3>
             <p className="text-md mt-4 text-primary">
               📅 {event?.date} ({event?.time})
             </p>

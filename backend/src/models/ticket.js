@@ -31,7 +31,7 @@ const ticketSchema = new mongoose.Schema(
     },
     event_datetime: {
       type: Date,
-      required: true,
+      // required: true,
     },
   },
   {
