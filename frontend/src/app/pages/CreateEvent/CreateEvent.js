@@ -24,7 +24,8 @@ function CreateEvent() {
       console.error("Error creating event:", error);
     }
   };
-  const handleNextStep = () => {
+  const handleNextStep = (e) => {
+    e.preventDefault();
     if (currentStep === 3) {
       createEvent();
       // nav("/my-events");
@@ -48,7 +49,7 @@ function CreateEvent() {
   };
 
   return (
-    <div className="flex-1 bg-black mx-auto">
+    <form className="flex-1 bg-black mx-auto">
       {/* Header - Tạo sự kiện */}
       <div className="flex items-center text-2xl pl-4 h-16 bg-bg-main border-b-2 border-[#A19393] font-semibold text-white">
         Tạo sự kiện
@@ -81,6 +82,7 @@ function CreateEvent() {
             Lưu
           </button>
           <button
+            type="submit"
             onClick={handleNextStep}
             className="ml-auto w-24 px-4 py-2 bg-primary text-white font-semibold rounded"
           >
@@ -108,7 +110,7 @@ function CreateEvent() {
           updateData={(data) => updateFormData("step3", data)}
         />
       )}
-    </div>
+    </form>
   );
 }
 

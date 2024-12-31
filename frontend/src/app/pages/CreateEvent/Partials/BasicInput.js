@@ -49,21 +49,49 @@ export default function BasicInput() {
     const file = e.target.files[0];
     if (file) {
       const reader = new FileReader();
-      reader.onloadend = () => {
-        sEvent2.set((prev) => {
-          prev.value[field] = reader.result; // Cập nhật trực tiếp vào Signify store
+      reader.onload = () => {
+        sEvent2.set((pre) => {
+          pre.value[field] = reader.result; // Lưu base64 vào store
         });
       };
-      reader.readAsDataURL(file);
+      reader.readAsDataURL(file); // Đọc file thành base64
     }
   };
+
   // if (loading) return <p>Loading event types...</p>;
   // if (error) return <p>Error loading event types: {error.message}</p>;
   return (
     <div className="space-y-6">
       <FormSection title={"Upload hình ảnh"}>
         <div className="space-x-4 grid grid-cols-4">
-          <UploadBox
+          <input
+            type="file"
+            name="logo_url"
+            required
+            onChange={(e) => handleFileChange(e, "logo_url")}
+          />
+          {eventInfo.logo_url && (
+            <img
+              src={eventInfo.logo_url}
+              alt="Preview"
+              style={{ maxWidth: "100%" }}
+            />
+          )}
+          <input
+            type="file"
+            name="cover_image_url"
+            required
+            onChange={(e) => handleFileChange(e, "cover_image_url")}
+          />
+          {eventInfo.cover_image_url && (
+            <img
+              src={eventInfo.cover_image_url}
+              alt="Preview"
+              style={{ maxWidth: "100%" }}
+            />
+          )}
+          {/* <UploadBox
+            name="logo_url"
             wi="col-span-1"
             he="h-[26.25rem]"
             label="Thêm logo sự kiện"
@@ -72,13 +100,14 @@ export default function BasicInput() {
             onChange={(e) => handleFileChange(e, "logo_url")}
           />
           <UploadBox
+            name="cover_image_url"
             wi="col-span-3"
             he="h-[26.25rem]"
             label="Thêm ảnh nền sự kiện"
             size="1280x720"
             image={eventInfo.cover_image_url}
             onChange={(e) => handleFileChange(e, "cover_image_url")}
-          />
+          /> */}
         </div>
       </FormSection>
       {/* Event Details Form */}

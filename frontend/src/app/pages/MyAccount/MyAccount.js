@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 export default function MyAccount() {
   // State để lưu thông tin người dùng
   const [formData, setFormData] = useState({
-    id: "",
+    _id: "",
     username: "",
     phone_number: "",
     email: "",
@@ -27,7 +27,7 @@ export default function MyAccount() {
     if (storedUser) {
       const user = JSON.parse(storedUser);
       setFormData({
-        id: user.id, // Lấy id từ localStorage
+        _id: user._id, // Lấy id từ localStorage
         username: user.username || "",
         phone_number: user.phone_number || "",
         email: user.email || "",
@@ -49,7 +49,7 @@ export default function MyAccount() {
     if (isEditing) {
       const userData = {
         ...formData,
-        id: formData.id, // Đảm bảo có id
+        _id: formData._id, // Đảm bảo có id
       };
 
       try {

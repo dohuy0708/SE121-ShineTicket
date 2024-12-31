@@ -21,10 +21,8 @@ export const sEvent2 = signify({
   ward: "",
   district: "",
   city: "",
-  logo_url: "",
-  cover_image_url: "",
+  logo_url: null,
+  cover_image_url: null,
 
   tickets: [],
 });
-
-export const sOrg = signify({});

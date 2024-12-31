@@ -17,3 +17,16 @@ export const handleLogin = async (email, password) => {
     throw error.response ? error.response.data : error;
   }
 };
+
+export const handleSignUp = async (userData) => {
+  try {
+    const response = await axios.post(
+      "http://localhost:8080/api/user/register",
+      userData
+    );
+    return response;
+  } catch (error) {
+    console.error("Lỗi khi đăng ký:", error);
+    throw error;
+  }
+};

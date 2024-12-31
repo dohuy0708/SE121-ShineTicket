@@ -24,6 +24,15 @@ export default function PaymentInfo() {
 
     fetchBanks();
     sEvent2.set((pre) => (pre.value.user_id = localStorage.getItem("user_id")));
+    // Cập nhật tổng số vé
+    sEvent2.set((pre) => {
+      pre.value.total_tickets = pre.value.tickets.reduce((sum, ticket) => {
+        return sum + Number(ticket.ticket_quantity);
+      }, 0);
+      pre.value.available_tickets = pre.value.tickets.reduce((sum, ticket) => {
+        return sum + Number(ticket.ticket_quantity);
+      }, 0);
+    });
   }, []);
 
   const handleBankChange = (e) => {

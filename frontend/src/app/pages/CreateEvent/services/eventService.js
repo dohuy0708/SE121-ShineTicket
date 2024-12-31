@@ -11,40 +11,53 @@ export const getEventType = async () => {
     throw error; // Ném lỗi ra ngoài để xử lý nếu cần
   }
 };
+const dataURLtoFile = (dataurl, filename) => {
+  // Tách phần header và data của base64 string
+  const arr = dataurl.split(",");
+  const mime = arr[0].match(/:(.*?);/)[1];
+  const bstr = atob(arr[1]);
+  let n = bstr.length;
+  const u8arr = new Uint8Array(n);
+
+  while (n--) {
+    u8arr[n] = bstr.charCodeAt(n);
+  }
+
+  return new File([u8arr], filename, { type: mime });
+};
 
 export const postEvent = async (eventData) => {
   try {
-    const formData = new FormData(); // Sử dụng FormData để gửi dữ liệu với file
+    const formData = new FormData();
 
-    // Duyệt qua các thuộc tính của eventData và thêm vào FormData
     Object.keys(eventData).forEach((key) => {
       if (key === "tickets") {
-        // Xử lý tickets: mảng vé (nếu có)
         eventData[key].forEach((ticket) => {
-          formData.append("tickets[]", JSON.stringify(ticket)); // Mảng tickets
+          formData.append("tickets[]", JSON.stringify(ticket));
         });
       } else if (key === "logo_url" || key === "cover_image_url") {
-        // Thêm file logo và cover image
-        formData.append(key, eventData[key]);
+        // Chuyển base64 thành File object
+        if (eventData[key] && eventData[key].startsWith("data:")) {
+          const file = dataURLtoFile(eventData[key], `${key}.png`);
+          formData.append(key, file);
+        }
       } else {
-        // Thêm các trường còn lại vào FormData
         formData.append(key, eventData[key]);
       }
     });
 
-    // Gửi dữ liệu với axios
     const response = await axios.post(
       "http://localhost:8080/api/event/create",
       formData,
-      { headers: { "Content-Type": "multipart/form-data" } } // Đảm bảo gửi đúng Content-Type cho form-data
+      { headers: { "Content-Type": "multipart/form-data" } }
     );
 
-    return response.data; // Trả về dữ liệu từ API
+    return response.data;
   } catch (error) {
     console.error(
       "Error creating event:",
       error.response?.data || error.message
     );
-    throw error; // Ném lỗi để xử lý bên ngoài
+    throw error;
   }
 };

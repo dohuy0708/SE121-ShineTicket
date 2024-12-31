@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { sEvent2 } from "../eventStore";
 
 function TicketModal({ ticket, onSave, onClose, index }) {
+  const ls = sEvent2.slice((n) => n.tickets).use();
+  const tt = sEvent2.slice((n) => n.total_tickets).use();
   const [ticketData, setTicketData] = useState({
     ticket_type: "",
     price: 0,
@@ -77,20 +79,7 @@ function TicketModal({ ticket, onSave, onClose, index }) {
 
     onSave(formattedData, index);
 
-    // Cập nhật tổng số vé
-    sEvent2.set((pre) => {
-      const total = pre.value.tickets.reduce((sum, ticket) => {
-        return sum + Number(ticket.ticket_quantity);
-      }, 0);
-
-      return {
-        ...pre,
-        value: {
-          ...pre.value,
-          total_tickets: total,
-        },
-      };
-    });
+    console.log(tt);
   };
 
   return (
