@@ -34,6 +34,7 @@ const handleListEventsByUser = async (req, res) => {
   return res.status(result.errCode === 0 ? 200 : 400).json(result); // Trả về kết quả
 };
 const handleCreateEvent = async (req, res) => {
+  let uploadedFiles = []; // Lưu đường dẫn file tạm
   try {
     const eventData = req.body; // Lấy dữ liệu sự kiện từ request body
     const files = req.files; // Lấy dữ liệu file từ Multer
@@ -45,10 +46,16 @@ const handleCreateEvent = async (req, res) => {
     if (files) {
       if (files.logo_url) {
         logoUrlPath = files.logo_url[0].filename; // Đường dẫn ảnh logo
+        uploadedFiles.push(
+          path.join("public/images", req.files.logo_url[0].filename)
+        );
       }
 
       if (files.cover_image_url) {
         coverImageUrlPath = files.cover_image_url[0].filename; // Đường dẫn ảnh cover image
+        uploadedFiles.push(
+          path.join("public/images", req.files.cover_image_url[0].filename)
+        );
       }
     }
 
@@ -65,6 +72,12 @@ const handleCreateEvent = async (req, res) => {
     // Trả về kết quả
     return res.status(result.errCode === 0 ? 200 : 400).json(result);
   } catch (error) {
+    // Xóa file đã upload nếu tạo sự kiện thất bại
+    uploadedFiles.forEach((filePath) => {
+      if (fs.existsSync(filePath)) {
+        fs.unlinkSync(filePath);
+      }
+    });
     return res.status(500).json({
       errCode: -1,
       message: "Lỗi server khi tạo sự kiện",
@@ -75,8 +88,18 @@ const handleCreateEvent = async (req, res) => {
 
 const handleEditEvent = async (req, res) => {
   const eventId = req.body.id; // Lấy id sự kiện từ URL params
-  const eventData = req.body; // Dữ liệu chỉnh sửa từ request body
 
+  const eventData = req.body;
+
+  // Lấy thông tin file upload
+  if (req.files) {
+    if (req.files.logo_url) {
+      eventData.logo_url = req.files.logo_url[0].filename; // Lấy tên file
+    }
+    if (req.files.cover_image_url) {
+      eventData.cover_image_url = req.files.cover_image_url[0].filename; // Lấy tên file
+    }
+  }
   const result = await updateEvent(eventId, eventData); // Gọi service để cập nhật sự kiện
 
   return res.status(result.errCode === 0 ? 200 : 400).json(result); // Trả về kết quả
