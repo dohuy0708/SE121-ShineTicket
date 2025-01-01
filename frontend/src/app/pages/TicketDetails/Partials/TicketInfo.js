@@ -51,15 +51,27 @@ const TicketInfo = ({ event }) => {
               year: "numeric",
             })}
           </div>
-          {event?.available_tickets > 0 ? (
-            <Link to={"/select-ticket"} state={{ event }}>
-              <button className="py-2 my-2 rounded-md bg-primary px-10">
-                Mua vé ngay
+          {new Date(event.start_date) > new Date() ? (
+            event?.available_tickets > 0 ? (
+              <Link to="/select-ticket" state={{ event }}>
+                <button className="px-2 bg-primary py-2 rounded-md hover:bg-white hover:text-black font-bold text-white">
+                  Mua vé ngay
+                </button>
+              </Link>
+            ) : (
+              <button
+                className="px-2 bg-gray-400 py-2 rounded-md font-bold text-white"
+                disabled
+              >
+                Hết vé
               </button>
-            </Link>
+            )
           ) : (
-            <button className="py-2 my-2 rounded-md bg-gray-400 px-10 cursor-default">
-              Hết vé
+            <button
+              className="px-2 bg-gray-400 py-2 rounded-md font-bold text-white"
+              disabled
+            >
+              Sự kiện đã kết thúc
             </button>
           )}
         </div>

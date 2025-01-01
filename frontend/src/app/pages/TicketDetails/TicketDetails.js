@@ -27,7 +27,7 @@ const TicketDetails = () => {
       <div className="mx-auto max-w-7xl p-4">
         <BigTicket event={event} />
         <div>
-          <EventInfo />
+          <EventInfo event={event} />
           <TicketInfo event={event} />
         </div>
       </div>

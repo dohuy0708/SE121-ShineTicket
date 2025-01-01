@@ -5,7 +5,9 @@ const EventCard = ({ event }) => {
   return (
     <div className="bg-bg-main p-4 rounded-lg text-white m-6">
       <div className="flex border-b-2 border-white pb-6">
-        <div className="w-80 bg-gray-500 h-[9.5rem] rounded-lg"></div>
+        <div className="w-72 bg-gray-500 h-[9.5rem] rounded-lg">
+          <img src={event.logo_url} className="w-full h-full object-cover" />
+        </div>
         <div className="ml-4 flex flex-col justify-between">
           <div>
             <h3 className="text-lg font-semibold">{event?.event_name}</h3>
@@ -17,7 +19,12 @@ const EventCard = ({ event }) => {
                 year: "numeric",
               })}
             </p>
-            <p className="text-md mt-2 text-primary">📍 {event?.venue_name}</p>
+            <p className="text-md mt-2 text-primary">
+              📍{" "}
+              {event?.event_format === "offline"
+                ? event?.venue_id?.venue_name
+                : "Sự kiện online"}
+            </p>
           </div>
         </div>
       </div>

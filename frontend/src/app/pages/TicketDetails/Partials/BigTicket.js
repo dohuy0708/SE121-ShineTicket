@@ -46,18 +46,27 @@ const BigTicket = ({ event }) => {
                   </span>
                 </p>
               </div>
-              {event?.available_tickets > 0 ? (
-                <Link to="/select-ticket" state={{ event }}>
-                  <button className="w-full bg-primary py-2 rounded-md hover:bg-white hover:text-black font-bold text-white">
-                    Mua vé ngay
+              {new Date(event.start_date) > new Date() ? (
+                event?.available_tickets > 0 ? (
+                  <Link to="/select-ticket" state={{ event }}>
+                    <button className="w-full bg-primary py-2 rounded-md hover:bg-white hover:text-black font-bold text-white">
+                      Mua vé ngay
+                    </button>
+                  </Link>
+                ) : (
+                  <button
+                    className="w-full bg-gray-400 py-2 rounded-md font-bold text-white"
+                    disabled
+                  >
+                    Hết vé
                   </button>
-                </Link>
+                )
               ) : (
                 <button
                   className="w-full bg-gray-400 py-2 rounded-md font-bold text-white"
                   disabled
                 >
-                  Hết vé
+                  Sự kiện đã kết thúc
                 </button>
               )}
             </div>
@@ -66,7 +75,7 @@ const BigTicket = ({ event }) => {
         <div className="col-span-2 flex items-center justify-center overflow-hidden">
           <img
             className="w-full h-full object-cover object-center overflow-clip"
-            src={event?.cover_image_url}
+            src={`/${event.logo_url}`}
             alt="Image"
           />
         </div>

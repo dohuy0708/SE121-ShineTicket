@@ -89,15 +89,20 @@ export default function Search() {
         <div className="grid grid-cols-4 gap-4 mt-4">
           {searchResults.map((result) => (
             <div
-              className="event-card w-full p-[5px] cursor-pointer"
+              className="event-card w-full p-[5px] cursor-pointer relative"
               key={result._id}
               onClick={() => handleViewDetail(result._id)}
             >
-              <div className="event-image bg-gray-200 h-[175px] rounded-lg mb-[10px]">
-                <image
-                  src={result?.cover_image_url}
+              {new Date(result.start_date) < new Date() ? (
+                <div className="absolute top-3 right-[5px] bg-primary text-sm rounded-s-md px-2">
+                  Đã kết thúc
+                </div>
+              ) : null}
+
+              <div className="event-image bg-gray-200 h-[175px] rounded-lg mb-[10px] overflow-hidden">
+                <img
+                  src={`/${result.logo_url}`}
                   className="w-full h-full object-cover"
-                  alt={result?.event_name}
                 />
               </div>
               <div className="event-info flex flex-col gap-2">

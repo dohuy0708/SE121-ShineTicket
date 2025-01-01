@@ -37,7 +37,7 @@ export default function Payment() {
 
   return (
     <div className="bg-black text-white  min-h-screen ">
-      <div className="bg-bg-main  bg-cover bg-center">
+      <div className="bg-bg-main  bg-cover bg-center ">
         <div className="flex flex-col max-w-7xl mx-auto  md:flex-row text-white px-8 pt-4 pb-4 rounded-lg  space-y-4 md:space-y-0 md:space-x-4">
           <EventInfo event={event} />
           <div className="w-[14rem] h-full px-4 pt-6 pb-4 border border-white/40 overflow-hidden  rounded-3xl bg-white/25 backdrop-blur-xl backdrop-brightness-90 flex justify-center items-center flex-col gap-4">
