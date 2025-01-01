@@ -1,18 +1,18 @@
 import { CalendarDaysIcon, MapPinIcon } from "@heroicons/react/24/outline";
 import React from "react";
 import { useNavigate } from "react-router-dom";
-
+import { toast } from "react-toastify";
 const CartSummary = ({ items, total, event }) => {
   const navigate = useNavigate();
 
   const handlePayment = () => {
     if (items?.length) {
-      console.log("items đay:", items);
+      localStorage.setItem("isNewOrder", true);
       navigate("/payment", {
         state: { items, total, event },
       });
     } else {
-      alert("Vui lòng chọn vé");
+      toast.warning("Vui lòng chọn vé");
     }
   };
   return (

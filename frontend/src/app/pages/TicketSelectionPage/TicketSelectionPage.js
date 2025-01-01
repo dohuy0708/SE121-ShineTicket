@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import TicketType from "./Partials/TicketType";
 import CartSummary from "./Partials/CartSummary";
 import { useLocation } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
 
 const TicketSelectionPage = () => {
   const location = useLocation();
@@ -31,7 +32,9 @@ const TicketSelectionPage = () => {
   const cartItems = event?.tickets
     .filter((ticket) => ticketQuantities[ticket.ticketType] > 0)
     .map((ticket) => ({
-      name: ticket.ticketType,
+      ticket_id: ticket.id,
+      ticket_type: ticket.ticketType,
+      price: ticket.price,
       quantity: ticketQuantities[ticket.ticketType],
       total: ticket.price * ticketQuantities[ticket.ticketType],
     }));
@@ -68,12 +71,9 @@ const TicketSelectionPage = () => {
         </div>
       </div>
       <div className="w-1/4 absolute top-0 right-0 h-[100%]">
-        <CartSummary
-          items={cartItems}
-          total={total.toLocaleString()}
-          event={event}
-        />
+        <CartSummary items={cartItems} total={total} event={event} />
       </div>
+      <ToastContainer />
     </div>
   );
 };

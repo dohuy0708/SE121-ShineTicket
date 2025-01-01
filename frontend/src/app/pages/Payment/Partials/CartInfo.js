@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import MomoPaymentModal from "./MomoPaymentModal";
-
+import { toast } from "react-toastify";
 const CartInfo = ({ items, total }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   return (
@@ -36,7 +36,10 @@ const CartInfo = ({ items, total }) => {
       </div>
       <button
         className="bg-primary text-white w-full py-2 rounded-lg font-bold"
-        onClick={() => setIsModalOpen(true)}
+        onClick={() => {
+          setIsModalOpen(true);
+          toast.info("Thành công");
+        }}
       >
         Thanh toán
       </button>

@@ -53,8 +53,8 @@ function App() {
               </PrivateRoute>
             }
           >
-            <Route path="/summary" element={<EventSummary />} />
-            <Route path="/orders" element={<EventOrders />} />
+            <Route path="/summary/:id" element={<EventSummary />} />
+            <Route path="/orders/:id" element={<EventOrders />} />
           </Route>
         </Routes>
       </BrowserRouter>

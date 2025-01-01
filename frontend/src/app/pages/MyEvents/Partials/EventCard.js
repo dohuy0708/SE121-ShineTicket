@@ -31,13 +31,13 @@ const EventCard = ({ event }) => {
       <div className="mt-4  max-w-xl mx-auto ">
         <div className="flex  justify-around text-sm text-center text-white">
           <span className="cursor-pointer font-semibold hover:text-primary">
-            <Link to="/summary">Tổng kết</Link>
+            <Link to={`/summary/${event._id}`}>Tổng kết</Link>
           </span>
           <span className="cursor-pointer font-semibold hover:text-primary">
             <Link to="/create-event">Chỉnh sửa</Link>
           </span>
           <span className="cursor-pointer font-semibold hover:text-primary">
-            <Link to="/orders">Đơn hàng</Link>
+            <Link to={`/orders/${event._id}`}>Đơn hàng</Link>
           </span>
         </div>
       </div>

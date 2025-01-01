@@ -5,6 +5,8 @@ import MomoPaymentModal from "./Partials/MomoPaymentModal";
 import EventInfo from "./Partials/EventInfo";
 import CartInfo from "./Partials/CartInfo";
 import PaymentInfo from "./Partials/PaymentInfo";
+import { ToastContainer, toast } from "react-toastify";
+import { createOrder, editOrder, deleteOrder } from "./orderService";
 // Event Information Component
 
 export default function Payment() {
@@ -12,14 +14,60 @@ export default function Payment() {
   const { items, total, event } = location.state || {};
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
-
+  const [orderId, setOrderId] = useState(null);
   // Shared timer state
   const [minutes, setMinutes] = useState(15);
   const [seconds, setSeconds] = useState(0);
 
   useEffect(() => {
+    // Tạo order khi vào trang
+    const createInitialOrder = async () => {
+      const order_details = items.map((ticket) => ({
+        ticket_id: ticket.ticket_id,
+        ticket_type: ticket.ticket_type,
+        ticket_date: event.start_date,
+        price: ticket.price,
+      }));
+      const userId = localStorage.getItem("user_id");
+      const orderForm = {
+        user_id: userId,
+        order_date: new Date().toISOString(),
+        total_amount: total,
+        event_id: event._id,
+        event_name: event.event_name,
+        event_date: event.start_date,
+        event_address:
+          event.event_format === "online"
+            ? "Sự kiện online"
+            : [
+                event.venue_id?.venue_name,
+                event.venue_id?.street_name,
+                event.venue_id?.ward,
+                event.venue_id?.district,
+                event.venue_id?.city,
+              ]
+                .filter(Boolean)
+                .join(", "),
+        order_status_id: "675ea35c101067cb13679b52", // Đang xử lý
+        order_details: order_details,
+      };
+
+      try {
+        const tempOrder = await createOrder(orderForm);
+        setOrderId(tempOrder.data._id); // Lưu lại orderId để xử lý sau
+        toast.info("Đơn hàng tạm thời đã được tạo");
+        console.log(tempOrder.data._id);
+      } catch (error) {
+        toast.error("Không thể tạo đơn hàng!");
+      }
+    };
+
+    createInitialOrder();
+  }, []);
+  useEffect(() => {
     const timerId = setInterval(() => {
       if (seconds === 0 && minutes === 0) {
+        handleCancelOrder();
         navigate("/");
         clearInterval(timerId);
       } else {
@@ -34,7 +82,29 @@ export default function Payment() {
 
     return () => clearInterval(timerId);
   }, [seconds]);
-
+  const handleOrderCompletion = async () => {
+    if (orderId) {
+      try {
+        await editOrder(orderId, "675ea365101067cb13679b55"); // Cập nhật trạng thái thành đã thanh toán
+        console.log("thanh tonas xong");
+        toast.success("Thanh toán thành công!");
+        navigate("/"); // Điều hướng đến trang thành công
+      } catch (error) {
+        toast.error("Không thể hoàn tất thanh toán!");
+      }
+    }
+  };
+  const handleCancelOrder = async () => {
+    if (orderId) {
+      try {
+        await deleteOrder(orderId);
+        toast.info("Đơn hàng đã bị hủy do hết thời gian thanh toán.");
+        navigate("/");
+      } catch (error) {
+        toast.error("Không thể hủy đơn hàng!");
+      }
+    }
+  };
   return (
     <div className="bg-black text-white  min-h-screen ">
       <div className="bg-bg-main  bg-cover bg-center ">
@@ -53,6 +123,12 @@ export default function Payment() {
         </div>
         <div className="space-y-4 mr-4 mt-6 max-w-[25rem]">
           <CartInfo items={items} total={total} />
+          <button
+            className="bg-primary rounded-lg px-4"
+            onClick={handleOrderCompletion}
+          >
+            Hoàn tất
+          </button>
         </div>
       </div>
 
@@ -62,6 +138,7 @@ export default function Payment() {
         amount={total}
         info={event?.organizer_id}
       />
+      <ToastContainer />
     </div>
   );
 }

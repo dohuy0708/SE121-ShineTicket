@@ -3,8 +3,10 @@ import SummaryTable from "./Partials/SummaryTable";
 import RevenueChart from "./Partials/RevenueChart";
 import TicketTable from "./Partials/TicketsTable";
 import ShowSelector from "./Partials/ShowSelector";
+import { useParams } from "react-router-dom";
 
 export default function EventSummary() {
+  const { id } = useParams();
   const [selectedDate, setSelectedDate] = useState(""); // Lưu ngày được chọn
   const summaryData = {
     ticketRevenue: "96.000.000",
