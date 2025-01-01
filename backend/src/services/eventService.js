@@ -87,7 +87,9 @@ export const listEventsByUser = async (userId) => {
     const organizerIds = organizers.map((organizer) => organizer._id);
 
     // Bước 2: Tìm tất cả Event có organizer_id trùng với các organizer_id
-    const events = await Event.find({ organizer_id: { $in: organizerIds } });
+    const events = await Event.find({
+      organizer_id: { $in: organizerIds },
+    }).populate("venue_id"); // Populate để lấy thông tin venue;
 
     return {
       errCode: 0,
