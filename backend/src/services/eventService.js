@@ -168,6 +168,7 @@ export const getEventById = async (eventId) => {
       event: {
         ...event.toObject(),
         tickets: tickets.map((ticket) => ({
+          id: ticket.id,
           ticketType: ticket.ticket_type,
           price: parseFloat(ticket.price.toString()),
           status: ticket.ticket_status_id?.status_name || "Unknown",
