@@ -26,14 +26,13 @@ let routerEvent = express.Router();
 // Event controller
 routerEvent.get("/list", handleListEvents);
 routerEvent.get("/get", handleGetEvent);
-routerEvent.get("/get_by_user", authenticate, handleListEventsByUser);
+routerEvent.get("/get_by_user", handleListEventsByUser);
 routerEvent.post(
   "/create",
   upload.fields([
     { name: "logo_url", maxCount: 1 },
     { name: "cover_image_url", maxCount: 1 },
   ]),
-  authenticate,
   handleCreateEvent
 );
 routerEvent.put(
