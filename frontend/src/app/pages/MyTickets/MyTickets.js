@@ -1,52 +1,49 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import TicketCard from "./Partials/TicketCard";
+import { getMyTickets } from "./services/ticketService";
+
 export default function MyTickets() {
   const [activeFilter, setActiveFilter] = useState("Sắp diễn ra");
+  const [loading, setLoading] = useState(true); // Trạng thái loading
+  const [tickets, setTickets] = useState([]);
+  const [filterTickets, setFilterTickets] = useState([]);
 
-  // Các trạng thái vé
-  const ticketState = ["Tất cả", "Sắp diễn ra", "Đã kết thúc"];
-
-  // Dữ liệu vé mẫu
-  const tickets = [
-    {
-      id: 1,
-      eventName: "Hòa nhạc mùa xuân",
-      eventDate: "24/11/2024",
-      venue: "Nhà hát lớn Hà Nội",
-      ticketType: "VIP",
-      ticketCode: "HN12345VIP",
-      price: "1.500.000",
-      status: "upcoming", // Sắp diễn ra
-    },
-    {
-      id: 2,
-      eventName: "Kịch nghệ mùa đông",
-      eventDate: "18/10/2024",
-      venue: "Rạp chiếu phim Galaxy",
-      ticketType: "Standard",
-      ticketCode: "KD45678STD",
-      price: "800.000",
-      status: "ended", // Đã kết thúc
-    },
-    {
-      id: 3,
-      eventName: "Liên hoan âm nhạc",
-      eventDate: "30/11/2024",
-      venue: "Sân vận động Mỹ Đình",
-      ticketType: "VIP",
-      ticketCode: "MD45698SPL",
-      price: "2.000.000",
-      status: "upcoming", // Sắp diễn ra
-    },
-  ];
+  useEffect(() => {
+    const fetchTickets = async () => {
+      setLoading(true); // Bắt đầu tải
+      try {
+        const userId = localStorage.getItem("user_id");
+        const tickets = await getMyTickets(userId);
+        setTickets(tickets);
+      } catch (error) {
+        console.error("Error fetching tickets:", error);
+      } finally {
+        setLoading(false); // Hoàn tất tải
+      }
+    };
+    fetchTickets();
+  }, []);
 
   // Lọc vé theo trạng thái
-  const filteredTickets = tickets.filter((ticket) => {
-    if (activeFilter === "Tất cả") return true;
-    if (activeFilter === "Sắp diễn ra") return ticket.status === "upcoming";
-    if (activeFilter === "Đã kết thúc") return ticket.status === "ended";
-    return false;
-  });
+  useEffect(() => {
+    const now = new Date();
+    const filtered = tickets.filter((ticket) => {
+      const ticketDate = new Date(ticket.ticket_date);
+      const ticketEndDate = new Date(ticket.ticket_end_date);
+
+      if (activeFilter === "Tất cả") return true;
+      if (activeFilter === "Sắp diễn ra") return ticketDate > now;
+      if (activeFilter === "Đang diễn ra")
+        return ticketDate <= now && ticketEndDate >= now;
+      if (activeFilter === "Đã kết thúc") return ticketEndDate < now;
+
+      return false;
+    });
+    setFilterTickets(filtered);
+  }, [activeFilter, tickets]);
+
+  // Các trạng thái vé
+  const ticketState = ["Tất cả", "Sắp diễn ra", "Đang diễn ra", "Đã kết thúc"];
 
   return (
     <div className="flex-1 bg-black mx-auto">
@@ -74,9 +71,11 @@ export default function MyTickets() {
 
       {/* Danh sách vé */}
       <div className="grid grid-cols-1 gap-4 px-4">
-        {filteredTickets.length > 0 ? (
-          filteredTickets.map((ticket) => (
-            <TicketCard key={ticket.id} ticket={ticket} />
+        {loading ? (
+          <p className="text-gray-400">Đang tải dữ liệu...</p>
+        ) : filterTickets.length > 0 ? (
+          filterTickets.map((ticket) => (
+            <TicketCard key={ticket?.ticket_id} ticket={ticket} />
           ))
         ) : (
           <p className="text-gray-400">Không có vé phù hợp.</p>

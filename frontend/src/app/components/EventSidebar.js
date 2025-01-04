@@ -6,7 +6,7 @@ import {
   ShoppingCartIcon,
 } from "@heroicons/react/24/outline";
 
-const EventSidebar = () => {
+const EventSidebar = ({ id }) => {
   const menuItems = [
     {
       name: "Sự kiện đã tạo",
@@ -15,19 +15,22 @@ const EventSidebar = () => {
     },
     {
       name: "Tổng kết",
-      path: "/summary",
+      path: `/summary/${id}`,
       icon: <ChartPieIcon className="h-6 inline mr-2" />,
     },
     {
       name: "Đơn hàng",
-      path: "/orders",
+      path: `/orders/${id}`,
       icon: <ShoppingCartIcon className="h-6 inline mr-2" />,
     },
   ];
 
   return (
-    <div className="w-64 bg-bg-main text-white border-r-2 border-[#A19393] font-bold text-lg  h-screen">
-      <ul className="mt-16">
+    <div className="w-64 bg-[#111827] text-white border-r-2 border-[#A19393] font-bold text-lg  h-screen">
+      <div className="  py-4">
+        <img src="/shineticket.png" className="h-24 mx-auto" />
+      </div>
+      <ul className="mt-8">
         {menuItems.map((item) => (
           <NavLink
             to={item.path}

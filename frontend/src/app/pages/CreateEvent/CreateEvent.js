@@ -5,6 +5,8 @@ import Step2 from "./Partials/Step2";
 import Step3 from "./Partials/Step3";
 import { postEvent } from "./services/eventService";
 import { sEvent2 } from "./eventStore";
+import { ToastContainer, toast } from "react-toastify";
+
 function CreateEvent() {
   const event = sEvent2.use();
   const nav = useNavigate();
@@ -19,8 +21,10 @@ function CreateEvent() {
     try {
       console.log(event);
       const result = await postEvent(event);
+      nav("/");
       console.log("Event created successfully:", result);
     } catch (error) {
+      toast.error("Tạo sự kiện thất bại!");
       console.error("Error creating event:", error);
     }
   };
@@ -110,6 +114,7 @@ function CreateEvent() {
           updateData={(data) => updateFormData("step3", data)}
         />
       )}
+      <ToastContainer />
     </form>
   );
 }

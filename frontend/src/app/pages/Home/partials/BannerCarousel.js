@@ -34,23 +34,30 @@ const BannerCarousel = ({ events }) => {
         }} // Chia tỷ lệ theo số slide hiển thị
       >
         {events.map((event, index) => (
-          <div key={event?.event_id} className="carousel-slide-container">
+          <div key={event?._id} className="carousel-slide-container">
             <div className="carousel-slide">
               <img
                 className="w-full h-full object-cover"
-                src={event?.cover_image_url}
+                src={`http://localhost:8080/images/${event?.cover_image_url}`}
                 alt={event?.event_name}
               />
               <div className="slide-text">
                 <div className="slide-info bg-gray-500 bg-opacity-70 rounded-md">
                   <div className="slide-price text-primary">
-                    Từ {event?.min_price.toLocaleString()} đ
+                    Từ {event?.lowest_price?.toLocaleString()} đ
                   </div>
-                  <div className="slide-date">{event?.start_date}</div>
+                  <div className="slide-date">
+                    {" "}
+                    {new Date(event?.start_date).toLocaleDateString("vi-VN", {
+                      day: "2-digit",
+                      month: "2-digit",
+                      year: "numeric",
+                    })}
+                  </div>
                 </div>
                 <button
                   className="slide-button hover:bg-primary hover:text-white"
-                  onClick={() => handleViewDetails(event?.event_id)}
+                  onClick={() => handleViewDetails(event?._id)}
                 >
                   Xem chi tiết
                 </button>

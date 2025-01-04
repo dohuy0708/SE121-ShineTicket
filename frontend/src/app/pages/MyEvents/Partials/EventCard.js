@@ -74,9 +74,9 @@ const EventCard = ({ event }) => {
           <span className="cursor-pointer font-semibold hover:text-primary">
             <Link to={`/summary/${event._id}`}>Tổng kết</Link>
           </span>
-          <span className="cursor-pointer font-semibold hover:text-primary">
+          {/* <span className="cursor-pointer font-semibold hover:text-primary">
             <Link to="/create-event">Chỉnh sửa</Link>
-          </span>
+          </span> */}
           <span className="cursor-pointer font-semibold hover:text-primary">
             <Link to={`/orders/${event._id}`}>Đơn hàng</Link>
           </span>

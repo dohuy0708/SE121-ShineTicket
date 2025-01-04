@@ -22,11 +22,12 @@ const EventSection = ({ title, events }) => {
           <div
             className="event-card w-1/4 p-[5px] cursor-pointer"
             key={index}
-            onClick={() => handleCardClick(event.event_id)}
+            onClick={() => handleCardClick(event?._id)}
           >
             <div className="event-image bg-gray-300 h-[175px] rounded-lg mb-[10px] overflow-hidden">
               <img
-                src={event?.cover_image_url}
+                src={`http://localhost:8080/images/${event?.cover_image_url}`}
+                alt={event?.event_name}
                 className="w-full h-full object-cover "
               />
             </div>
@@ -35,13 +36,17 @@ const EventSection = ({ title, events }) => {
                 {event?.event_name}
               </div>
               <div className="event-price text-primary font-semibold">
-                Từ {event?.min_price?.toLocaleString()} đ
+                Từ {event?.lowest_price?.toLocaleString()} đ
               </div>
 
               <div className="event-date flex-1 flex items-center">
                 {" "}
                 <CalendarDaysIcon className="text-white inline w-5 bg-transparent mr-2" />
-                {event?.start_date}
+                {new Date(event?.start_date).toLocaleDateString("vi-VN", {
+                  day: "2-digit",
+                  month: "2-digit",
+                  year: "numeric",
+                })}
               </div>
             </div>
           </div>

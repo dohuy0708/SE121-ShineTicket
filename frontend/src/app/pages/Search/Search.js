@@ -3,6 +3,7 @@ import SearchFilter from "./Partials/SearchFilter";
 import { useNavigate } from "react-router-dom";
 import { CalendarDaysIcon } from "@heroicons/react/24/outline";
 import { getAllEvents } from "./services/searchService";
+import Footer from "../../components/Footer";
 
 export default function Search() {
   const [filters, setFilters] = useState({
@@ -131,6 +132,7 @@ export default function Search() {
           ))}
         </div>
       </div>
+      <Footer />
     </div>
   );
 }
