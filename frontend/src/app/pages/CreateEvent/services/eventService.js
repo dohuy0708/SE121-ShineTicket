@@ -11,20 +11,6 @@ export const getEventType = async () => {
     throw error; // Ném lỗi ra ngoài để xử lý nếu cần
   }
 };
-const dataURLtoFile = (dataurl, filename) => {
-  // Tách phần header và data của base64 string
-  const arr = dataurl.split(",");
-  const mime = arr[0].match(/:(.*?);/)[1];
-  const bstr = atob(arr[1]);
-  let n = bstr.length;
-  const u8arr = new Uint8Array(n);
-
-  while (n--) {
-    u8arr[n] = bstr.charCodeAt(n);
-  }
-
-  return new File([u8arr], filename, { type: mime });
-};
 
 export const postEvent = async (eventData) => {
   try {
@@ -32,19 +18,16 @@ export const postEvent = async (eventData) => {
 
     Object.keys(eventData).forEach((key) => {
       if (key === "tickets") {
-        eventData[key].forEach((ticket) => {
-          formData.append("tickets[]", JSON.stringify(ticket));
-        });
+        // Chuyển tickets thành chuỗi JSON và gửi
+        formData.append("tickets", JSON.stringify(eventData[key]));
       } else if (key === "logo_url" || key === "cover_image_url") {
-        // Chuyển base64 thành File object
-        if (eventData[key] && eventData[key].startsWith("data:")) {
-          const file = dataURLtoFile(eventData[key], `${key}.png`);
-          formData.append(key, file);
-        }
+        formData.append(key, eventData[key]);
       } else {
         formData.append(key, eventData[key]);
       }
     });
+
+    // Gửi formData qua API
 
     const response = await axios.post(
       "http://localhost:8080/api/event/create",

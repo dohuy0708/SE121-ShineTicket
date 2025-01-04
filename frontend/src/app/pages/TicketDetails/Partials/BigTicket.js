@@ -75,7 +75,7 @@ const BigTicket = ({ event }) => {
         <div className="col-span-2 flex items-center justify-center overflow-hidden">
           <img
             className="w-full h-full object-cover object-center overflow-clip"
-            src={`/${event.logo_url}`}
+            src={`http://localhost:8080/images/${event.logo_url}`}
             alt="Image"
           />
         </div>

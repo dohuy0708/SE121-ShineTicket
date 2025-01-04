@@ -21,8 +21,8 @@ export default function Search() {
       const events = await getAllEvents();
       const filteredEvents = events.filter(
         (event) =>
-          event.event_status_id === "675ea25872e40e87eb7dbf08" ||
-          event.event_status_id === "675ea24172e40e87eb7dbf06"
+          event.event_status_id._id === "675ea25872e40e87eb7dbf08" ||
+          event.event_status_id._id === "675ea24172e40e87eb7dbf06"
       );
       setSearchResults(filteredEvents);
     };
@@ -106,7 +106,7 @@ export default function Search() {
 
               <div className="event-image bg-gray-200 h-[175px] rounded-lg mb-[10px] overflow-hidden">
                 <img
-                  src={`/${result.logo_url}`}
+                  src={`http://localhost:8080/images/${result.logo_url}`}
                   className="w-full h-full object-cover"
                 />
               </div>
