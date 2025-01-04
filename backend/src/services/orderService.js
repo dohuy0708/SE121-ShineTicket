@@ -15,7 +15,6 @@ export const listOrdersByEvent = async (eventId) => {
           })
           .populate({
             path: "user_id", // Thêm thông tin user
-            select: "name email phone_number", // Chỉ chọn những trường cần thiết
           })
       : await Order.find()
           .populate({
@@ -24,7 +23,6 @@ export const listOrdersByEvent = async (eventId) => {
           })
           .populate({
             path: "user_id", // Thêm thông tin user
-            select: "name email phone_number", // Chỉ chọn những trường cần thiết
           });
 
     // Kiểm tra nếu không có đơn hàng nào
