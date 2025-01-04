@@ -5,8 +5,20 @@ export const listOrdersByEvent = async (eventId) => {
   try {
     // Tìm các đơn hàng theo `eventId` (hoặc tất cả nếu không có `eventId`)
     const orders = eventId
-      ? await Order.find({ event_id: eventId })
-      : await Order.find();
+      ? await Order.find({ event_id: eventId }).populate({
+          path: "event_id",
+          select: "event_name organizer_id",
+          populate: {
+            path: "organizer_id",
+          },
+        })
+      : await Order.find().populate({
+          path: "event_id",
+          select: "event_name organizer_id",
+          populate: {
+            path: "organizer_id",
+          },
+        });
 
     // Kiểm tra nếu không có đơn hàng nào
     if (orders.length === 0) {
@@ -23,7 +35,7 @@ export const listOrdersByEvent = async (eventId) => {
       orders.map(async (order) => {
         const orderDetails = await OrderDetail.find({ order_id: order._id });
 
-        // Gắn thông tin `order_details` vào đơn hàng
+        // Gắn thông tin `order_details` và `organizer` vào đơn hàng
         return {
           ...order.toObject(), // Chuyển `order` thành plain object
           total_amount: order.total_amount.toString(), // Chuyển đổi Decimal128 thành chuỗi
@@ -32,6 +44,7 @@ export const listOrdersByEvent = async (eventId) => {
             ticket_date: detail.ticket_date,
             price: detail.price.toString(), // Chuyển đổi Decimal128 thành chuỗi
           })),
+          // organizer: order.event_id.organizer_id || null, // Gắn toàn bộ thông tin organizer
         };
       })
     );

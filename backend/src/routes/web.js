@@ -12,6 +12,7 @@ import routerVenue from "./routeVenue.js";
 import { refreshToken } from "../middleware/JWT/Token.js";
 
 import PaymentStatus from "../models/payment_status.js";
+import routerRefund from "./routeRefund.js";
 
 let router = express.Router();
 
@@ -26,8 +27,9 @@ let initWebRoutes = (app) => {
   app.use("/api/event", routerEvent);
   app.use("/api/role", routerRole);
   app.use("/api/organizer", routerOrganizer);
-  app.use("/refresh_token", refreshToken);
+  app.use("/api/refund", routerRefund);
 
+  app.use("/refresh_token", refreshToken);
   app.use("/fetch/add", addeventstatus);
 };
 
