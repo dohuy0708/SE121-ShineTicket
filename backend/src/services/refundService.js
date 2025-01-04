@@ -10,7 +10,7 @@ export const createRefund = async (data) => {
       total_amount: data.total_amount,
       refund_amount: data.refund_amount,
       commission: data.commission,
-      refund_date: data.refund_dyate,
+      refund_date: data.refund_date,
       payment_status_id: data.payment_status_id || "675ea40ce482c1ed0507f16a",
       notes: data.notes || null, // Nếu không có ghi chú, đặt giá trị mặc định là null
     });

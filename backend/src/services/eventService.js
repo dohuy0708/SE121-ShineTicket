@@ -280,7 +280,8 @@ export const createEvent = async (eventData) => {
     const eventInstance = await Event.create([newEvent], { session });
 
     // 4. Tạo Tickets
-    const ticketPromises = eventData.tickets.map((ticket) =>
+    console.log("Vé này", eventData.tickets);
+    const ticketPromises = JSON.parse(eventData.tickets).map((ticket) =>
       Ticket.create(
         [
           {
