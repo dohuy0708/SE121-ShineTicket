@@ -1,4 +1,5 @@
 import React from "react";
+import { setRejectEvent, setWillOccureEvent } from "../services/eventService";
 
 const EventDetailsModal = ({ event, onClose }) => {
   if (!event) return null;
@@ -10,6 +11,26 @@ const EventDetailsModal = ({ event, onClose }) => {
       year: "numeric",
     });
 
+  const onApprove = async (id) => {
+    try {
+      await setWillOccureEvent(id);
+      //  event?.event_status_id="675ea24172e40e87eb7dbf06"
+      onClose();
+    } catch (error) {
+      console.error("Lỗi khi duyệt sự kiện:", error);
+      alert("Không thể từ chối sự kiện. Vui lòng thử lại!");
+    }
+  };
+  const onReject = async (id) => {
+    try {
+      await setRejectEvent(id);
+      //   event.event_status_id="676ece8250c4e95732edbadf"
+      onClose();
+    } catch (error) {
+      console.error("Lỗi khi từ chối sự kiện:", error);
+      alert("Không thể từ chối sự kiện. Vui lòng thử lại!");
+    }
+  };
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
       <div className="bg-white p-8 rounded-lg shadow-lg w-3/4 max-w-4xl">
@@ -131,13 +152,26 @@ const EventDetailsModal = ({ event, onClose }) => {
         <div className="flex justify-end">
           <button
             className="bg-gray-300 px-4 py-2 rounded-lg mr-2 hover:bg-gray-400"
-            onClick={onClose}
+            onClick={onClose} // Hàm xử lý nút Đóng
           >
             Đóng
           </button>
-          <button className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600">
-            Duyệt
-          </button>
+          {event?.event_status_id === "676ece5d50c4e95732edbadd" && (
+            <>
+              <button
+                className="bg-green-500 text-white px-4 py-2 rounded-lg mr-2 hover:bg-green-600"
+                onClick={() => onApprove(event._id)} // Hàm xử lý nút Duyệt
+              >
+                Duyệt
+              </button>
+              <button
+                className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600"
+                onClick={() => onReject(event._id)} // Hàm xử lý nút Từ chối
+              >
+                Từ chối
+              </button>
+            </>
+          )}
         </div>
       </div>
     </div>

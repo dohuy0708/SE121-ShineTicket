@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from "react";
 import EventList from "./Partials/EventList";
 import EventDetailsModal from "./Partials/EventDetailsModal";
-import { getAllEvent } from "./services/eventService";
+import {
+  getAllEvent,
+  setOccuredEvent,
+  setOccuringEvent,
+} from "./services/eventService";
 import EventSearchBar from "./Partials/EventSearchBar";
 
 export default function Events() {
@@ -24,7 +28,41 @@ export default function Events() {
     const fetchEvents = async () => {
       setLoading(true); // Bắt đầu tải
       try {
+        const now = new Date(); // Lấy thời điểm hiện tại
+        const today = new Date(
+          now.getFullYear(),
+          now.getMonth(),
+          now.getDate()
+        ); // Chỉ lấy ngày hiện tại
         const eventFromApi = await getAllEvent();
+
+        for (let i = 0; i < eventFromApi.length; i++) {
+          const startDate = new Date(
+            new Date(eventFromApi[i].start_date).getFullYear(),
+            new Date(eventFromApi[i].start_date).getMonth(),
+            new Date(eventFromApi[i].start_date).getDate()
+          );
+
+          const endDate = new Date(
+            new Date(eventFromApi[i].end_date).getFullYear(),
+            new Date(eventFromApi[i].end_date).getMonth(),
+            new Date(eventFromApi[i].end_date).getDate()
+          );
+
+          if (eventFromApi[i].event_status_id === "675ea25872e40e87eb7dbf08") {
+            if (endDate < today) {
+              // Nếu ngày kết thúc sự kiện đã qua
+              await setOccuredEvent(eventFromApi[i]._id);
+              eventFromApi[i].event_status_id = "675ea26172e40e87eb7dbf0a";
+            } else if (startDate <= today && endDate >= today) {
+              // Đang trong quá trình diễn ra sự kiện
+              await setOccuringEvent(eventFromApi[i]._id);
+              eventFromApi[i].event_status_id = "675ea24172e40e87eb7dbf06";
+            }
+          }
+        }
+
+        //
         setEvents(eventFromApi);
         setFilteredEvents(eventFromApi); // Mặc định hiển thị tất cả sự kiện
       } catch (error) {
@@ -34,7 +72,7 @@ export default function Events() {
       }
     };
     fetchEvents();
-  }, []);
+  }, [selectedEvent]);
 
   // Lọc sự kiện theo bộ lọc đã chọn
   const filterEvents = (filter) => {
