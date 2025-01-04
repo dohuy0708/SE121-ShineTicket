@@ -37,11 +37,12 @@ const handleCreateEvent = async (req, res) => {
   let uploadedFiles = []; // Lưu đường dẫn file tạm
   try {
     const eventData = req.body; // Lấy dữ liệu sự kiện từ request body
-    const files = req.files; // Lấy dữ liệu file từ Multer
-
+    const files = req.files;
     // Kiểm tra file bắt buộc và xử lý ảnh nếu có
-    let logoUrlPath = null;
-    let coverImageUrlPath = null;
+    const logoUrlPath = files["logo_url"] || null;
+    const coverImageUrlPath = files["cover_image_url"] || null;
+    console.log("logo", logoUrlPath);
+    console.log("cover image", coverImageUrlPath);
 
     if (files) {
       if (files.logo_url) {
@@ -65,7 +66,7 @@ const handleCreateEvent = async (req, res) => {
       logo_url: logoUrlPath || null, // Nếu không có logo, để null
       cover_image_url: coverImageUrlPath || null, // Nếu không có cover image, để null
     };
-
+    console.log(newEvent);
     // Gọi service để tạo sự kiện
     const result = await createEvent(newEvent);
 

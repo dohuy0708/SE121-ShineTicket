@@ -16,7 +16,7 @@ const handleGetOrderDetail = async (req, res) => {
 };
 
 const handleListOrderDetailsByUser = async (req, res) => {
-  const UserId = req.body.UserId; // Lấy id đơn hàng từ query string
+  const UserId = req.query.UserId; // Lấy id đơn hàng từ query string
   const result = await listOrderDetails(UserId); // Lấy danh sách chi tiết đơn hàng theo orderId
   return res.status(result.errCode === 0 ? 200 : 400).json(result); // Trả về kết quả
 };
