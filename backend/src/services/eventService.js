@@ -336,20 +336,20 @@ export const updateEvent = async (eventId, eventData) => {
     // Cập nhật thông tin event
     const { logo_url, cover_image_url } = event;
 
-    // Xóa hình ảnh cũ nếu có và thay bằng hình ảnh mới
-    if (logo_url) {
-      const oldLogoPath = path.join("public/images", logo_url);
-      if (fs.existsSync(oldLogoPath)) {
-        fs.unlinkSync(oldLogoPath); // Xóa file cũ
-      }
-    }
+    // // Xóa hình ảnh cũ nếu có và thay bằng hình ảnh mới
+    // if (logo_url) {
+    //   const oldLogoPath = path.join("public/images", logo_url);
+    //   if (fs.existsSync(oldLogoPath)) {
+    //     fs.unlinkSync(oldLogoPath); // Xóa file cũ
+    //   }
+    // }
 
-    if (cover_image_url) {
-      const oldCoverPath = path.join("public/images", cover_image_url);
-      if (fs.existsSync(oldCoverPath)) {
-        fs.unlinkSync(oldCoverPath); // Xóa file cũ
-      }
-    }
+    // if (cover_image_url) {
+    //   const oldCoverPath = path.join("public/images", cover_image_url);
+    //   if (fs.existsSync(oldCoverPath)) {
+    //     fs.unlinkSync(oldCoverPath); // Xóa file cũ
+    //   }
+    // }
 
     // Cập nhật thông tin event
     const updatedEventData = {
