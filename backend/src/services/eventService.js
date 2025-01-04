@@ -364,6 +364,7 @@ export const updateEvent = async (eventId, eventData) => {
       available_tickets: eventData.available_tickets || event.available_tickets,
       organizer_id: event.organizer_id._id,
       venue_id: event.venue_id._id,
+      paid: eventData.paid || "false",
       logo_url: eventData.logo_url,
       cover_image_url: eventData.cover_image_url,
     };

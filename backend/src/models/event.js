@@ -62,6 +62,10 @@ const eventSchema = new mongoose.Schema(
       maxlength: 255,
       default: null,
     },
+    paid: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     versionKey: false, // Loại bỏ __v
