@@ -40,7 +40,11 @@ export const listEvents = async (filters) => {
       }
     }
     // Lọc sự kiện với các điều kiện đã tạo
-    const events = await Event.find(filterConditions);
+    const events = await Event.find(filterConditions)
+      .populate("venue_id") // Lấy tất cả thông tin của Venue
+      .populate("organizer_id") // Lấy tất cả thông tin của Organizer
+      .populate("event_status_id", "status_name") // Lấy thông tin event_status
+      .populate("event_type_id", "type_name"); // Lấy thông tin event_type;
 
     // Nhóm các đơn đặt hàng theo event_id và tính tổng số tiền với điều kiện order_status_id = 675ea365101067cb13679b55
     const ordersTotalAmount = await Order.aggregate([
@@ -69,8 +73,10 @@ export const listEvents = async (filters) => {
 
     const eventsWithPricesAndTotals = await Promise.all(
       events.map(async (event) => {
-        // Lấy giá vé tối thiểu
+        // Lấy danh sách vé liên quan đến sự kiện
         const tickets = await Ticket.find({ event_id: event._id });
+
+        // Lấy giá vé tối thiểu
         const minPrice = tickets.reduce((min, ticket) => {
           const ticketPrice = parseFloat(ticket.price.toString());
           return ticketPrice < min ? ticketPrice : min;
@@ -79,10 +85,21 @@ export const listEvents = async (filters) => {
         // Tính tổng số tiền từ map
         const totalAmount = orderTotalMap.get(event._id.toString()) || 0;
 
+        // Chuyển đổi danh sách vé thành thông tin chi tiết
+        const ticketDetails = tickets.map((ticket) => ({
+          ticket_type: ticket.ticket_type,
+          price: parseFloat(ticket.price.toString()),
+          ticket_status_id: ticket.ticket_status_id,
+          ticket_des: ticket.ticket_des,
+          ticket_quantity: ticket.ticket_quantity,
+          event_datetime: ticket.event_datetime,
+        }));
+
         return {
           ...event.toObject(),
           ticketPrice: minPrice === Infinity ? null : minPrice, // Nếu không có vé, giá vé là null
           event_total_amount: totalAmount, // Tổng giá trị các đơn đặt
+          ticket_details: ticketDetails, // Thông tin chi tiết các vé
         };
       })
     );
