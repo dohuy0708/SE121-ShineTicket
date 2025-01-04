@@ -3,21 +3,34 @@ import { EyeIcon } from "@heroicons/react/24/outline";
 
 const PaymentEventList = ({ events, onPay, onViewDetails, onSearch }) => {
   return (
-    <div className="bg-white shadow-md rounded-lg mt-4">
+    <div className="bg-gray-900 shadow-md rounded-lg mt-4">
       <table className="min-w-full border-collapse">
         <thead>
-          <tr className="border-b">
-            <th className="px-4 py-2 text-center  ">Tên sự kiện</th>
-            <th className="px-4 py-2 text-center  ">Ngày kết thúc</th>
-            <th className="px-4 py-2 text-center  ">Số tiền thu được</th>
-            <th className="px-4 py-2 text-center  ">Số tiền cần thanh toán</th>
-            <th className="px-4 py-2 text-center  ">Thông tin thanh toán</th>
+          <tr className="border-b border-gray-700">
+            <th className="px-4 py-2 text-center  text-gray-300 ">
+              Tên sự kiện
+            </th>
+            <th className="px-4 py-2 text-center  text-gray-300 ">
+              Ngày kết thúc
+            </th>
+            <th className="px-4 py-2 text-center  text-gray-300 ">
+              Số tiền thu được
+            </th>
+            <th className="px-4 py-2 text-center  text-gray-300 ">
+              Số tiền cần thanh toán
+            </th>
+            <th className="px-4 py-2 text-center  text-gray-300 ">
+              Thông tin thanh toán
+            </th>
             <th className="px-4 py-2 "></th>
           </tr>
         </thead>
         <tbody>
           {events.map((event, index) => (
-            <tr key={index} className="hover:bg-gray-50 text-center">
+            <tr
+              key={index}
+              className="hover:bg-gray-800 text-gray-200 text-center"
+            >
               <td className="px-4 py-2">{event?.event_name}</td>
               <td className="px-4 py-2">
                 {" "}
@@ -40,7 +53,7 @@ const PaymentEventList = ({ events, onPay, onViewDetails, onSearch }) => {
 
               <td className="px-4 py-2 text-center">
                 <button onClick={() => onViewDetails(event)}>
-                  <EyeIcon className="h-6 text-black hover:text-primary" />
+                  <EyeIcon className="h-6 text-gray-300 cursor-pointer hover:text-primary transition-colors duration-200" />
                 </button>
               </td>
             </tr>

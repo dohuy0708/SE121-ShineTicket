@@ -29,22 +29,24 @@ const OrderInvoices = ({ invoices, refresh }) => {
   };
 
   return (
-    <div className="bg-white shadow-md rounded-lg mt-4">
+    <div className="bg-gray-900 shadow-md rounded-lg mt-4">
       <table className="min-w-full border-collapse">
         <thead>
-          <tr className="border-b">
-            <th className="px-4 py-2 text-left">STT</th>
-            <th className="px-4 py-2 text-left">Tên sự kiện</th>
-            <th className="px-4 py-2 text-left">Người mua</th>
-            <th className="px-4 py-2 text-left">Số tiền</th>
-            <th className="px-4 py-2 text-left">Ngày thanh toán</th>
-            <th className="px-4 py-2 text-left">Trạng thái</th>
-            <th className="px-4 py-2 text-left"></th>
+          <tr className="border-b border-gray-700">
+            <th className="px-4 py-2 text-gray-300 text-left">STT</th>
+            <th className="px-4 py-2 text-gray-300 text-left">Tên sự kiện</th>
+            <th className="px-4 py-2 text-gray-300 text-left">Người mua</th>
+            <th className="px-4 py-2 text-gray-300 text-left">Số tiền</th>
+            <th className="px-4 py-2 text-gray-300 text-left">
+              Ngày thanh toán
+            </th>
+            <th className="px-4 py-2 text-gray-300 text-left">Trạng thái</th>
+            <th className="px-4 py-2 text-gray-300 text-left"></th>
           </tr>
         </thead>
         <tbody>
           {invoices.map((invoice, index) => (
-            <tr key={invoice._id} className="hover:bg-gray-50">
+            <tr key={invoice._id} className="hover:bg-gray-800 text-gray-200">
               <td className="px-4 py-2">{index + 1}</td>
               <td className="px-4 py-2">{invoice?.event_name}</td>
               <td className="px-4 py-2">{invoice?.user_id?.username}</td>
@@ -71,7 +73,7 @@ const OrderInvoices = ({ invoices, refresh }) => {
               <td>
                 {invoice?.order_status_id === "675ea35c101067cb13679b52" ? (
                   <button
-                    className="bg-primary px-2 py-1 rounded-lg"
+                    className="h-6 text-gray-800 px-2 rounded-md bg-gray-300 r cursor-pointer hover:text-primary hover:bg-gray-700 transition-colors duration-200"
                     onClick={() => handleOrderCompletion(invoice._id)}
                   >
                     Thanh toán

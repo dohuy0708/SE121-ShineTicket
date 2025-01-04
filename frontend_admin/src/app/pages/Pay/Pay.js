@@ -53,7 +53,9 @@ export default function Pay() {
 
   return (
     <div className="p-6">
-      <h1 className="text-2xl font-bold mb-4">Các sự kiện chờ thanh toán</h1>
+      <h1 className="text-2xl text-gray-300 font-bold mb-4">
+        Các sự kiện chờ thanh toán
+      </h1>
       {loading ? (
         <p>Đang tải dữ liệu...</p>
       ) : (

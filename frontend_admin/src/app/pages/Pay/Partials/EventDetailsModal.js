@@ -37,15 +37,15 @@ const EventDetailsModal = ({ event, onClose }) => {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60">
-      <div className="bg-white rounded-xl shadow-lg p-8 w-11/12 max-w-4xl overflow-y-auto">
+      <div className="bg-gray-800 text-gray-200  rounded-xl shadow-lg p-8 w-11/12 max-w-4xl overflow-y-auto">
         {/* Header */}
         <div className="flex justify-between items-center border-b pb-4 mb-6">
-          <h2 className="text-2xl font-extrabold text-black flex items-center space-x-2">
+          <h2 className="text-2xl font-extrabold text-gray-200 flex items-center space-x-2">
             <CalendarIcon className="h-6 w-6 text-indigo-600" />
             <span>{event?.event_name}</span>
           </h2>
           <button
-            className="text-gray-500 hover:text-red-500 text-xl"
+            className=" text-gray-300 hover:text-red-500 text-xl"
             onClick={onClose}
           >
             <XMarkIcon className="h-6 w-6" />
@@ -53,15 +53,15 @@ const EventDetailsModal = ({ event, onClose }) => {
         </div>
 
         {/* Event Info */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-gray-700">
-          <div className="bg-gray-100 rounded-lg p-4">
-            <p className="text-sm text-gray-500">Bắt đầu</p>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-gray-300">
+          <div className="bg-gray-700 rounded-lg p-4">
+            <p className="text-sm  text-gray-300">Bắt đầu</p>
             <p className="text-lg font-semibold">
               {new Date(event?.start_date).toLocaleDateString("vi-VN")}
             </p>
           </div>
-          <div className="bg-gray-100 rounded-lg p-4">
-            <p className="text-sm text-gray-500">Kết thúc</p>
+          <div className="bg-gray-700 rounded-lg p-4">
+            <p className="text-sm  text-gray-300">Kết thúc</p>
             <p className="text-lg font-semibold">
               {new Date(event?.end_date).toLocaleDateString("vi-VN")}
             </p>
@@ -70,32 +70,32 @@ const EventDetailsModal = ({ event, onClose }) => {
 
         {/* Organizer Info */}
         <div className="mt-8">
-          <h3 className="text-xl font-bold text-black flex items-center space-x-2">
+          <h3 className="text-xl font-bold text-gray-200 flex items-center space-x-2">
             <UserIcon className="h-6 w-6 text-green-600" />
             <span>Thông tin ban tổ chức</span>
           </h3>
           <div className="mt-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-2">
             <div>
-              <p className="text-sm text-gray-500">Tên</p>
+              <p className="text-sm  text-gray-300">Tên</p>
               <p className="font-medium">
                 {event?.organizer_id?.organizer_name}
               </p>
             </div>
             <div>
-              <p className="text-sm text-gray-500">Số điện thoại</p>
+              <p className="text-sm  text-gray-300">Số điện thoại</p>
               <p className="font-medium">
                 {event?.organizer_id?.organizer_phone_number}
               </p>
             </div>
             <div>
-              <p className="text-sm text-gray-500">Email</p>
+              <p className="text-sm  text-gray-300">Email</p>
               <p className="font-medium">
                 {event?.organizer_id?.organizer_email}
               </p>
             </div>
 
             <div className="md:col-span-2">
-              <p className="text-sm text-gray-500">Tài khoản ngân hàng</p>
+              <p className="text-sm  text-gray-300">Tài khoản ngân hàng</p>
               <p className="font-medium">
                 {event?.organizer_id?.account_number} -{" "}
                 {event?.organizer_id?.bank_name}. Chủ tài khoản:{" "}
@@ -107,19 +107,19 @@ const EventDetailsModal = ({ event, onClose }) => {
 
         {/* Revenue Info */}
         <div className="mt-8">
-          <h3 className="text-xl font-bold text-black flex items-center space-x-2">
+          <h3 className="text-xl font-bold text-gray-200 flex items-center space-x-2">
             <CurrencyDollarIcon className="h-6 w-6 text-yellow-600" />
             <span>Doanh thu</span>
           </h3>
           <div className="mt-4 space-y-3">
             <p className="flex justify-between">
-              <span className="text-gray-500">Doanh thu:</span>
+              <span className=" text-gray-300">Doanh thu:</span>
               <span className="font-medium text-xl text-green-500">
                 {event?.event_total_amount} VNĐ
               </span>
             </p>
             <p className="flex justify-between">
-              <span className="text-gray-500">Tiền cần thanh toán:</span>
+              <span className=" text-gray-300">Tiền cần thanh toán:</span>
               <span className="font-medium text-xl text-red-500">
                 {(event?.event_total_amount * 90) / 100} VNĐ
               </span>
@@ -130,7 +130,7 @@ const EventDetailsModal = ({ event, onClose }) => {
         {/* Refund Action */}
         <div className="flex justify-end mt-2 mb-[-8px]">
           <button
-            className="bg-primary px-4 py-2 text-lg rounded-lg"
+            className="bg-gray-900 px-4 py-2 hover:text-primary  rounded-lg text-gray-300"
             onClick={handelPostRefund}
           >
             Thanh toán

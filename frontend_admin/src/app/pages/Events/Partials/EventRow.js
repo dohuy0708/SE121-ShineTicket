@@ -17,7 +17,7 @@ export default function RowEvent({ event, onViewDetails }) {
     "676ece8250c4e95732edbadf": "Đã hủy",
   };
   return (
-    <tr key={event._id} className="hover:bg-gray-50">
+    <tr key={event._id} className="hover:bg-gray-800 text-gray-200">
       <td className="px-4 py-2">{event?.event_name}</td>
       <td className="px-4 py-2">
         {" "}
@@ -51,7 +51,7 @@ export default function RowEvent({ event, onViewDetails }) {
             onViewDetails(event);
           }}
         >
-          <EyeIcon className="h-6 text-black hover:text-primary" />
+          <EyeIcon className="h-6 text-gray-300 cursor-pointer hover:text-primary transition-colors duration-200" />
         </button>
       </td>
     </tr>

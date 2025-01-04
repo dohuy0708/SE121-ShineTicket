@@ -1,10 +1,28 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import OverviewCard from "./partials/OverviewCard";
 import RevenueTable from "./partials/RevenueTable";
 import Chart from "./partials/Chart";
+import { getAllOrders } from "./services/service";
 
 export default function Home() {
-  // Dữ liệu mẫu
+  const [orders, setOrders] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const fetchOrders = async () => {
+      setLoading(true);
+      try {
+        const orderApi = await getAllOrders();
+        setOrders(orderApi);
+      } catch (error) {
+        console.error("Error fetching refund:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchOrders();
+  }, []);
+
   const overviewData = [
     { title: "Tổng doanh thu", value: "500,000,000 VND" },
     { title: "Phí dịch vụ", value: "50,000,000 VND" },

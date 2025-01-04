@@ -88,7 +88,7 @@ const OrderInvoices = ({ invoices }) => {
               </td>
               <td>
                 <EyeIcon
-                  className="h-6 text-gray-300 cursor-pointer hover:text-white transition-colors duration-200"
+                  className="h-6 text-gray-300 cursor-pointer hover:text-primary transition-colors duration-200"
                   onClick={() => openModal(invoice)}
                 />
               </td>

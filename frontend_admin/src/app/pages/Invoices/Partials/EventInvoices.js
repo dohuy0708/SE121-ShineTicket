@@ -17,21 +17,23 @@ const EventInvoices = ({ invoices }) => {
   };
 
   return (
-    <div className="bg-white shadow-md rounded-lg mt-4">
+    <div className="bg-gray-900 shadow-md rounded-lg mt-4">
       <table className="min-w-full border-collapse">
         <thead>
           <tr className="border-b">
-            <th className="px-4 py-2 text-left">Sự kiện</th>
-            <th className="px-4 py-2 text-left">Ban tổ chức</th>
-            <th className="px-4 py-2 text-left">Tổng tiền</th>
-            <th className="px-4 py-2 text-left">Tiền thu</th>
-            <th className="px-4 py-2 text-left">Ngày thanh toán</th>
+            <th className="px-4 py-2 text-left text-gray-300">Sự kiện</th>
+            <th className="px-4 py-2 text-left text-gray-300">Ban tổ chức</th>
+            <th className="px-4 py-2 text-left text-gray-300">Tổng tiền</th>
+            <th className="px-4 py-2 text-left text-gray-300">Tiền thu</th>
+            <th className="px-4 py-2 text-left text-gray-300">
+              Ngày thanh toán
+            </th>
             <th className="px-4 py-2 "></th>
           </tr>
         </thead>
         <tbody>
           {invoices.map((invoice, index) => (
-            <tr key={index} className="hover:bg-gray-50">
+            <tr key={index} className="hover:bg-gray-800 text-gray-200">
               <td className="px-4 py-2">{invoice?.event_id?.event_name}</td>
               <td className="px-4 py-2">
                 {invoice?.organizer_id?.organizer_name}
@@ -57,7 +59,7 @@ const EventInvoices = ({ invoices }) => {
                   className="flex items-center justify-center"
                   onClick={() => openModal(invoice)}
                 >
-                  <EyeIcon className="h-6 text-black hover:text-primary" />
+                  <EyeIcon className="h-6 text-gray-300 cursor-pointer hover:text-primary transition-colors duration-200" />
                 </button>
               </td>
             </tr>

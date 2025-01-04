@@ -32,7 +32,7 @@ const AdminSidebar = () => {
   ];
 
   return (
-    <div className="w-wsidebar bg-bg-main text-white   border-[#A19393] font-bold text-lg fixed h-screen ">
+    <div className="w-wsidebar bg-[#111827] text-white   border-[#A19393] font-bold text-lg fixed h-screen ">
       <div className="  py-4">
         <img src="/shineticket.png" className="h-24 mx-auto" />
       </div>
@@ -44,8 +44,8 @@ const AdminSidebar = () => {
             className={({ isActive }) =>
               `h-16 px-8 cursor-pointer flex items-center ${
                 isActive
-                  ? "bg-[#393F4E] text-primary"
-                  : "hover:bg-[#393F4E] hover:text-primary"
+                  ? "bg-[#030712] text-primary"
+                  : "hover:bg-[#030712] hover:text-primary"
               }`
             }
           >

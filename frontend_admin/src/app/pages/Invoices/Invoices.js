@@ -41,19 +41,19 @@ const Invoices = () => {
 
   return (
     <div className="p-6">
-      <h1 className="text-2xl font-bold mb-4">Quản lý hóa đơn</h1>
+      <h1 className="text-2xl text-gray-300 font-bold mb-4">Quản lý hóa đơn</h1>
       <div className="flex space-x-4 mb-4">
         <button
-          className={`px-4 py-2 rounded-lg ${
-            activeTab === "order" ? "bg-blue-500 text-white" : "bg-gray-200"
+          className={`px-4 py-2 bg-gray-900 text-gray-300 rounded-lg ${
+            activeTab === "order" ? "border border-gray-300" : ""
           }`}
           onClick={() => setActiveTab("order")}
         >
           Hóa đơn người mua vé
         </button>
         <button
-          className={`px-4 py-2 rounded-lg ${
-            activeTab === "event" ? "bg-blue-500 text-white" : "bg-gray-200"
+          className={`px-4 py-2 rounded-lg bg-gray-900 text-gray-300 ${
+            activeTab === "event" ? "border border-gray-300" : " "
           }`}
           onClick={() => setActiveTab("event")}
         >
