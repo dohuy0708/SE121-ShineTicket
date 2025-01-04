@@ -5,20 +5,27 @@ export const listOrdersByEvent = async (eventId) => {
   try {
     // Tìm các đơn hàng theo `eventId` (hoặc tất cả nếu không có `eventId`)
     const orders = eventId
-      ? await Order.find({ event_id: eventId }).populate({
-          path: "event_id",
-          select: "event_name organizer_id",
-          populate: {
-            path: "organizer_id",
-          },
-        })
-      : await Order.find().populate({
-          path: "event_id",
-          select: "event_name organizer_id",
-          populate: {
-            path: "organizer_id",
-          },
-        });
+      ? await Order.find({ event_id: eventId })
+          .populate({
+            path: "event_id",
+            select: "event_name organizer_id",
+            populate: {
+              path: "organizer_id",
+            },
+          })
+          .populate({
+            path: "user_id", // Thêm thông tin user
+            select: "name email phone_number", // Chỉ chọn những trường cần thiết
+          })
+      : await Order.find()
+          .populate({
+            path: "event_id",
+            select: "event_name organizer_id",
+          })
+          .populate({
+            path: "user_id", // Thêm thông tin user
+            select: "name email phone_number", // Chỉ chọn những trường cần thiết
+          });
 
     // Kiểm tra nếu không có đơn hàng nào
     if (orders.length === 0) {
