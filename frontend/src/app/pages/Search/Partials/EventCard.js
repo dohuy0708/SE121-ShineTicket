@@ -10,7 +10,7 @@ export default function EventCard({ event, onClick }) {
     >
       <div className=" bg-gray-200 h-[175px] rounded-lg mb-[10px]">
         <image
-          src={`/${event.logo_url}`}
+          src={`http://localhost/8080/images/${event.logo_url}`}
           className="w-full h-full object-cover"
         />
       </div>

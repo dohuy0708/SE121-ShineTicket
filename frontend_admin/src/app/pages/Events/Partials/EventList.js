@@ -16,10 +16,16 @@ const EventList = ({ events, onViewDetails }) => {
         <tbody>
           {events.map((event, index) => (
             <tr key={index} className="hover:bg-gray-50">
-              <td className="px-4 py-2">{event.name}</td>
-              <td className="px-4 py-2">{event.category}</td>
-              <td className="px-4 py-2">{event.date}</td>
-              <td className="px-4 py-2">{event.status}</td>
+              <td className="px-4 py-2">{event?.event_name}</td>
+              <td className="px-4 py-2">{event?.category}</td>
+              <td className="px-4 py-2">
+                {new Date(event?.start_date).toLocaleDateString("vi-VN", {
+                  day: "2-digit",
+                  month: "2-digit",
+                  year: "numeric",
+                })}
+              </td>
+              <td className="px-4 py-2">{event?.status}</td>
               <td className="px-4 py-2 text-center">
                 <button
                   className="text-blue-500 hover:underline"

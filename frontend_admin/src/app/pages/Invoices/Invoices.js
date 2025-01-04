@@ -1,27 +1,26 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import OrderInvoices from "./Partials/OrderInvoices";
 import EventInvoices from "./Partials/EventInvoices";
+import { getAllOrders } from "./services/invoiceService";
 
 const Invoices = () => {
   // Dữ liệu mẫu (sẽ truyền vào từ API hoặc từ dữ liệu gốc)
-  const orderData = [
-    {
-      id: "INV001",
-      eventName: "Sự kiện A",
-      buyerName: "Nguyễn Văn A",
-      paymentAmount: 100000,
-      paymentDate: "2024-11-15",
-      status: "Đã thanh toán",
-    },
-    {
-      id: "INV002",
-      eventName: "Sự kiện B",
-      buyerName: "Trần Thị B",
-      paymentAmount: 150000,
-      paymentDate: "2024-11-18",
-      status: "Đã thanh toán",
-    },
-  ];
+  const [orders, setOrders] = useState([]);
+  const [loading, setLoading] = useState(false);
+  useEffect(() => {
+    const fetchEvents = async () => {
+      setLoading(true); // Bắt đầu tải
+      try {
+        const ordersFromApi = await getAllOrders();
+        setOrders(ordersFromApi);
+      } catch (error) {
+        console.error("Error fetching events:", error);
+      } finally {
+        setLoading(false); // Hoàn tất tải
+      }
+    };
+    fetchEvents();
+  }, []);
 
   const eventData = [
     {
@@ -67,7 +66,7 @@ const Invoices = () => {
       </div>
 
       {activeTab === "order" ? (
-        <OrderInvoices invoices={orderData} />
+        <OrderInvoices invoices={orders} />
       ) : (
         <EventInvoices invoices={eventData} />
       )}

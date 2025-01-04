@@ -19,7 +19,12 @@ export default function Search() {
   useEffect(() => {
     const fetchEvents = async () => {
       const events = await getAllEvents();
-      setSearchResults(events);
+      const filteredEvents = events.filter(
+        (event) =>
+          event.event_status_id === "675ea25872e40e87eb7dbf08" ||
+          event.event_status_id === "675ea24172e40e87eb7dbf06"
+      );
+      setSearchResults(filteredEvents);
     };
 
     fetchEvents();
