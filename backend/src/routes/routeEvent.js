@@ -41,7 +41,6 @@ routerEvent.put(
     { name: "logo_url", maxCount: 1 },
     { name: "cover_image_url", maxCount: 1 },
   ]),
-  authenticate,
   handleEditEvent
 );
 routerEvent.delete("/delete", authenticate, handleDeleteEvent);

@@ -7,7 +7,7 @@ import cors from "cors"; // Import thư viện cors
 import dotenv from "dotenv"; // Sử dụng import
 import cookieParser from "cookie-parser";
 import Database from "./config/InitDB.js";
-
+import path from "path";
 dotenv.config(); // Gọi config
 
 // config app
@@ -18,6 +18,8 @@ app.use(
     origin: "http://localhost:3000", // Thay bằng URL của ứng dụng React của bạn
   })
 );
+app.use("/images", express.static(path.join(process.cwd(), "public/images")));
+
 app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));

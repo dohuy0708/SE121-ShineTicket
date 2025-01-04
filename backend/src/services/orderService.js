@@ -150,10 +150,8 @@ export const createOrder = async (orderData) => {
 
 export const updateOrder = async (orderId, orderData) => {
   try {
-    const [updatedRowsCount] = await Orders.update(orderData, {
-      where: { order_id: orderId },
-    });
-    if (updatedRowsCount === 0) {
+    const updatedRowsCount = await Order.findByIdAndUpdate(orderId, orderData);
+    if (!updatedRowsCount) {
       return {
         errCode: 2,
         message: "Order not found.",

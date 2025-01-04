@@ -7,7 +7,7 @@ import {
 } from "../services/orderService.js"; // Nhập các hàm từ orderService
 
 const handleGetOrder = async (req, res) => {
-  const orderId = req.body.id; // Lấy id đơn hàng từ query string
+  const orderId = req.query.id; // Lấy id đơn hàng từ query string
   let result;
   result = await getOrderById(orderId); // Lấy đơn hàng theo id
 

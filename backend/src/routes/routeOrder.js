@@ -15,6 +15,6 @@ routerOrder.get("/list-orders", handleListOrders);
 routerOrder.get("/get-order", handleGetOrder); // Query string: /api/get-order?orderId=value
 routerOrder.post("/create-order", handleCreateOrder);
 routerOrder.put("/edit-order", handleEditOrder); // Query string: /api/edit-order?orderId=value
-routerOrder.delete("/delete-order", authenticate, handleDeleteOrder); // Query string: /api/delete-order?orderId=value
+routerOrder.delete("/delete-order", handleDeleteOrder); // Query string: /api/delete-order?orderId=value
 
 export default routerOrder;
