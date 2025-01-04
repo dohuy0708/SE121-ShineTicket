@@ -1,124 +1,184 @@
-import React, { useState } from "react";
-import SummaryTable from "./Partials/SummaryTable";
-import RevenueChart from "./Partials/RevenueChart";
-import TicketTable from "./Partials/TicketsTable";
-import ShowSelector from "./Partials/ShowSelector";
+import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
+import { getAllOrders } from "./summaryService";
+import { toast } from "react-toastify";
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  LineChart,
+  Line,
+  ResponsiveContainer,
+  PieChart,
+  Pie,
+  Cell,
+} from "recharts";
 
-export default function EventSummary() {
+const EventSummary = () => {
+  const [orders, setOrders] = useState([]);
+  const [loading, setLoading] = useState(false);
   const { id } = useParams();
-  const [selectedDate, setSelectedDate] = useState(""); // Lưu ngày được chọn
-  const summaryData = {
-    ticketRevenue: "96.000.000",
-    serviceFee: "9.600.000",
-    totalRevenue: "88.400.000",
+
+  useEffect(() => {
+    const fetchOrders = async () => {
+      setLoading(true);
+      try {
+        const orderApi = await getAllOrders(id);
+        setOrders(orderApi);
+      } catch (error) {
+        console.error("Error fetching refund:", error);
+        toast.error("Không thể tải dữ liệu. Vui lòng thử lại!");
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchOrders();
+  }, [id]);
+
+  // Tính toán các thống kê cơ bản
+  const calculateStats = () => {
+    const totalRevenue = orders.reduce(
+      (sum, order) => sum + parseFloat(order.total_amount),
+      0
+    );
+
+    const totalTickets = orders.reduce(
+      (sum, order) => sum + order.order_details.length,
+      0
+    );
+
+    const ticketTypeStats = orders.reduce((acc, order) => {
+      order.order_details.forEach((ticket) => {
+        if (!acc[ticket.ticket_type]) {
+          acc[ticket.ticket_type] = 0;
+        }
+        acc[ticket.ticket_type]++;
+      });
+      return acc;
+    }, {});
+
+    return { totalRevenue, totalTickets, ticketTypeStats };
   };
 
-  const showData = [
-    {
-      date: "18/11/2024",
-      ticketRevenue: "50.000.000",
-      serviceFee: "5.000.000",
-      totalRevenue: "45.000.000",
-      tickets: [
-        {
-          type: "VIP",
-          price: "600.000",
-          total: 30,
-          sold: 25,
-          revenue: "15.000.000",
-        },
-        {
-          type: "Standard",
-          price: "300.000",
-          total: 50,
-          sold: 45,
-          revenue: "13.500.000",
-        },
-      ],
-    },
-    {
-      date: "19/11/2024",
-      ticketRevenue: "46.000.000",
-      serviceFee: "4.600.000",
-      totalRevenue: "41.400.000",
-      tickets: [
-        {
-          type: "VIP",
-          price: "600.000",
-          total: 30,
-          sold: 20,
-          revenue: "12.000.000",
-        },
-        {
-          type: "Standard",
-          price: "300.000",
-          total: 50,
-          sold: 40,
-          revenue: "12.000.000",
-        },
-      ],
-    },
-  ];
+  // Dữ liệu cho biểu đồ doanh thu theo ngày
+  const prepareRevenueData = () => {
+    const revenueByDate = orders.reduce((acc, order) => {
+      const date = new Date(order.order_date).toLocaleDateString("vi-VN");
+      if (!acc[date]) {
+        acc[date] = 0;
+      }
+      acc[date] += parseFloat(order.total_amount);
+      return acc;
+    }, {});
 
-  // Dữ liệu biểu đồ toàn bộ khoảng thời gian bán vé
-  const chartData = {
-    startDate: "01/11/2024",
-    endDate: "20/11/2024",
-    sales: [
-      { date: "01/11/2024", ticketsSold: 10, revenue: 3000000 },
-      { date: "02/11/2024", ticketsSold: 15, revenue: 4500000 },
-      { date: "03/11/2024", ticketsSold: 20, revenue: 6000000 },
-      { date: "18/11/2024", ticketsSold: 70, revenue: 50000000 }, // Ngày diễn
-      { date: "19/11/2024", ticketsSold: 60, revenue: 46000000 }, // Ngày diễn
-      { date: "20/11/2024", ticketsSold: 50, revenue: 40000000 },
-    ],
+    return Object.entries(revenueByDate).map(([date, amount]) => ({
+      date,
+      amount,
+    }));
   };
 
-  // Lấy dữ liệu của ngày được chọn
-  const selectedShow = showData.find((show) => show.date === selectedDate);
+  const stats = calculateStats();
+  const revenueData = prepareRevenueData();
+  const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
 
-  // Lọc dữ liệu biểu đồ theo ngày được chọn
-  const filteredChartData =
-    selectedShow &&
-    chartData.sales
-      .filter((sale) => sale.date === selectedShow.date)
-      .map((sale) => ({
-        date: sale.date,
-        ticketsSold: sale.ticketsSold,
-        revenue: sale.revenue,
-      }));
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <div className="text-xl text-gray-200">Đang tải dữ liệu...</div>
+      </div>
+    );
+  }
 
-  // Xây dựng dữ liệu biểu đồ đúng định dạng
-  const selectedChartData = {
-    startDate: selectedShow?.date,
-    endDate: selectedShow?.date,
-    sales: filteredChartData || [],
-  };
   return (
-    <div className="flex-1 bg-black mx-auto">
-      <div className=" p-6 ">
-        <SummaryTable summaryData={summaryData} />
-        <RevenueChart chartData={chartData} />
-        {/* Dropdown chọn ngày */}
-        <ShowSelector
-          shows={showData}
-          selectedDate={selectedDate}
-          onChange={setSelectedDate}
-        />
+    <div className="flex-1 p-6 bg-gray-950">
+      {/* Thống kê tổng quan */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div className="bg-gray-900 p-6 rounded-lg shadow-lg">
+          <h3 className="text-gray-400 text-sm font-medium">Tổng doanh thu</h3>
+          <p className="text-2xl font-bold text-white mt-2">
+            {stats.totalRevenue.toLocaleString()} VND
+          </p>
+        </div>
+        <div className="bg-gray-900 p-6 rounded-lg shadow-lg">
+          <h3 className="text-gray-400 text-sm font-medium">
+            Tổng số vé đã bán
+          </h3>
+          <p className="text-2xl font-bold text-white mt-2">
+            {stats.totalTickets} vé
+          </p>
+        </div>
+        <div className="bg-gray-900 p-6 rounded-lg shadow-lg">
+          <h3 className="text-gray-400 text-sm font-medium">Số đơn hàng</h3>
+          <p className="text-2xl font-bold text-white mt-2">
+            {orders.length} đơn
+          </p>
+        </div>
+      </div>
 
-        {/* Hiển thị dữ liệu theo ngày được chọn */}
-        {selectedShow ? (
-          <>
-            <TicketTable
-              tickets={selectedShow.tickets}
-              date={selectedShow.date}
-            />
-          </>
-        ) : (
-          <p className="text-gray-400">Hãy chọn một ngày để xem thông tin.</p>
-        )}
+      {/* Biểu đồ */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="bg-gray-900 p-6 rounded-lg shadow-lg">
+          <h3 className="text-gray-300 text-lg font-medium mb-4">
+            Doanh thu theo ngày
+          </h3>
+          <ResponsiveContainer width="100%" height={300}>
+            <LineChart data={revenueData}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="date" />
+              <YAxis />
+              <Tooltip />
+              <Legend />
+              <Line
+                type="monotone"
+                dataKey="amount"
+                stroke="#8884d8"
+                name="Doanh thu (VND)"
+              />
+            </LineChart>
+          </ResponsiveContainer>
+        </div>
+
+        <div className="bg-gray-900 p-6 rounded-lg shadow-lg">
+          <h3 className="text-gray-300 text-lg font-medium mb-4">
+            Phân bố loại vé
+          </h3>
+          <ResponsiveContainer width="100%" height={300}>
+            <PieChart>
+              <Pie
+                data={Object.entries(stats.ticketTypeStats).map(
+                  ([name, value]) => ({
+                    name,
+                    value,
+                  })
+                )}
+                cx="50%"
+                cy="50%"
+                labelLine={false}
+                label={({ name, percent }) =>
+                  `${name} (${(percent * 100).toFixed(0)}%)`
+                }
+                outerRadius={80}
+                fill="#8884d8"
+                dataKey="value"
+              >
+                {Object.entries(stats.ticketTypeStats).map((entry, index) => (
+                  <Cell
+                    key={`cell-${index}`}
+                    fill={COLORS[index % COLORS.length]}
+                  />
+                ))}
+              </Pie>
+              <Tooltip />
+            </PieChart>
+          </ResponsiveContainer>
+        </div>
       </div>
     </div>
   );
-}
+};
+
+export default EventSummary;

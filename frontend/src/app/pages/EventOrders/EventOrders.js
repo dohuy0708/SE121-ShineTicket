@@ -15,7 +15,6 @@ export default function EventOrders() {
         setOrders(orderApi);
       } catch (error) {
         console.error("Error fetching refund:", error);
-        toast.error("Không thể tải dữ liệu. Vui lòng thử lại!");
       } finally {
         setLoading(false); // Hoàn tất tải
       }
