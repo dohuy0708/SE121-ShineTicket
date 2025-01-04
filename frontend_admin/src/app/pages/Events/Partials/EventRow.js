@@ -38,10 +38,10 @@ export default function RowEvent({ event, onViewDetails }) {
       </td>
       <td
         className={`px-4 py-2 font-semibold ${
-          statusColorMap[event?.event_status_id] || "text-gray-500"
+          statusColorMap[event?.event_status_id?._id] || "text-gray-500"
         }`}
       >
-        {statusTextMap[event?.event_status_id] || "Không xác định"}
+        {statusTextMap[event?.event_status_id?._id] || "Không xác định"}
       </td>
 
       <td className="px-4 py-2 text-center">

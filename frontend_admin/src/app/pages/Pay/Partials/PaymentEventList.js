@@ -1,30 +1,23 @@
 import React from "react";
+import { EyeIcon } from "@heroicons/react/24/outline";
 
 const PaymentEventList = ({ events, onPay, onViewDetails, onSearch }) => {
   return (
     <div className="bg-white shadow-md rounded-lg mt-4">
-      <div className="p-4">
-        <input
-          type="text"
-          placeholder="Tìm sự kiện..."
-          className="border px-4 py-2 rounded-lg w-full"
-          onChange={(e) => onSearch(e.target.value)}
-        />
-      </div>
       <table className="min-w-full border-collapse">
         <thead>
           <tr className="border-b">
-            <th className="px-4 py-2 text-left">Tên sự kiện</th>
-            <th className="px-4 py-2 text-left">Ngày kết thúc</th>
-            <th className="px-4 py-2 text-left">Số tiền cần thanh toán</th>
-            <th className="px-4 py-2 text-left">Thông tin thanh toán</th>
-            <th className="px-4 py-2 text-left">Trạng thái thanh toán</th>
-            <th className="px-4 py-2 text-center">Hành động</th>
+            <th className="px-4 py-2 text-center  ">Tên sự kiện</th>
+            <th className="px-4 py-2 text-center  ">Ngày kết thúc</th>
+            <th className="px-4 py-2 text-center  ">Số tiền thu được</th>
+            <th className="px-4 py-2 text-center  ">Số tiền cần thanh toán</th>
+            <th className="px-4 py-2 text-center  ">Thông tin thanh toán</th>
+            <th className="px-4 py-2 "></th>
           </tr>
         </thead>
         <tbody>
           {events.map((event, index) => (
-            <tr key={index} className="hover:bg-gray-50">
+            <tr key={index} className="hover:bg-gray-50 text-center">
               <td className="px-4 py-2">{event?.event_name}</td>
               <td className="px-4 py-2">
                 {" "}
@@ -37,32 +30,17 @@ const PaymentEventList = ({ events, onPay, onViewDetails, onSearch }) => {
               </td>
 
               <td className="px-4 py-2">{event?.event_total_amount} VND</td>
-              <td className="px-4 py-2">{event.paymentInfo}</td>
               <td className="px-4 py-2">
-                <span
-                  className={`px-2 py-1 rounded-lg ${
-                    event.paymentStatus === "Chưa thanh toán"
-                      ? "bg-red-500 text-white"
-                      : "bg-green-500 text-white"
-                  }`}
-                >
-                  {event.paymentStatus}
-                </span>
+                {(event?.event_total_amount * 10) / 100} VNĐ
               </td>
+              <td className="px-4 py-2">
+                {event?.organizer_id?.account_number} -{" "}
+                {event?.organizer_id?.bank_name}
+              </td>
+
               <td className="px-4 py-2 text-center">
-                {event.paymentStatus === "Chưa thanh toán" && (
-                  <button
-                    className="bg-blue-500 text-white px-4 py-2 rounded-lg"
-                    onClick={() => onPay(event)}
-                  >
-                    Thanh toán
-                  </button>
-                )}
-                <button
-                  className="text-blue-500 hover:underline"
-                  onClick={() => onViewDetails(event)}
-                >
-                  Xem chi tiết
+                <button onClick={() => onViewDetails(event)}>
+                  <EyeIcon className="h-6 text-black hover:text-primary" />
                 </button>
               </td>
             </tr>

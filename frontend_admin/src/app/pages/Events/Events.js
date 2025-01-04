@@ -43,15 +43,17 @@ export default function Events() {
           new Date(eventFromApi[i].end_date).getDate()
         );
 
-        if (eventFromApi[i].event_status_id === "675ea25872e40e87eb7dbf08") {
+        if (
+          eventFromApi[i].event_status_id?._id === "675ea25872e40e87eb7dbf08"
+        ) {
           if (endDate < today) {
             // Nếu ngày kết thúc sự kiện đã qua
             await setOccuredEvent(eventFromApi[i]._id);
-            eventFromApi[i].event_status_id = "675ea26172e40e87eb7dbf0a";
+            eventFromApi[i].event_status_id._id = "675ea26172e40e87eb7dbf0a";
           } else if (startDate <= today && endDate >= today) {
             // Đang trong quá trình diễn ra sự kiện
             await setOccuringEvent(eventFromApi[i]._id);
-            eventFromApi[i].event_status_id = "675ea24172e40e87eb7dbf06";
+            eventFromApi[i].event_status_id._id = "675ea24172e40e87eb7dbf06";
           }
         }
       }
@@ -77,7 +79,7 @@ export default function Events() {
     } else {
       const statusId = statusMap[filter];
       const filtered = events.filter(
-        (event) => event.event_status_id === statusId
+        (event) => event.event_status_id._id === statusId
       );
       setFilteredEvents(filtered); // Cập nhật danh sách sự kiện đã lọc
     }

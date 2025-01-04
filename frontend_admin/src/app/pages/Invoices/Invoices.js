@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from "react";
 import OrderInvoices from "./Partials/OrderInvoices";
 import EventInvoices from "./Partials/EventInvoices";
-import { getAllOrders } from "./services/invoiceService";
+import { getAllOrders, getAllRefund } from "./services/invoiceService";
 import { ToastContainer, toast } from "react-toastify";
 
 const Invoices = () => {
-  // Dữ liệu mẫu (sẽ truyền vào từ API hoặc từ dữ liệu gốc)
   const [orders, setOrders] = useState([]);
+  const [refunds, setRefunds] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [activeTab, setActiveTab] = useState("order");
+
   const fetchEvents = async () => {
     setLoading(true); // Bắt đầu tải
     try {
@@ -15,34 +17,27 @@ const Invoices = () => {
       setOrders(ordersFromApi);
     } catch (error) {
       console.error("Error fetching events:", error);
+      toast.error("Không thể tải dữ liệu. Vui lòng thử lại!");
+    } finally {
+      setLoading(false); // Hoàn tất tải
+    }
+  };
+  const fetchRefund = async () => {
+    setLoading(true); // Bắt đầu tải
+    try {
+      const refundApi = await getAllRefund();
+      setRefunds(refundApi);
+    } catch (error) {
+      console.error("Error fetching refund:", error);
+      toast.error("Không thể tải dữ liệu. Vui lòng thử lại!");
     } finally {
       setLoading(false); // Hoàn tất tải
     }
   };
   useEffect(() => {
     fetchEvents();
+    fetchRefund();
   }, []);
-
-  const eventData = [
-    {
-      id: "EV001",
-      eventName: "Sự kiện A",
-      organizerName: "Công ty XYZ",
-      amountPaid: 70000,
-      paymentDate: "2024-11-18",
-      status: "Đã thanh toán",
-    },
-    {
-      id: "EV002",
-      eventName: "Sự kiện B",
-      organizerName: "Công ty ABC",
-      amountPaid: 120000,
-      paymentDate: "2024-11-20",
-      status: "Đã thanh toán",
-    },
-  ];
-
-  const [activeTab, setActiveTab] = useState("order");
 
   return (
     <div className="p-6">
@@ -66,10 +61,12 @@ const Invoices = () => {
         </button>
       </div>
 
-      {activeTab === "order" ? (
+      {loading ? (
+        <div className="text-center text-gray-500">Đang tải...</div>
+      ) : activeTab === "order" ? (
         <OrderInvoices invoices={orders} refresh={fetchEvents} />
       ) : (
-        <EventInvoices invoices={eventData} />
+        <EventInvoices invoices={refunds} />
       )}
       <ToastContainer />
     </div>
