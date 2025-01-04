@@ -17,10 +17,13 @@ import {
   Pie,
   Cell,
 } from "recharts";
+import * as XLSX from "xlsx"; // Thư viện xuất Excel
 
 const EventSummary = () => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [startDate, setStartDate] = useState(""); // Ngày bắt đầu
+  const [endDate, setEndDate] = useState(""); // Ngày kết thúc
   const { id } = useParams();
 
   useEffect(() => {
@@ -81,9 +84,80 @@ const EventSummary = () => {
     }));
   };
 
+  // Lọc đơn hàng theo khoảng thời gian
+  const filterOrdersByDate = () => {
+    return orders.filter((order) => {
+      const orderDate = new Date(order.order_date);
+      const start = new Date(startDate);
+      const end = new Date(endDate);
+      return orderDate >= start && orderDate <= end;
+    });
+  };
+
   const stats = calculateStats();
   const revenueData = prepareRevenueData();
+  const filteredOrders = filterOrdersByDate();
   const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
+
+  const exportToExcel = () => {
+    // Tạo dữ liệu cho sheet Tổng quan
+    const summaryData = [
+      {
+        label: "Tổng doanh thu",
+        value:
+          filteredOrders.reduce(
+            (total, order) => total + parseFloat(order.total_amount),
+            0
+          ) + " VND",
+      },
+      {
+        label: "Tổng số vé đã bán",
+        value:
+          filteredOrders.reduce(
+            (total, order) => total + order.order_details.length,
+            0
+          ) + " vé",
+      },
+      { label: "Số đơn hàng", value: filteredOrders.length + " đơn" },
+    ];
+
+    // Tạo dữ liệu cho sheet Chi tiết đơn hàng
+    const detailData = filteredOrders.map((order) => ({
+      order_date: order.order_date,
+      total_amount: order.total_amount,
+      event_name: order.event_name,
+      event_date: order.event_date,
+      order_details: order.order_details
+        .map((ticket) => `${ticket.ticket_type} - ${ticket.price} VND`)
+        .join(", "), // Hiển thị chi tiết vé
+    }));
+
+    // Tạo dữ liệu cho sheet Phân bố loại vé
+    const ticketTypeDistribution = Object.entries(stats.ticketTypeStats).map(
+      ([name, value]) => ({
+        ticket_type: name,
+        count: value,
+      })
+    );
+
+    // Tạo sheet Tổng quan
+    const summarySheet = XLSX.utils.json_to_sheet(summaryData);
+
+    // Tạo sheet Chi tiết đơn hàng
+    const detailSheet = XLSX.utils.json_to_sheet(detailData);
+
+    // Tạo sheet Phân bố loại vé
+    const ticketTypeSheet = XLSX.utils.json_to_sheet(ticketTypeDistribution);
+
+    // Tạo workbook và thêm các sheet
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, summarySheet, "Tổng quan");
+    XLSX.utils.book_append_sheet(wb, detailSheet, "Chi tiết đơn hàng");
+    XLSX.utils.book_append_sheet(wb, ticketTypeSheet, "Phân bố loại vé");
+
+    // Xuất file Excel
+    XLSX.writeFile(wb, "bao_cao_doanh_thu.xlsx");
+  };
 
   if (loading) {
     return (
@@ -95,12 +169,43 @@ const EventSummary = () => {
 
   return (
     <div className="flex-1 p-6 bg-gray-950">
+      {/* Lọc theo ngày */}
+
+      <div className="mb-6 flex justify-between items-center">
+        <div>
+          <input
+            type="date"
+            value={startDate}
+            onChange={(e) => setStartDate(e.target.value)}
+            className="bg-gray-700 text-gray-300 p-2 rounded-lg mr-4"
+          />
+          <input
+            type="date"
+            value={endDate}
+            onChange={(e) => setEndDate(e.target.value)}
+            className="bg-gray-700 text-gray-300 p-2 rounded-lg"
+          />
+        </div>
+
+        {/* Nút xuất báo cáo */}
+        <button
+          onClick={exportToExcel}
+          className=" bg-blue-600 p-2 rounded-lg text-white"
+        >
+          Xuất báo cáo Excel
+        </button>
+      </div>
+
       {/* Thống kê tổng quan */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
         <div className="bg-gray-900 p-6 rounded-lg shadow-lg">
           <h3 className="text-gray-400 text-sm font-medium">Tổng doanh thu</h3>
           <p className="text-2xl font-bold text-white mt-2">
-            {stats.totalRevenue.toLocaleString()} VND
+            {filteredOrders.reduce(
+              (total, order) => total + parseFloat(order.total_amount),
+              0
+            )}{" "}
+            VND
           </p>
         </div>
         <div className="bg-gray-900 p-6 rounded-lg shadow-lg">
@@ -108,13 +213,17 @@ const EventSummary = () => {
             Tổng số vé đã bán
           </h3>
           <p className="text-2xl font-bold text-white mt-2">
-            {stats.totalTickets} vé
+            {filteredOrders.reduce(
+              (total, order) => total + order.order_details.length,
+              0
+            )}{" "}
+            vé
           </p>
         </div>
         <div className="bg-gray-900 p-6 rounded-lg shadow-lg">
           <h3 className="text-gray-400 text-sm font-medium">Số đơn hàng</h3>
           <p className="text-2xl font-bold text-white mt-2">
-            {orders.length} đơn
+            {filteredOrders.length} đơn
           </p>
         </div>
       </div>
