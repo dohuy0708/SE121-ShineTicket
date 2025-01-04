@@ -11,6 +11,7 @@ import mongoose from "mongoose";
 import TrendEvent from "../models/event_trend.js";
 import SpecialEvent from "../models/event_special.js";
 import Banner from "../models/banner.js";
+import Order from "../models/order.js";
 export const listEvents = async (filters) => {
   try {
     const filterConditions = {};
@@ -38,21 +39,50 @@ export const listEvents = async (filters) => {
         filterConditions.venue_id = null;
       }
     }
-
     // Lọc sự kiện với các điều kiện đã tạo
     const events = await Event.find(filterConditions);
 
-    const eventsWithPrices = await Promise.all(
+    // Nhóm các đơn đặt hàng theo event_id và tính tổng số tiền với điều kiện order_status_id = 675ea365101067cb13679b55
+    const ordersTotalAmount = await Order.aggregate([
+      {
+        $match: {
+          order_status_id: new mongoose.Types.ObjectId(
+            "675ea365101067cb13679b55"
+          ), // Lọc theo order_status_id
+        },
+      },
+      {
+        $group: {
+          _id: "$event_id",
+          totalAmount: { $sum: { $toDouble: "$total_amount" } }, // Chuyển Decimal128 thành số để tính toán
+        },
+      },
+    ]);
+
+    // Tạo một map để tra cứu nhanh tổng giá trị của từng sự kiện
+    const orderTotalMap = new Map(
+      ordersTotalAmount.map((order) => [
+        order._id.toString(),
+        order.totalAmount,
+      ])
+    );
+
+    const eventsWithPricesAndTotals = await Promise.all(
       events.map(async (event) => {
+        // Lấy giá vé tối thiểu
         const tickets = await Ticket.find({ event_id: event._id });
         const minPrice = tickets.reduce((min, ticket) => {
           const ticketPrice = parseFloat(ticket.price.toString());
           return ticketPrice < min ? ticketPrice : min;
         }, Infinity);
 
+        // Tính tổng số tiền từ map
+        const totalAmount = orderTotalMap.get(event._id.toString()) || 0;
+
         return {
           ...event.toObject(),
           ticketPrice: minPrice === Infinity ? null : minPrice, // Nếu không có vé, giá vé là null
+          event_total_amount: totalAmount, // Tổng giá trị các đơn đặt
         };
       })
     );
@@ -60,7 +90,7 @@ export const listEvents = async (filters) => {
     return {
       errCode: 0,
       message: "Success",
-      data: eventsWithPrices,
+      data: eventsWithPricesAndTotals,
     };
   } catch (error) {
     console.error("Error fetching Events:", error.message);
