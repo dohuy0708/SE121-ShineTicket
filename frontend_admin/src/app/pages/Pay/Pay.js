@@ -1,8 +1,30 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import PaymentEventList from "./Partials/PaymentEventList";
 import EventDetailsModal from "./Partials/EventDetailsModal";
+import { getEventPay } from "./services/payService";
 
 export default function Pay() {
+  const [payEvents, setPayEvents] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const fetchEvents = async () => {
+      setLoading(true); // Bắt đầu tải
+      try {
+        const events = await getEventPay();
+        // Lọc các sự kiện có event_status_id là "675ea26172e40e87eb7dbf0a"
+        const filteredEvents = events.filter(
+          (event) => event.event_status_id === "675ea26172e40e87eb7dbf0a"
+        );
+        setPayEvents(filteredEvents);
+      } catch (error) {
+        console.error("Error fetching events:", error);
+      } finally {
+        setLoading(false); // Hoàn tất tải
+      }
+    };
+    fetchEvents();
+  }, []);
   const [events, setEvents] = useState([
     {
       name: "Sự kiện A",
@@ -59,7 +81,7 @@ export default function Pay() {
     <div className="p-6">
       <h1 className="text-2xl font-bold mb-4">Các sự kiện chờ thanh toán</h1>
       <PaymentEventList
-        events={filteredEvents}
+        events={payEvents}
         onPay={handlePay}
         onViewDetails={handleViewDetails}
         onSearch={handleSearch}

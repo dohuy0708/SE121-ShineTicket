@@ -14,3 +14,18 @@ export const getAllOrders = async () => {
     throw error; // Ném lỗi để xử lý ở nơi gọi hàm nếu cần
   }
 };
+export const editOrder = async (orderId, updatedStatus) => {
+  try {
+    const response = await axios.put(
+      `http://localhost:8080/api/order/edit-order/?id=${orderId}`,
+      {
+        order_status_id: updatedStatus,
+      }
+    );
+    console.log("sửa trạng thái thành công");
+    return response.data;
+  } catch (error) {
+    console.error("Error editing order:", error);
+    throw error;
+  }
+};

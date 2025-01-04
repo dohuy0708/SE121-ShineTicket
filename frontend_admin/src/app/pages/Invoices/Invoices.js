@@ -2,23 +2,24 @@ import React, { useEffect, useState } from "react";
 import OrderInvoices from "./Partials/OrderInvoices";
 import EventInvoices from "./Partials/EventInvoices";
 import { getAllOrders } from "./services/invoiceService";
+import { ToastContainer, toast } from "react-toastify";
 
 const Invoices = () => {
   // Dữ liệu mẫu (sẽ truyền vào từ API hoặc từ dữ liệu gốc)
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(false);
+  const fetchEvents = async () => {
+    setLoading(true); // Bắt đầu tải
+    try {
+      const ordersFromApi = await getAllOrders();
+      setOrders(ordersFromApi);
+    } catch (error) {
+      console.error("Error fetching events:", error);
+    } finally {
+      setLoading(false); // Hoàn tất tải
+    }
+  };
   useEffect(() => {
-    const fetchEvents = async () => {
-      setLoading(true); // Bắt đầu tải
-      try {
-        const ordersFromApi = await getAllOrders();
-        setOrders(ordersFromApi);
-      } catch (error) {
-        console.error("Error fetching events:", error);
-      } finally {
-        setLoading(false); // Hoàn tất tải
-      }
-    };
     fetchEvents();
   }, []);
 
@@ -66,10 +67,11 @@ const Invoices = () => {
       </div>
 
       {activeTab === "order" ? (
-        <OrderInvoices invoices={orders} />
+        <OrderInvoices invoices={orders} refresh={fetchEvents} />
       ) : (
         <EventInvoices invoices={eventData} />
       )}
+      <ToastContainer />
     </div>
   );
 };

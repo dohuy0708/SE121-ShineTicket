@@ -25,9 +25,18 @@ const PaymentEventList = ({ events, onPay, onViewDetails, onSearch }) => {
         <tbody>
           {events.map((event, index) => (
             <tr key={index} className="hover:bg-gray-50">
-              <td className="px-4 py-2">{event.name}</td>
-              <td className="px-4 py-2">{event.endDate}</td>
-              <td className="px-4 py-2">{event.paymentAmount} VND</td>
+              <td className="px-4 py-2">{event?.event_name}</td>
+              <td className="px-4 py-2">
+                {" "}
+                {new Date(event?.end_date).toLocaleDateString("vi-VN", {
+                  timeZone: "UTC",
+                  day: "2-digit",
+                  month: "2-digit",
+                  year: "numeric",
+                })}{" "}
+              </td>
+
+              <td className="px-4 py-2">{event?.event_total_amount} VND</td>
               <td className="px-4 py-2">{event.paymentInfo}</td>
               <td className="px-4 py-2">
                 <span

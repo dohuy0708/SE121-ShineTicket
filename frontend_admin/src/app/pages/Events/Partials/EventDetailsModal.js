@@ -1,7 +1,7 @@
 import React from "react";
 import { setRejectEvent, setWillOccureEvent } from "../services/eventService";
 
-const EventDetailsModal = ({ event, onClose }) => {
+const EventDetailsModal = ({ event, onClose, refreshData }) => {
   if (!event) return null;
 
   const formatDate = (date) =>
@@ -15,6 +15,7 @@ const EventDetailsModal = ({ event, onClose }) => {
     try {
       await setWillOccureEvent(id);
       //  event?.event_status_id="675ea24172e40e87eb7dbf06"
+      refreshData();
       onClose();
     } catch (error) {
       console.error("Lỗi khi duyệt sự kiện:", error);
@@ -26,6 +27,7 @@ const EventDetailsModal = ({ event, onClose }) => {
       await setRejectEvent(id);
       //   event.event_status_id="676ece8250c4e95732edbadf"
       onClose();
+      refreshData();
     } catch (error) {
       console.error("Lỗi khi từ chối sự kiện:", error);
       alert("Không thể từ chối sự kiện. Vui lòng thử lại!");
