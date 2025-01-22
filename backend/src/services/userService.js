@@ -164,7 +164,7 @@ let createUser = (data) => {};
 
 let editUser = async (data) => {
   try {
-    const updateUser = await User.findByIdAndUpdate(data.id, data);
+    const updateUser = await User.findByIdAndUpdate(data._id, data);
     if (!updateUser) {
       return {
         errCode: 1,

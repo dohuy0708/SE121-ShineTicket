@@ -29,7 +29,11 @@ const handleListEvents = async (req, res) => {
   return res.status(result.errCode === 0 ? 200 : 400).json(result); // Trả về kết quả
 };
 const handleListEventsByUser = async (req, res) => {
+<<<<<<< HEAD
   const userId = req.query.userId;
+=======
+  const userId = req.body._id;
+>>>>>>> origin/frontend
   const result = await listEventsByUser(userId); // Lấy danh sách sự kiện
   return res.status(result.errCode === 0 ? 200 : 400).json(result); // Trả về kết quả
 };

@@ -1,0 +1,114 @@
+/* Định dạng cho carousel */
+.carousel {
+  margin-top: 20px;
+  position: relative;
+  overflow: hidden; /* Ẩn nội dung vượt quá của carousel */
+}
+
+/* Các slide trong carousel */
+.carousel-slides {
+  display: flex; /* Sử dụng flexbox để sắp xếp các slide */
+  transition: transform 0.3s ease; /* Hiệu ứng chuyển động mượt mà */
+}
+.carousel-slide-container {
+  min-width: 50%; /* Mỗi slide chiếm 50% chiều rộng của carousel (2 slide hiển thị) */
+  padding: 5px;
+}
+
+/* Định dạng cho từng slide */
+.carousel-slide {
+  position: relative;
+  height: 343px; /* Chiều cao của slide */
+  display: flex; /* Để căn giữa nội dung trong slide */
+  flex-direction: column; /* Sắp xếp nội dung theo cột */
+  align-items: center; /* Căn giữa theo chiều ngang */
+  justify-content: center; /* Căn giữa theo chiều dọc */
+  background-color: #878787; /* Màu nền cho slide */
+  border-radius: 15px; /* Đường viền cong cho slide */
+  overflow: hidden; /* Ẩn nội dung vượt quá của slide */
+}
+
+/* Định dạng cho ảnh trong slide */
+.carousel-slide img {
+  max-width: 100%; /* Ảnh không vượt quá chiều rộng của slide */
+}
+
+.slide-text {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+}
+
+.slide-info {
+  display: flex;
+  margin-bottom: 10px;
+}
+.slide-price {
+  font-weight: bold;
+  margin-right: 10px;
+  margin-left: 10px;
+}
+.slide-date {
+  color: white;
+  font-weight: 600;
+  margin-right: 10px;
+  margin-left: 10px;
+}
+.slide-button {
+  cursor: pointer;
+  padding: 8px 16px;
+  color: black;
+  font-weight: 550;
+  border-radius: 10px;
+  border: none;
+  background-color: white;
+}
+
+/* Định dạng cho nút điều khiển (trái, phải) */
+.carousel-control {
+  position: absolute; /* Đặt vị trí tuyệt đối để nút nằm trên carousel */
+  top: 50%; /* Đặt vị trí theo chiều dọc */
+  transform: translateY(-50%); /* Căn giữa theo chiều dọc */
+  /* Màu nền của nút */
+  color: #fff; /* Màu chữ */
+  border: none; /* Không có đường viền */
+  border-radius: 50%; /* Đường viền tròn */
+  width: 30px; /* Chiều rộng của nút */
+  height: 30px; /* Chiều cao của nút */
+  cursor: pointer; /* Con trỏ chuột khi di chuột qua */
+  font-size: 18px; /* Kích thước chữ */
+  transition: background-color 0.3s; /* Hiệu ứng chuyển màu nền khi hover */
+}
+
+/* Nút điều khiển bên trái */
+.carousel-control.prev {
+  left: 10px; /* Khoảng cách từ bên trái */
+}
+
+/* Nút điều khiển bên phải */
+.carousel-control.next {
+  right: 10px; /* Khoảng cách từ bên phải */
+}
+
+/* Định dạng cho phần chấm tròn */
+.carousel-dots {
+  text-align: center; /* Căn giữa các chấm */
+  margin-top: 10px; /* Khoảng cách trên các chấm */
+}
+
+/* Định dạng cho từng chấm tròn */
+.dot {
+  height: 10px; /* Chiều cao của chấm */
+  width: 10px; /* Chiều rộng của chấm */
+  margin: 0 5px; /* Khoảng cách giữa các chấm */
+  background-color: #bbb; /* Màu sắc chấm không hoạt động */
+  border-radius: 50%; /* Làm cho các chấm thành hình tròn */
+  display: inline-block; /* Hiển thị theo dòng ngang */
+  cursor: pointer; /* Con trỏ chuột sẽ thay đổi khi di chuột qua */
+  transition: background-color 0.3s; /* Hiệu ứng chuyển màu */
+}
+
+/* Màu sắc chấm khi hoạt động */
+.dot.active {
+  background-color: #ffc107; /* Màu sắc chấm hoạt động */
+}
