@@ -39,8 +39,8 @@ const handleCreateEvent = async (req, res) => {
     const eventData = req.body; // Lấy dữ liệu sự kiện từ request body
     const files = req.files;
     // Kiểm tra file bắt buộc và xử lý ảnh nếu có
-    const logoUrlPath = files["logo_url"] || null;
-    const coverImageUrlPath = files["cover_image_url"] || null;
+    const logoUrlPath = files["logo_url"];
+    const coverImageUrlPath = files["cover_image_url"];
     console.log("logo", logoUrlPath);
     console.log("cover image", coverImageUrlPath);
 
