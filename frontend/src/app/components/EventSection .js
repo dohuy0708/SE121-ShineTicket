@@ -26,7 +26,10 @@ const EventSection = ({ title, events }) => {
           >
             <div className="event-image bg-gray-300 h-[175px] rounded-lg mb-[10px] overflow-hidden">
               <img
-                src={`http://localhost:8080/images/${event?.cover_image_url}`}
+                src={
+                  `http://localhost:8080/images/${event?.cover_image_url}` ||
+                  "./Demo_logo.webp"
+                }
                 alt={event?.event_name}
                 className="w-full h-full object-cover "
               />
