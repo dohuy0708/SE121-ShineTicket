@@ -34,6 +34,44 @@ ShineTicket is a ticket selling and event management project that helps people b
 * Payment management
 * Reporting and statistics
 
+## Installation guide
+
+### Requirements
+* Node.js >= 16.x.x
+* npm (included with Node.js)
+* Git
+### Install 
+1. Clone project:
+   ```bash
+   git clone <repository-url>
+2. Navigate to the project directory:
+   ```bash
+   cd <tên-thư-mục-dự-án>
+3. Install packages:
+   ```bash
+   npm install
+
+###  Configure Environment Variables
+
+Create a `.env` file in the project root and define the following values:
+```env
+ PORT = 
+ NODE_ENV = development
+
+ ACCESS_TOKEN_SECRET = 
+ REFRESH_TOKEN_SECRET = 
+
+ DB_USERNAME=
+ DB_PASSWORD=
+
+ MAIL_USER =  
+ MAIL_PASS = 
+```
+## Run
+1. Run project:
+   ```bash
+   npm start
+
 ## Demo
 Link demo [ShineTicket](https://youtu.be/v1L4upPpij8)
 
